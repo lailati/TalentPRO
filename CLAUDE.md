@@ -19,7 +19,7 @@ Sistem pemetaan bakat pensyarah FSTP (UPNM), projek PSM. Frontend HTML/CSS/JS (E
 
 ## Larangan
 - Jangan commit PDF, imej mockup, `.pptx`, kata laluan, token atau data sebenar.
-- Jangan `git push`, cipta projek awan atau jadikan sesuatu awam tanpa kebenaran pengguna.
+- Auto commit + push ke `origin/main` dibenarkan oleh pengguna (hook Stop → `tools/autopush.ps1`). Repo ini **awam**: jangan letak rahsia di mana-mana fail. Selain itu, jangan cipta projek awan atau jadikan sesuatu awam tanpa kebenaran pengguna; jangan force-push.
 - Jangan dakwa UAT telah dibuat (belum; dirancang PSM II).
 
 ## Jalankan
