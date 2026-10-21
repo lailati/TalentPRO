@@ -1,0 +1,30 @@
+# Dokumen sumber peribadi (jangan commit)
+*.pdf
+*.pptx
+*.docx
+WhatsApp*
+*.jpg
+*.jpeg
+!docs/**/*.jpg
+!docs/**/*.jpeg
+
+# Rahsia / persekitaran
+.env
+.env.*
+*.key
+secrets/
+
+# Tetapan tempatan Claude
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Output
+dist/
+node_modules/
+screenshots/
