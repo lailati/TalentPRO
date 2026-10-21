@@ -99,7 +99,6 @@ function setup() {
 /**
  * Jalankan SEKALI jika pangkalan data dibuat sebelum versi Bahasa Malaysia:
  * menukar nama kategori kepakaran asal (Inggeris) dan akaun pentadbir kepada Bahasa Malaysia.
- * Data contoh lama (rekod berbahasa Inggeris) perlu dibuang dan dimuatkan semula daripada Akaun > Data contoh.
  */
 function terjemahDataKeBM() {
   rows_('expertise_categories').forEach(function (c) {
@@ -115,6 +114,22 @@ function resetAdminPassword() {
   var salt = uid_('s');
   update_('users', 'usr_admin', { salt: salt, password_hash: hash_(salt, 'admin'), status: 'Active', updated_at: now_() });
   Logger.log('Kata laluan admin kini: admin');
+}
+
+/** Buang baki data contoh lama (id / lecturer_id bermula 'demo_'). Data sebenar tidak disentuh. Jalankan sekali dari editor jika perlu. */
+function buangDataContoh() {
+  var ss = getSS_(), total = 0;
+  Object.keys(T).forEach(function (t) {
+    var sh = ss.getSheetByName(t), last = sh ? sh.getLastRow() : 0; if (last < 2) return;
+    var cols = T[t], range = sh.getRange(2, 1, last - 1, cols.length), vals = range.getValues();
+    var li = cols.indexOf('lecturer_id'), isDemo = function (v) { return String(v[0]).indexOf('demo_') === 0 || (li >= 0 && String(v[li]).indexOf('demo_') === 0); };
+    var keep = vals.filter(function (v) { return !isDemo(v); });
+    if (keep.length === vals.length) return;
+    total += vals.length - keep.length;
+    range.clearContent();
+    if (keep.length) sh.getRange(2, 1, keep.length, cols.length).setValues(keep);
+  });
+  Logger.log('Baris contoh dibuang: ' + total);
 }
 
 /** Wipes ALL data rows (keeps headers). Run by hand only. */
@@ -148,7 +163,7 @@ function doPost(e) {
   return json_(out);
 }
 
-var WRITES = { promoSave: 1, promoSubmit: 1, promoAct: 1, promoAppeal: 1, promoRemove: 1, bulkImport: 1, clearDemo: 1, create: 1, update: 1, remove: 1, upload: 1, createUser: 1, updateUser: 1, resetPassword: 1, changePassword: 1, deleteUser: 1 };
+var WRITES = { promoSave: 1, promoSubmit: 1, promoAct: 1, promoAppeal: 1, promoRemove: 1, create: 1, update: 1, remove: 1, upload: 1, createUser: 1, updateUser: 1, resetPassword: 1, changePassword: 1, deleteUser: 1 };
 
 // =====================================================================
 // Actions (same contract as js/local-server.js)
@@ -256,46 +271,6 @@ var ACTIONS = {
     if (ctx.user.role !== 'admin' && d.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw httpErr_('Tidak dibenarkan.', 403);
     var blob = DriveApp.getFileById(d.file_ref).getBlob();
     return { file_name: d.file_name, mime: d.mime, dataUrl: 'data:' + d.mime + ';base64,' + Utilities.base64Encode(blob.getBytes()) };
-  },
-
-  /** Admin-only one-shot import of sample rows. Every id must start with 'demo_' so clearDemo can remove exactly these. */
-  bulkImport: function (p, ctx) {
-    needAdmin_(ctx);
-    var tables = p.tables || {}, out = {};
-    Object.keys(tables).forEach(function (t) {
-      if (!T[t]) throw httpErr_('Jadual tidak diketahui: ' + t, 400);
-      tables[t].forEach(function (r) {
-        if (String(r.id).indexOf('demo_') !== 0) throw httpErr_('Import pukal hanya menerima id demo_.', 400);
-        if (t === 'users' && r.role !== 'lecturer') throw httpErr_('Import pukal tidak boleh mencipta pentadbir.', 400);
-      });
-    });
-    Object.keys(tables).forEach(function (t) {
-      var rows = tables[t]; if (!rows.length) return;
-      var existing = {}; rows_(t).forEach(function (r) { existing[r.id] = 1; });
-      var fresh = rows.filter(function (r) { return !existing[r.id]; });          // idempotent: re-running adds nothing twice
-      if (!fresh.length) { out[t] = 0; return; }
-      var sh = sheet_(t), data = fresh.map(function (r) { return toArr_(t, r); });
-      sh.getRange(sh.getLastRow() + 1, 1, data.length, T[t].length).setValues(data);
-      out[t] = data.length;
-    });
-    return out;
-  },
-
-  /** Admin-only: removes every row created by bulkImport (ids / lecturer_ids starting 'demo_'). Real data is untouched. */
-  clearDemo: function (p, ctx) {
-    needAdmin_(ctx);
-    var out = {};
-    Object.keys(T).forEach(function (t) {
-      var sh = sheet_(t), last = sh.getLastRow(); if (last < 2) { out[t] = 0; return; }
-      var cols = T[t], range = sh.getRange(2, 1, last - 1, cols.length), vals = range.getValues();
-      var li = cols.indexOf('lecturer_id'), isDemo = function (v) { return String(v[0]).indexOf('demo_') === 0 || (li >= 0 && String(v[li]).indexOf('demo_') === 0); };
-      var keep = vals.filter(function (v) { return !isDemo(v); });
-      out[t] = vals.length - keep.length;
-      if (!out[t]) return;
-      range.clearContent();
-      if (keep.length) sh.getRange(2, 1, keep.length, cols.length).setValues(keep);
-    });
-    return out;
   },
 
   // ---------- Kenaikan pangkat (aliran kerja; ikut js/promotion/workflow.js) ----------

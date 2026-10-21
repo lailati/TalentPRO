@@ -61,14 +61,14 @@ export function createGalaxy(host, { lecturers, expertise, categories, onOpen, t
     vertexShader: 'attribute float size; attribute vec3 color; varying vec3 vC; uniform float scale; void main(){ vC=color; vec4 mv=modelViewMatrix*vec4(position,1.); gl_PointSize=size*scale/-mv.z; gl_Position=projectionMatrix*mv; }',
     fragmentShader: 'uniform sampler2D map; varying vec3 vC; void main(){ vec4 t=texture2D(map,gl_PointCoord); gl_FragColor=vec4(vC*(0.6+t.a), t.a); if(t.a<0.02) discard; }',
   });
-  const points = new THREE.Points(geo, mat); scene.add(points);
+  const points = new THREE.Points(geo, mat); points.visible = N > 0; scene.add(points);   // geometri kosong (belum ada pensyarah) menghasilkan radius NaN
 
   // tethers: person -> secondary category hubs
   const lp = [];
   people.forEach((p) => p.cats.forEach((cid) => { const h = hubs.get(cid); if (h && !(p.top && cid === p.top.category_id)) lp.push(p.pos, h.p); else if (h) lp.push(p.pos, h.p); }));
   const lgeo = new THREE.BufferGeometry().setFromPoints(lp);
   const lmat = new THREE.LineBasicMaterial({ color: 0x5b8def, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false });
-  scene.add(new THREE.LineSegments(lgeo, lmat));
+  const tethers = new THREE.LineSegments(lgeo, lmat); tethers.visible = lp.length > 0; scene.add(tethers);
 
   let active = null; // Set of lecturer ids highlighted
   const dim = new THREE.Color(0x2a3550);

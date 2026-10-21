@@ -9,7 +9,7 @@ export async function render(root) {
   let tab = 'faq'; const cases = [];
   const draw = () => {
     const body = tab === 'faq' ? faq() : tab === 'proses' ? proses() : calc();
-    mount(root, html`${pageHead('Panduan Kenaikan Pangkat', 'Ringkasan Garis Panduan Kenaikan Pangkat Staf Akademik UPNM dalam bahasa yang mudah.', html`<a class="btn ghost" href="#/demo-kp">${icon('star', 18)} Lihat demo berpandu</a>`, '', 'panduan')}
+    mount(root, html`${pageHead('Panduan Kenaikan Pangkat', 'Ringkasan Garis Panduan Kenaikan Pangkat Staf Akademik UPNM dalam bahasa yang mudah.', '', '', 'panduan')}
       <div class="seg" role="group" aria-label="Bahagian panduan" style="margin-bottom:16px"><button data-t="faq" aria-pressed="${tab === 'faq'}">Soalan lazim</button><button data-t="proses" aria-pressed="${tab === 'proses'}">Proses &amp; jawatankuasa</button><button data-t="calc" aria-pressed="${tab === 'calc'}">Kalkulator tatatertib</button></div>${body}`);
     $$('[data-t]', root).forEach((b) => (b.onclick = () => { tab = b.dataset.t; draw(); }));
     const q = $('#fq', root); if (q) q.oninput = debounce((e) => { const v = e.target.value.toLowerCase(); $$('.faq details', root).forEach((d) => (d.hidden = !!v && !d.textContent.toLowerCase().includes(v))); });

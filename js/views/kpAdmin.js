@@ -19,7 +19,7 @@ export async function render(root) {
   const k = { act: apps().filter(inProcess).length, draf: apps().filter((a) => a.status === 'draf').length, ok: apps().filter((a) => ['berjaya', 'rayuan_berjaya'].includes(a.status) && String(a.decision_date || '').startsWith(year)).length, no: apps().filter((a) => ['tidak_berjaya', 'rayuan_ditolak'].includes(a.status)).length };
 
   mount(root, html`
-    ${pageHead('Papan Kerja Kenaikan Pangkat', 'Satu tempat untuk melihat semua permohonan dan apa yang perlu dibuat seterusnya.', html`<a class="btn ghost" href="#/panduan">${icon('book', 18)} Panduan</a><a class="btn ghost" href="#/demo-kp">${icon('star', 18)} Demo berpandu</a>`, '', 'kp_admin')}
+    ${pageHead('Papan Kerja Kenaikan Pangkat', 'Satu tempat untuk melihat semua permohonan dan apa yang perlu dibuat seterusnya.', html`<a class="btn ghost" href="#/panduan">${icon('book', 18)} Panduan</a>`, '', 'kp_admin')}
     <div class="kpi-row"><div class="kpi ${k.act ? 'hot' : ''}"><b>${k.act}</b><span>Perlu tindakan</span></div><div class="kpi"><b>${k.draf}</b><span>Draf calon</span></div><div class="kpi"><b>${k.ok}</b><span>Berjaya tahun ${year}</span></div><div class="kpi"><b>${k.no}</b><span>Tidak berjaya</span></div></div>
     <div class="row between" style="margin-bottom:12px"><div class="seg" role="group" aria-label="Paparan"><button data-t="act" aria-pressed="true">Perlu tindakan</button><button data-t="all" aria-pressed="false">Semua permohonan</button><button data-t="cand" aria-pressed="false">Calon berpotensi</button></div>${searchBox('q', 'Cari nama pensyarah…')}</div>
     <div id="tbl"></div>`);

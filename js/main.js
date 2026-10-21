@@ -27,7 +27,6 @@ const ROUTES = [
   ['kp-admin', 'kpAdmin', ['admin']],
   ['kp-admin/:id', 'kpDetail', ['admin']],
   ['panduan', 'panduan', ['admin', 'lecturer']],
-  ['demo-kp', 'demoKp', ['admin', 'lecturer']],
   ...ADMIN_ENTITY_ORDER.map((e) => [e, 'records:' + e, ['admin']]),
   ...ENTITY_ORDER.map((e) => [e, 'records:' + e, ['admin', 'lecturer']]),
 ];
@@ -55,7 +54,6 @@ function navFor(role) {
     { grp: 'Kenaikan Pangkat' },
     { href: '#/kp-admin', key: 'kp-admin', label: 'Papan Kerja', icon: 'target' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { href: '#/demo-kp', key: 'demo-kp', label: 'Demo Berpandu', icon: 'star' },
     { grp: 'Rekod' },
     ...ENTITY_ORDER.map(ent),
     ...ADMIN_ENTITY_ORDER.map(ent),
@@ -69,7 +67,6 @@ function navFor(role) {
     { grp: 'Kenaikan Pangkat' },
     { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat Saya', icon: 'target' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { href: '#/demo-kp', key: 'demo-kp', label: 'Demo Berpandu', icon: 'star' },
     { grp: 'Rekod Saya' },
     ...ENTITY_ORDER.map(ent),
   ];
@@ -148,8 +145,7 @@ function pageKey() {
   const p = curPath, admin = store.me && store.me.role === 'admin';
   if (p === 'dashboard') return admin ? 'dashboard_admin' : 'dashboard_lecturer';
   if (p === 'kp') return 'kp'; if (p === 'kp/mohon') return 'kp_mohon'; if (p.startsWith('kp-admin/')) return 'kp_detail'; if (p.startsWith('kp/')) return 'kp';
-  if (p === 'kp-admin') return 'kp_admin'; if (p === 'panduan') return 'panduan'; if (p === 'demo-kp') return 'demo_kp';
-  if (p.startsWith('lecturer/')) return 'lecturers';
+  if (p === 'kp-admin') return 'kp_admin'; if (p === 'panduan') return 'panduan';  if (p.startsWith('lecturer/')) return 'lecturers';
   return ['profile', 'lecturers', 'talent', 'users', 'categories', 'stats', 'reports', 'account', 'lppt_scores', 'disciplinary'].includes(p) ? p : 'records';
 }
 let revalidating = null;

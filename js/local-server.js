@@ -3,7 +3,6 @@
 import { TABLES, OWNED, ENTITIES, MAX_FILE_BYTES, ADMIN_WRITE, ACTION_ONLY, SERVICE_FIELDS } from './schema.js';
 import { NEXT_GRADE, stepsFor } from './promotion/guideline.js';
 import { allowedActs, nextStatus, ACTIVE_STATUSES, appealInfo } from './promotion/workflow.js';
-import { buildSeed } from './seed.js';
 
 const K = (t) => 'ftm:db:' + t;
 const read = (t) => JSON.parse(localStorage.getItem(K(t)) || '[]');
@@ -39,11 +38,21 @@ async function blobOp(mode, fn) {
 
 class HttpError extends Error { constructor(msg, code = 400) { super(msg); this.code = code; } }
 
-async function ensureSeed() {
-  if (localStorage.getItem('ftm:seeded') === '6') return;
-  const seed = await buildSeed(hashPw, { count: 100 });
-  TABLES.forEach((t) => write(t, seed[t] || []));
-  localStorage.setItem('ftm:seeded', '6');
+// Pangkalan data sandbox bermula kosong: hanya 12 kategori asas dan akaun admin (sama seperti setup() dalam Code.gs).
+const DEFAULT_CATEGORIES = [
+  ['Keselamatan Siber', '#1d5fd1'], ['Kecerdasan Buatan', '#7c3aed'], ['Rangkaian', '#0891b2'], ['Pangkalan Data', '#16a34a'],
+  ['Forensik Digital', '#e11d48'], ['Kejuruteraan Perisian', '#ea580c'], ['Keselamatan Maklumat', '#0f766e'], ['Sains Data', '#ca8a04'],
+  ['Internet Benda (IoT)', '#4f46e5'], ['Matematik & Pemodelan', '#be185d'], ['Teknologi Pertahanan', '#475569'], ['Lain-lain', '#64748b'],
+];
+async function ensureBootstrap() {
+  if (localStorage.getItem('ftm:boot') === '1') return;
+  const now = nowIso();
+  TABLES.forEach((t) => write(t, []));
+  write('expertise_categories', DEFAULT_CATEGORIES.map(([name, color]) => ({ id: uid('cat'), name, color, description: '', created_at: now, updated_at: now })));
+  const salt = uid('s');
+  write('users', [{ id: uid('usr'), username: 'admin', email: 'admin@fstp.upnm.edu.my', full_name: 'Pentadbir Fakulti', role: 'admin', department: 'Pejabat Fakulti', status: 'Active', salt, password_hash: await hashPw(salt, 'admin'), last_login: '', created_at: now, updated_at: now }]);
+  ['ftm:seeded', 'ftm:sessions'].forEach((k) => localStorage.removeItem(k));
+  localStorage.setItem('ftm:boot', '1');
 }
 
 function session(token) {
@@ -303,26 +312,6 @@ const actions = {
     write('users', read('users').filter((u) => u.id !== id));
     return { id };
   },
-  async bulkImport({ tables }, ctx) {
-    needAdmin(ctx); const out = {};
-    for (const [t, rows] of Object.entries(tables)) {
-      if (!TABLES.includes(t)) throw new HttpError('Jadual tidak diketahui: ' + t);
-      rows.forEach((r) => { if (!String(r.id).startsWith('demo_')) throw new HttpError('Import pukal hanya menerima id demo_.'); if (t === 'users' && r.role !== 'lecturer') throw new HttpError('Import pukal tidak boleh mencipta pentadbir.'); });
-      const have = new Set(read(t).map((r) => r.id)); const fresh = rows.filter((r) => !have.has(r.id));
-      write(t, [...read(t), ...fresh]); out[t] = fresh.length;
-    }
-    return out;
-  },
-  async clearDemo(_p, ctx) {
-    needAdmin(ctx); const out = {};
-    for (const t of TABLES) { const rows = read(t); const keep = rows.filter((r) => !String(r.id).startsWith('demo_') && !String(r.lecturer_id || '').startsWith('demo_')); out[t] = rows.length - keep.length; write(t, keep); }
-    return out;
-  },
-  async resetDemo() {
-    localStorage.removeItem('ftm:seeded'); localStorage.removeItem('ftm:sessions');
-    await ensureSeed();
-    return true;
-  },
 };
 
 function promoEvent(app, actor, role, action, from, to, note) {
@@ -336,12 +325,11 @@ function assertOwnsDoc(docId, lecturerId) {
 }
 
 export async function handle(action, payload, token) {
-  await ensureSeed();
+  await ensureBootstrap();
   const fn = actions[action];
   if (!fn) throw new HttpError('Tindakan tidak diketahui: ' + action, 404);
-  const open = ['login', 'resetDemo'];
-  const ctx = open.includes(action) ? null : session(token);
-  // small artificial latency keeps loading states honest during demo
+  const ctx = action === 'login' ? null : session(token);
+  // small artificial latency keeps loading states honest
   await new Promise((r) => setTimeout(r, 120));
   return fn(payload || {}, ctx, token);
 }

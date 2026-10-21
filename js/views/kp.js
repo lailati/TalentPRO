@@ -33,7 +33,7 @@ export async function render(root) {
     : html`<h2>${s.verdictText}</h2><p>${s.ready ? `Semua kriteria wajib bagi ${gradeLabel(ev.to)} telah dipenuhi mengikut rekod anda. Anda boleh memulakan permohonan.` : `${s.metCount} daripada ${s.total} bahagian penilaian telah dipenuhi untuk ${gradeLabel(ev.to)}. Ikuti senarai "perkara paling penting" di bawah untuk melengkapkan rekod anda.`}</p>`;
 
   mount(root, html`
-    ${pageHead('Kenaikan Pangkat Saya', `${gradeLabel(ev.from)} → ${gradeLabel(ev.to)}`, html`<a class="btn ghost" href="#/panduan">${icon('book', 18)} Panduan</a><a class="btn ghost" href="#/demo-kp">${icon('star', 18)} Demo berpandu</a>`, '', 'kp')}
+    ${pageHead('Kenaikan Pangkat Saya', `${gradeLabel(ev.from)} → ${gradeLabel(ev.to)}`, html`<a class="btn ghost" href="#/panduan">${icon('book', 18)} Panduan</a>`, '', 'kp')}
     ${ladder(ev.from, ev.to)}
     <section class="kp-hero" aria-label="Ringkasan kesediaan">
       ${ring(s.pct, 'kesediaan')}

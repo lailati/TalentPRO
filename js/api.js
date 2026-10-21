@@ -99,15 +99,12 @@ export const updateUser = async (id, patch) => { const u = await call('updateUse
 export const resetPassword = (id, password) => call('resetPassword', { id, password });
 export const changePassword = (current, password) => call('changePassword', { current, password });
 export const deleteUser = async (id) => { await call('deleteUser', { id }); await load(); };
-export const resetDemo = () => call('resetDemo');
 // ---- kenaikan pangkat ----
 export async function promoSave(data) { const r = await call('promoSave', data); patchStore('promotion_applications', r); emit(); return r; }
 export async function promoSubmit(id, ack) { const r = await call('promoSubmit', { id, ack }); await load(); return r; }
 export async function promoAct(id, payload) { const r = await call('promoAct', { id, ...payload }); await load(); return r; }
 export async function promoAppeal(id, reason) { const r = await call('promoAppeal', { id, reason }); await load(); return r; }
 export async function promoRemove(id) { await call('promoRemove', { id }); store.promotion_applications = store.promotion_applications.filter((a) => a.id !== id); store.promotion_events = store.promotion_events.filter((e) => e.application_id !== id); emit(); }
-export const bulkImport = async (tables) => { const r = await call('bulkImport', { tables }); await load(); return r; };
-export const clearDemo = async () => { const r = await call('clearDemo'); await load(); return r; };
 
 // Mirrors what the server logs, so we avoid a second round trip.
 function note(lecturer_id, message) { if (lecturer_id && store.lecturers.some((l) => l.id === lecturer_id)) store.activity_log.push({ id: 'local_' + Date.now(), lecturer_id, message, created_at: new Date().toISOString() }); }

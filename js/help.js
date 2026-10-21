@@ -108,9 +108,6 @@ export const HELP = {
   cat_color: { t: 'Warna kategori', b: 'Warna digunakan dalam carta dan galaksi 3D. Masukkan kod hex 6 digit seperti #1d5fd1.' },
   reports_filters: { t: 'Penapis laporan', b: 'Pilih jenis laporan, kemudian tapis mengikut jabatan, tahap atau tahun. Pratonton dipaparkan terus; gunakan Eksport CSV atau Cetak untuk menyimpan.' },
   reports_print: { t: 'Cetak / PDF', b: 'Membuka dialog cetak pelayar. Pilih "Simpan sebagai PDF" untuk mendapatkan fail PDF.' },
-  sample_load: { t: 'Muatkan pensyarah contoh', b: 'Menambah 100 pensyarah fiksyen (lengkap dengan rekod kenaikan pangkat) untuk melihat sistem pada skala sebenar. Baris contoh ditandakan supaya boleh dibuang tanpa menjejaskan data sebenar.' },
-  sample_clear: { t: 'Buang data contoh', b: 'Memadam hanya pensyarah dan rekod contoh. Akaun dan data sebenar tidak terjejas.' },
-  demo_reset: { t: 'Tetap semula data demo', b: 'Memulihkan data contoh asal dalam pelayar ini dan melog keluar semua pengguna.' },
   theme_toggle: { t: 'Tema', b: 'Tukar antara paparan cerah dan gelap. Pilihan anda diingati dalam pelayar ini.' },
   profile_photo: { t: 'Gambar profil', b: 'Pilih gambar JPG atau PNG (maksimum 2 MB). Gambar dipotong kepada petak dan dikecilkan secara automatik.' },
   remember_me: { t: 'Ingat saya', b: 'Kekalkan log masuk pada pelayar ini selepas ia ditutup. Jangan tandakan pada komputer yang dikongsi.' },
@@ -126,7 +123,6 @@ export const HELP = {
   kp_assessor_add: { t: 'Calonkan Penilai Luar', b: 'Fakulti mencalonkan 5 penilai bergred lebih tinggi, daripada mana 3 dipilih. Masukkan butiran dan semak setiap kriteria. Honorarium RM300 (dalam negara) atau USD100 (luar negara).', ref: 'Perenggan 3.5' },
   kp_candidates: { t: 'Calon berpotensi', b: 'Senarai pensyarah yang hampir atau sudah memenuhi syarat wajib minimum bagi gred seterusnya, dikira daripada rekod mereka. Gunakan untuk mengenal pasti calon yang boleh digalakkan memohon.' },
   kp_tatatertib_calc: { t: 'Kalkulator tempoh tatatertib', b: 'Masukkan hukuman dan tarikh; sistem mengira bila anda boleh dipertimbangkan semula mengikut Garis Panduan.', ref: 'Perenggan 2.3.5–2.3.8' },
-  kp_demo: { t: 'Demo berpandu', b: 'Lihat satu permohonan dari awal hingga akhir dalam beberapa langkah ringkas, dengan penjelasan di setiap langkah. Data demo tidak menjejaskan rekod sebenar.' },
 };
 
 // Bantuan halaman: apa fungsi halaman dan tiga tugas biasa
@@ -146,8 +142,7 @@ export const PAGE_HELP = {
   kp_mohon: { t: 'Permohonan Kenaikan Pangkat', b: 'Empat langkah ringkas.', tasks: ['Semak maklumat peribadi dan kelayakan.', 'Semak aktiviti yang dikumpul daripada rekod anda.', 'Beri pengakuan dan hantar kepada Fakulti.'] },
   kp_admin: { t: 'Papan Kerja Kenaikan Pangkat', b: 'Semua permohonan mengikut langkah.', tasks: ['Klik "Perlu tindakan" untuk melihat apa yang menunggu anda.', 'Klik satu permohonan untuk melihat langkah seterusnya.', 'Gunakan "Calon berpotensi" untuk mencari pensyarah yang sudah hampir layak.'] },
   kp_detail: { t: 'Butiran Permohonan', b: 'Satu permohonan, satu tindakan seterusnya.', tasks: ['Baca "Apa berlaku di langkah ini".', 'Tandakan item semakan dan klik butang keputusan.', 'Semak garis masa dan penilai luar di sebelah kanan.'] },
-  panduan: { t: 'Panduan Kenaikan Pangkat', b: 'Ringkasan Garis Panduan dalam bahasa biasa.', tasks: ['Cari soalan di kotak carian.', 'Gunakan Kalkulator tatatertib untuk mengira tempoh tidak layak.', 'Buka Demo berpandu untuk melihat proses dari awal ke akhir.'] },
-  demo_kp: { t: 'Demo Kenaikan Pangkat', b: 'Cerita berpandu langkah demi langkah.', tasks: ['Pilih satu cerita.', 'Tekan "Seterusnya" atau ▶ untuk main automatik.', 'Cuba "Bagaimana jika" untuk melihat kesediaan berubah apabila rekod ditambah.'] },
+  panduan: { t: 'Panduan Kenaikan Pangkat', b: 'Ringkasan Garis Panduan dalam bahasa biasa.', tasks: ['Cari soalan di kotak carian.', 'Gunakan Kalkulator tatatertib untuk mengira tempoh tidak layak.'] },
   lppt_scores: { t: 'Markah LPPT', b: 'Markah prestasi tahunan.', tasks: ['Tambah markah setiap tahun bagi setiap pensyarah.'] },
   disciplinary: { t: 'Hukuman Tatatertib', b: 'Rekod hukuman yang menjejaskan kelayakan.', tasks: ['Tambah hukuman dengan tarikh dijatuhkan.', 'Nombor kes yang sama = satu pertuduhan.'] },
 };

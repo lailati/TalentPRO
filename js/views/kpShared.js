@@ -1,4 +1,4 @@
-// Komponen paparan Kenaikan Pangkat yang dikongsi: hab pensyarah, butiran pentadbir dan demo.
+// Komponen paparan Kenaikan Pangkat yang dikongsi: hab pensyarah dan butiran pentadbir.
 import { html, raw, icon, fmtDate } from '../util.js';
 import { helpBtn } from '../help.js';
 import { GRADES, GRADE, COMPONENT, STATUS_LABEL, stepsFor, gradeLabel } from '../promotion/guideline.js';

@@ -16,7 +16,7 @@ Deploy **versi baharu** setiap kali `Code.gs` disunting, jika tidak URL terus me
 
 ## Pangkalan data yang dicipta sebelum versi Bahasa Malaysia
 
-Jalankan fungsi **`terjemahDataKeBM`** sekali (kemudian deploy versi baharu): ia menukar nama 12 kategori kepakaran asal (Inggeris) dan akaun pentadbir kepada Bahasa Malaysia. Jika anda sudah memuatkan data contoh versi lama (rekod berbahasa Inggeris), pilih **Akaun → Buang data contoh**, kemudian **Muatkan 100 pensyarah contoh** semula. Fungsi `resetAdminPassword` pula menetapkan kata laluan admin kepada `admin`.
+Jalankan fungsi **`terjemahDataKeBM`** sekali (kemudian deploy versi baharu): ia menukar nama 12 kategori kepakaran asal (Inggeris) dan akaun pentadbir kepada Bahasa Malaysia. Fungsi `resetAdminPassword` pula menetapkan kata laluan admin kepada `admin`.
 
 ## Mengapa akses "Anyone" masih agak selamat
 
@@ -37,8 +37,8 @@ URL aplikasi web ialah awam, tetapi setiap tindakan kecuali `login` memerlukan t
 4. Dalam `js/api.js` halakan `transport()` ke titik akhir baharu. **Tiada perubahan kod paparan.**
 5. Pindahkan muat naik daripada Drive ke cakera/S3 (`documents.file_ref`) dan cincang semula kata laluan kepada bcrypt pada log masuk pertama.
 
-## Data contoh (100 pensyarah fiksyen)
+## Data sebenar sahaja
 
-Log masuk sebagai admin → **Akaun → Data contoh → Muatkan 100 pensyarah contoh**. Ia menggunakan tindakan `bulkImport` (memerlukan `Code.gs` terkini di-deploy sebagai versi baharu). Setiap id baris contoh bermula dengan `demo_`, jadi **Buang data contoh** (`clearDemo`) memadam baris tersebut sahaja dan tidak menyentuh data sebenar. Pensyarah contoh log masuk dengan nama pengguna mereka + `Lecturer@123`.
+Aplikasi tidak lagi mempunyai data contoh. Pensyarah dan rekod dimasukkan melalui **Urus Pengguna** dan borang rekod. Jika Sheet anda masih ada baki baris contoh lama (id bermula `demo_`), jalankan fungsi **`buangDataContoh`** sekali dari editor Apps Script; data sebenar tidak disentuh.
 
 Petua: buka laman dengan `?backend=local` untuk menggunakan kotak pasir peribadi dalam pelayar dan bukannya Sheet bersama.

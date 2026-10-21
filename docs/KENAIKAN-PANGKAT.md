@@ -9,7 +9,6 @@ Garis Panduan itu rumit (108 halaman). Sistem ini menyembunyikan kerumitannya di
 - **Pensyarah**: satu halaman (`#/kp`) — gred sekarang → sasaran, cincin kesediaan, "3 perkara paling penting", dan **satu** butang utama (Mulakan permohonan / Lihat status). Butang "Tambah rekod" membuka borang dengan jenis rekod yang betul.
 - **Pentadbir**: papan kerja (`#/kp-admin`) dengan tab *Perlu tindakan / Semua / Calon berpotensi*; butiran permohonan menunjukkan **satu langkah semasa**, siapa yang bertindak, senarai semak, dan butang keputusan dalam bahasa biasa.
 - **Butang "?"** di sebelah setiap istilah / butang yang kelihatan rumit (kira-kira 150 entri dalam `js/help.js`, dengan rujukan Perenggan ). Butang **Bantuan** di bar atas menerangkan halaman semasa. Borang menyembunyikan medan kenaikan pangkat di bawah bahagian pilihan yang dilipat, dan medan lain muncul hanya apabila relevan (contoh: jenis aktiviti).
-- **Demo berpandu** (`#/demo-kp`): tiga cerita yang menjalankan **enjin sebenar** pada data fiksyen dalam ingatan.
 
 ## Laluan gred yang dilindungi
 
@@ -45,10 +44,8 @@ Jadual peralihan sah berada di `js/promotion/workflow.js` **dan** disalin dalam 
 | `js/promotion/guideline.js` | Garis Panduan sebagai data (RULES, STEPS, FAQ, jawatankuasa, kod Lampiran) |
 | `js/promotion/engine.js` | `evaluate()`, `disciplineBlocks()`, `compileLampiran()`, `quickReadiness()` — tulen, tanpa DOM |
 | `js/promotion/workflow.js` | jadual peralihan, label butang, tempoh rayuan |
-| `js/promotion/demo.js` | data fiksyen untuk demo |
 | `js/help.js` | daftar bantuan "?" dan bantuan halaman |
-| `js/views/kp*.js`, `panduan.js`, `demoKp.js`, `lampiran.js` | skrin |
-| `js/seed-career.js` | data demo kerjaya (gred, LPPT, tatatertib, aktiviti, ~10 permohonan pelbagai status) |
+| `js/views/kp*.js`, `panduan.js`, `lampiran.js` | skrin |
 | `tools/test-engine.mjs` | 21 ujian unit yang memetik perenggan Garis Panduan |
 
 Jalankan ujian: `node tools/test-engine.mjs`.

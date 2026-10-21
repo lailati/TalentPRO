@@ -1,4 +1,4 @@
-# PROJECT.md — Peta Bakat FSTP (FSTP Talent Map)
+﻿# PROJECT.md — Peta Bakat FSTP (FSTP Talent Map)
 
 > **Purpose of this file.** A complete, self-contained handoff. A person or an AI agent with *only this file* (and no memory of earlier work) should be able to rebuild, run, deploy, extend, test and present this project. Everything the previous build learned the hard way is in §20 (Gotchas) and §21 (Build order).
 >
@@ -22,11 +22,11 @@
 | Stack | Plain HTML/CSS/JavaScript (ES modules, **no build step**), Three.js r160 (CDN), Google Apps Script + Google Sheets/Drive (phase 1 backend), planned PHP + MySQL (phase 2) |
 | Reference repo (current, not mandatory) | https://github.com/ruxxzif89/FTSP-Talent-Map-System (public, branch `main`) |
 | Reference deployment (current, not mandatory) | https://ruxxzif89.github.io/FTSP-Talent-Map-System/ (GitHub Pages) — **a new build may be hosted anywhere; see §0.1 and §11** |
-| Sandbox demo | live site + `?backend=local` (private in-browser DB with 100 fictional lecturers) |
+| Sandbox | live site + `?backend=local` (private in-browser DB; starts empty with admin + 12 categories) |
 | Reference DB (current phase-1 backend) — Google Sheet | spreadsheet id `1LFZkj30JrlinLjcabWfZ-yEcO08EVwcDt2MPR0prRF0` |
 | Reference API — Apps Script web app | `https://script.google.com/macros/s/AKfycbyklWJ6Ttcj9gL11yeAIdT0mDv6VzdQgdhVZGR9UquD8Od2JS7gcZ1JOKDourKJcYZD/exec` (Execute as: Me · Access: Anyone) |
 | Default admin | username `admin`, password `admin` (**first-phase default; change before real data**) |
-| Sample lecturers | username = first name lower-case (+ index from the 5th lecturer), password `Lecturer@123`; the showcase account is `aisyah` |
+
 | Presentation deck | 28-slide Malay FYP deck (claude.ai artifact "Pembentangan FYP - Peta Bakat FSTP"; also exported to `.pptx` locally, not committed) |
 
 ---
@@ -227,7 +227,7 @@ js/config.js            CONFIG {backend, gasUrl, appName}; ?backend=local|gas UR
 js/schema.js            ENTITIES + enums + labels (single source of truth)
 js/api.js               gateway, store, session cache (stale-while-revalidate), selectors
 js/local-server.js      in-browser backend (localStorage + IndexedDB), same actions as Code.gs
-js/seed.js              deterministic Malay sample-data generator (buildSeed)
+
 js/util.js              html`` escaping template, icons, logo, formatters, toast, drawer, confirm, SVG charts, avatar
 js/main.js              shell, router, nav, popovers, theme, route guard, revalidate re-render
 js/views/               login, dashboard, records(generic CRUD), profile, profileView, lecturers, talent,
@@ -236,7 +236,7 @@ js/three/               login-scene.js (network backdrop), galaxy.js (3D experti
 backend/Code.gs         Google Apps Script API (Sheets as DB)
 backend/README.md       Google setup + migration notes (Malay)
 docs/schema.sql         MySQL 8 target schema
-tools/screenshots.mjs   Edge-headless (CDP) screenshot generator used for the deck
+
 .nojekyll               REQUIRED on GitHub Pages (see §20)
 .gitignore              ignores *.pdf, WhatsApp images, *.pptx, .claude/settings.local.json
 README.md               short Malay README
@@ -275,7 +275,7 @@ Notes:
 - `lecturers.photo`: data-URL JPEG, 200×200 centre-crop, quality 0.82 (must fit one Sheets cell: ≤ 45,000 chars enforced).
 - `documents.file_ref`: Drive file id (GAS) — **never returned to the browser**; local backend stores the file body in IndexedDB keyed by document id.
 - Numeric columns: `years, year, duration_days, size`. Everything else is text. In Sheets all columns are pre-formatted as plain text (`@`) except those numeric ones (`0`) — otherwise Sheets converts `2026-10-13` to Date objects.
-- Sample/demo rows have ids starting `demo_` (remote import) so they can be removed precisely.
+- Legacy sample rows (if any) have ids starting `demo_`; the editor function `buangDataContoh()` in `Code.gs` removes exactly those.
 
 ### 4.1 Canonical stored values (Bahasa Malaysia)
 Logic codes stay English and are translated **only on display**: `role ∈ {admin, lecturer}` → Pentadbir / Pensyarah; `users.status ∈ {Active, Inactive}` → Aktif / Tidak Aktif. All other descriptive values are stored in Malay:
@@ -331,9 +331,6 @@ Client treats `code===401` (except for `login`) as "session expired": clears ses
 | `resetPassword` | admin | `{id,password}` | ≥ 8 chars, new salt |
 | `changePassword` | any | `{current,password}` | verifies current; ≥ 8 |
 | `deleteUser` | admin | `{id}` | not self; cascades lecturer + all owned rows + Drive files |
-| `bulkImport` | admin | `{tables:{table:[rows]}}` → counts | **every row id must start `demo_`**, users must be role lecturer, idempotent (skips existing ids). Used to load sample data in one request (single `setValues` per table in GAS) |
-| `clearDemo` | admin | → counts | deletes every row whose `id` or `lecturer_id` starts `demo_`; real data untouched |
-| `resetDemo` | none (local only) | | reseeds local DB |
 
 Concurrency: GAS uses `LockService.getScriptLock()` for all write actions (`WRITES` map).
 Limits: Sheets cell ≤ 50,000 chars (guard 45,000); activity_log trimmed (GAS keeps ~800 rows, local 400); Apps Script run ≤ 6 min.
@@ -374,7 +371,7 @@ Top bar (navy gradient): hamburger (mobile), crest + "PETA BAKAT FSTP / UPNM · 
 - **Kategori Kepakaran** — CRUD with colour hex (`#RRGGBB`) and lecturer count; delete blocked when in use.
 - **Statistik** — 4 tiles (lecturers, expertise records, avg years, lecturers with no expertise), bars per category, donut by level, bars publications/year (last 8), donut publication types, donut by department, top 5 publishing lecturers, "Perlu perhatian" list.
 - **Laporan** — 8 reports: Direktori pensyarah, Matriks kepakaran, + Penyelidikan/Penerbitan/Pensijilan/Latihan/Konsultansi/Pencapaian; filters department/level/year; preview (first 200 rows); **Eksport CSV** (UTF-8 BOM; cells starting `= + - @` are prefixed with `'` to neutralise formula injection) and **Cetak / PDF** (`window.print`, print CSS hides chrome).
-- **Akaun & Kata Laluan** — change password; admin on remote backend sees **Data contoh** card (Muatkan 100 pensyarah contoh / Buang data contoh); admin on local backend sees "Tetap semula data demo".
+- **Akaun & Kata Laluan** — change password only. (The former "Data contoh" and "Tetap semula data demo" cards were removed.)
 
 ### 6.5 Shared UI toolkit (`util.js`, `_ui.js`)
 - `html\`\`` tagged template **escapes every interpolation** unless it is itself `html`/`raw` (XSS defence). `mount(el, tpl)`.
@@ -406,16 +403,9 @@ Core glossary (use consistently): Dashboard→Papan Pemuka · Lecturer→Pensyar
 
 ---
 
-## 9. Sample data (`seed.js`)
+## 9. Data (no sample data)
 
-`buildSeed(hashPw, {count=100, prefix='', categories=null, includeAdmin=true, docs=true})`, deterministic (mulberry32 seed `20261013`).
-- Admin `admin/admin` (only when `includeAdmin`). Lecturers share one salt and password `Lecturer@123`.
-- First four fixed: Dr. Aisyah Binti Ahmad (`aisyah`, UPNM001, Sains Komputer, Pensyarah Kanan; counts research 8 / publications 15 / certifications 6 / training 10 / consultancy 4 / achievements 5; 3 documents when `docs`), Prof. Dr. Harun Bin Ismail (`harun`), Dr. Farhana Binti Omar (`farhana`), Dr. Ahmad Bin Zulkifli (`ahmadz`).
-- Remaining: mix of Malay (≈72 %: Bin/Binti), Chinese (≈14 %), Indian (≈14 %: a/l, a/p) names; titles by position (Profesor→"Prof. Dr.", Profesor Madya→"Prof. Madya Dr.", Tutor→Encik/Puan, others Dr. 80 % else Encik/Puan); usernames `<first-name-lowercase><index>`; unique full names.
-- Per lecturer: 1 main expertise (level/years scaled by seniority) + 0–2 extras; research/publication/certification/training/consultancy/achievement counts vary by seniority; every 31st lecturer `Inactive`; bios for all; activity feed entries.
-- Produces for 100 lecturers ≈ 224 expertise, 211 research, 497 publications, 203 certifications, 223 training, 122 consultancy, 147 achievements, 43 activity = **1,870 rows** (plus 100 users + 100 lecturers).
-- Titles/venues/courses/clients/awards are Malay (journal names such as "IEEE Access", "Computers & Security", certification names like CISSP are proper nouns). Category lookup works whether the DB categories are Malay or legacy English (`CAT_EN` alias map).
-- Local backend seeds 100 lecturers automatically (flag `localStorage['ftm:seeded']='5'`; bump the number to force a reseed). Remote: Akaun → *Muatkan 100 pensyarah contoh* (`bulkImport`, ids `demo_*`, no documents).
+- The local sandbox bootstraps itself (flag `localStorage['ftm:boot']='1'`): empty tables + the 12 default categories + `admin/admin`. Real data is entered through Urus Pengguna and the record forms (or pre-existing Sheet data on the `gas` backend).
 
 ---
 
@@ -481,7 +471,7 @@ pages:
 ### 11.4 Verification checklist after any deploy
 1. The URL loads over HTTPS and the login page shows the animated network (no console errors).
 2. Login as admin works; the dashboard counts load; hard refresh (Ctrl+Shift+R) still works.
-3. Open `<url>/?backend=local` → sandbox works with 100 lecturers.
+3. Open `<url>/?backend=local` → sandbox starts empty (login `admin/admin`).
 4. Create + delete a test lecturer, add a record with a file upload, export a CSV.
 5. A lecturer account cannot open admin pages and cannot read another lecturer's data (try the API with a lecturer token).
 6. Mobile width (≈390 px) shows the drawer navigation.
@@ -522,7 +512,7 @@ The **frontend only knows the logical contract in §5** (the 12 "tables" returne
 5. **Secrets:** never return password hashes/salts or storage paths/ids; files only via authorised `download`.
 6. **Validation:** required fields, numeric ranges (`years` 0–60, `year` 1990–2100, `duration_days` 0–365), enum values from §4.1, password ≥ 8 chars, file ≤ 5 MB with MIME/extension whitelist.
 7. **Audit text:** write an `activity_log` row on create/update/remove/upload ("Menambah … baharu", "Mengemas kini maklumat …", "Memadam …", "Memuat naik dokumen"); keep the log bounded.
-8. **Idempotent demo tooling:** `bulkImport` accepts only ids prefixed `demo_` and lecturer-role users; `clearDemo` removes exactly those.
+8. **No sample data:** the system ships empty (admin + 12 default categories). `buangDataContoh()` (editor-only) removes legacy `demo_` rows.
 
 ### 12.1.2 Mapping by database style
 | Style | How to model the 12 entities | Where to enforce §12.1.1 | Pitfalls |
@@ -547,7 +537,7 @@ The **frontend only knows the logical contract in §5** (the 12 "tables" returne
 ## 13. Testing
 
 Manual functional cases executed (all pass unless noted): **TC1** admin & lecturer login (live Sheet + sandbox) · **TC2** lecturer opening admin route is refused ("Halaman tidak tersedia") · **TC3** add certification with PDF upload · **TC4** empty form shows inline errors on every required field · **TC5** create then delete a lecturer account on the live Google Sheet · **TC6** load 100 lecturers (1,870 rows) and render dashboard/galaxy · **TC7** sweep all 17 routes without console errors · **TC8** 390 px mobile layout (drawer nav, 2-column tiles) · **TC9** UAT with real lecturers — **planned PSM II, not done**.
-Tooling notes: `tools/screenshots.mjs` drives headless **Microsoft Edge over the DevTools protocol** (no npm install; uses Node's global `WebSocket`) to produce 1600×900 @1.25 DPR JPEGs of every key screen against `http://localhost:5173/?backend=local` (logs in as admin and as `aisyah`, includes a 390 px mobile run). Usage: start the dev server, then `node tools/screenshots.mjs <outDir>`. It must kill the whole Edge process tree at the end (`taskkill /T`), otherwise the next run silently attaches to the old browser/session. Edit the `EDGE` path for other machines. Automated test suite: not yet written (roadmap).
+Tooling notes: `tools/test-engine.mjs` runs the promotion-engine unit tests (`node tools/test-engine.mjs`). The former screenshot tool and all sample-data generators were removed in the housekeeping pass. Automated UI tests: not yet written (roadmap).
 
 ---
 
@@ -591,7 +581,7 @@ Tooling notes: `tools/screenshots.mjs` drives headless **Microsoft Edge over the
 | Run locally | `python -m http.server 5173` |
 | Use sandbox | open `/?backend=local` (login `admin/admin`) |
 | Reset sandbox | Akaun → Tetap semula data demo, or clear site data, or bump `ftm:seeded` |
-| Load/remove sample data on live | Akaun → Muatkan 100 pensyarah contoh / Buang data contoh (admin) |
+| Clean leftover sample rows on live | run `buangDataContoh()` once in the Apps Script editor (only `demo_` rows; real data untouched) |
 | Reset live admin password | run `resetAdminPassword()` in Apps Script, deploy new version |
 | Wipe live DB | run `resetAllData()` (destructive) |
 | Publish site | depends on the host chosen in §0.1 (reference: `git push` to `main` → GitHub Pages rebuilds ~1 min; Firebase: `firebase deploy --only hosting`) |
@@ -608,7 +598,7 @@ Tooling notes: `tools/screenshots.mjs` drives headless **Microsoft Edge over the
 - [ ] Talent search across name/area/interest/titles with department+level filters, counts per category, card + 3D views.
 - [ ] Dashboard (admin + lecturer), statistics, 8 reports with CSV + print.
 - [ ] Users CRUD, password reset, cascade delete.
-- [ ] Sample data 100 lecturers load and clear without touching real rows.
+- [ ] Fresh install starts empty (admin + 12 categories only); no sample/demo data anywhere in code or UI.
 - [ ] Light/dark theme, responsive down to 360 px, keyboard-accessible dialogs/drawers.
 - [ ] No English user-visible strings; dates in `ms-MY`.
 - [ ] Works at the root **and** under a sub-path of whichever host was chosen in §0.1 (relative URLs; `.nojekyll` only for GitHub Pages).
@@ -642,16 +632,16 @@ Give the AI this file plus the proposal PDF and the two mockups, then proceed in
 
 0. **Decision gate (§0.1):** ask the human about hosting, backend, accounts, data sensitivity and comfort level; offer guided mode. Do this *before* writing deploy/backend code.
 1. **Foundations:** `index.html` (import map, fonts, theme script, `lang="ms"`), `css/app.css` tokens + shell, `util.js` (`html` escaping, icons, toast, drawer, confirm, charts), `schema.js` (ENTITIES, enums, labels).
-2. **Local backend:** `local-server.js` + `seed.js` implementing the §5 contract (auth, snapshot, CRUD, upload/download via IndexedDB, users) and `api.js` with store, selectors and session cache. *Check:* console-level calls succeed; authorisation tests per §19.
+2. **Local backend:** `local-server.js` (starts empty: admin + 12 default categories) implementing the §5 contract (auth, snapshot, CRUD, upload/download via IndexedDB, users) and `api.js` with store, selectors and session cache. *Check:* console-level calls succeed; authorisation tests per §19.
 3. **Shell & router:** `main.js` (guards, nav, popovers, theme), login view.
 4. **Generic records view** + `_ui.js` helpers (table, form builder/validator). *Check:* all 8 record types CRUD with files.
 5. **Dashboards, profile, lecturers directory, users, categories.**
 6. **Talent mapping** (search algorithm §6.4) → **statistics → reports**.
 7. **Three.js:** login network, then galaxy (+ dashboard card with lazy loading).
 8. **Malay audit:** grep every user-visible string, server errors, activity messages, seed text, README; verify with a page-text sweep.
-9. **Backend (per the §0.1 answer):** implement the §5 contract on the chosen platform. For the reference choice that is `Code.gs` (+ `setup`, `resetAdminPassword`, `terjemahDataKeBM`, `bulkImport`, `clearDemo`): deploy, flip `backend:'gas'`, retest TC1–TC5 against the live data. For Firebase / Supabase / PHP see §11.3 and §12.
+9. **Backend (per the §0.1 answer):** implement the §5 contract on the chosen platform. For the reference choice that is `Code.gs` (+ `setup`, `resetAdminPassword`, `terjemahDataKeBM`, `buangDataContoh`): deploy, flip `backend:'gas'`, retest TC1–TC5 against the live data. For Firebase / Supabase / PHP see §11.3 and §12.
 10. **Performance pass:** parallel session restore, snapshot cache, lazy galaxy.
 11. **Docs & deploy:** README, backend notes, `docs/schema.sql`; then **run the decision gate (§0.1)** and deploy with the matching recipe in §11, finishing with the §11.4 checklist and a filled-in decision record.
-12. **Deck:** capture screenshots with `tools/screenshots.mjs`, build the 28 slides (§14).
+12. **Deck:** capture screenshots of the running system (manually or with a script) and build the 28 slides (§14).
 
 When in doubt, read the code: it is small (roughly 2,600 lines of JS, CSS and Apps Script, with no dependency besides Three.js).
