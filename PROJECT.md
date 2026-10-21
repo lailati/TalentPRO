@@ -580,7 +580,7 @@ Tooling notes: `tools/test-engine.mjs` runs the promotion-engine unit tests (`no
 |---|---|
 | Run locally | `python -m http.server 5173` |
 | Use sandbox | open `/?backend=local` (login `admin/admin`) |
-| Reset sandbox | Akaun → Tetap semula data demo, or clear site data, or bump `ftm:seeded` |
+| Reset sandbox | clear the site's data in the browser (or bump the `ftm:boot` flag in `local-server.js`) |
 | Clean leftover sample rows on live | run `buangDataContoh()` once in the Apps Script editor (only `demo_` rows; real data untouched) |
 | Reset live admin password | run `resetAdminPassword()` in Apps Script, deploy new version |
 | Wipe live DB | run `resetAllData()` (destructive) |
