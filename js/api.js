@@ -95,6 +95,7 @@ export async function upload(file, meta) {
 }
 export async function download(id) { return call('download', { id }); }
 export const createUser = async (user) => { const u = await call('createUser', { user }); await load(); return u; };
+export const createUsers = async (users) => { const r = await call('createUsers', { users }); await load(); return r; };
 export const updateUser = async (id, patch) => { const u = await call('updateUser', { id, patch }); await load(); return u; };
 export const resetPassword = (id, password) => call('resetPassword', { id, password });
 export const changePassword = (current, password) => call('changePassword', { current, password });

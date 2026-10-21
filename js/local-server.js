@@ -1,7 +1,7 @@
 // In-browser stand-in for the Apps Script backend (backend/Code.gs).
 // Same actions, same rules (auth, ownership, referential integrity) so the UI cannot tell them apart.
-import { TABLES, OWNED, ENTITIES, MAX_FILE_BYTES, ADMIN_WRITE, ACTION_ONLY, SERVICE_FIELDS } from './schema.js';
-import { NEXT_GRADE, stepsFor } from './promotion/guideline.js';
+import { TABLES, OWNED, ENTITIES, MAX_FILE_BYTES, ADMIN_WRITE, ACTION_ONLY, SERVICE_FIELDS, POSITIONS } from './schema.js';
+import { NEXT_GRADE, stepsFor, GRADES, FIELDS } from './promotion/guideline.js';
 import { allowedActs, nextStatus, ACTIVE_STATUSES, appealInfo } from './promotion/workflow.js';
 
 const K = (t) => 'ftm:db:' + t;
@@ -272,6 +272,37 @@ const actions = {
       write('lecturers', lecs);
     }
     return safeUser(u);
+  },
+  /** Cipta banyak akaun pensyarah sekali gus (import CSV). Baris sah dicipta; baris tidak sah dilaporkan dalam `errors` (indeks mengikut urutan permintaan). */
+  async createUsers({ users: list }, ctx) {
+    needAdmin(ctx);
+    if (!Array.isArray(list) || !list.length) throw new HttpError('Tiada pengguna untuk dicipta.');
+    if (list.length > 500) throw new HttpError('Maksimum 500 baris setiap import.');
+    const users = read('users'), lecs = read('lecturers');
+    const names = new Set(users.map((u) => u.username.toLowerCase())), mails = new Set(users.map((u) => u.email.toLowerCase())), staff = new Set(lecs.map((l) => String(l.staff_id).toLowerCase()));
+    const created = [], errors = [];
+    for (let i = 0; i < list.length; i++) {
+      const r = list[i] || {}; const bad = (m) => errors.push({ index: i, message: m });
+      if (!r.username || !r.email || !r.full_name || !r.password) { bad('Medan wajib tidak lengkap.'); continue; }
+      if (String(r.password).length < 8) { bad('Kata laluan mestilah sekurang-kurangnya 8 aksara.'); continue; }
+      const un = String(r.username).toLowerCase(), em = String(r.email).toLowerCase();
+      if (names.has(un)) { bad('Nama pengguna sudah digunakan.'); continue; }
+      if (mails.has(em)) { bad('E-mel sudah didaftarkan.'); continue; }
+      if (r.staff_id && staff.has(String(r.staff_id).toLowerCase())) { bad('No. staf sudah digunakan.'); continue; }
+      if (r.position && !POSITIONS.includes(r.position)) { bad('Jawatan tidak sah.'); continue; }
+      if (r.grade && !GRADES.some((g) => g.code === r.grade)) { bad('Gred tidak sah.'); continue; }
+      if (r.field && !FIELDS.includes(r.field)) { bad('Bidang tidak sah.'); continue; }
+      if (['has_phd', 'has_prof_qual'].some((k) => r[k] && !['Ya', 'Tidak'].includes(r[k]))) { bad('Nilai Ya/Tidak tidak sah.'); continue; }
+      if (['grade_since', 'appointed_on', 'confirmed_on', 'vk7_since'].some((k) => r[k] && !/^\d{4}-\d{2}-\d{2}$/.test(r[k]))) { bad('Format tarikh tidak sah.'); continue; }
+      const salt = uid('s'), now = nowIso();
+      const u = { id: uid('usr'), username: r.username, email: r.email, full_name: r.full_name, role: 'lecturer', department: r.department || '', status: 'Active', salt, password_hash: await hashPw(salt, r.password), last_login: '', created_at: now, updated_at: now };
+      const lec = { id: uid('lec'), user_id: u.id, staff_id: r.staff_id || 'UPNM' + String(lecs.length + 1).padStart(3, '0'), full_name: r.full_name, email: r.email, department: r.department || '', position: r.position || 'Pensyarah', phone: '', location: '', bio: '', photo: '', created_at: now, updated_at: now };
+      for (const k of ['grade', 'grade_since', 'appointed_on', 'confirmed_on', 'vk7_since', 'field', 'has_phd', 'has_prof_qual']) if (r[k]) lec[k] = r[k];
+      users.push(u); lecs.push(lec); names.add(un); mails.add(em); staff.add(String(lec.staff_id).toLowerCase());
+      created.push({ index: i, ...safeUser(u) });
+    }
+    write('users', users); write('lecturers', lecs);
+    return { created, errors };
   },
   async updateUser({ id, patch }, ctx) {
     needAdmin(ctx);

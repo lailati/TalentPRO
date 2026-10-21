@@ -163,7 +163,7 @@ function doPost(e) {
   return json_(out);
 }
 
-var WRITES = { promoSave: 1, promoSubmit: 1, promoAct: 1, promoAppeal: 1, promoRemove: 1, create: 1, update: 1, remove: 1, upload: 1, createUser: 1, updateUser: 1, resetPassword: 1, changePassword: 1, deleteUser: 1 };
+var WRITES = { promoSave: 1, promoSubmit: 1, promoAct: 1, promoAppeal: 1, promoRemove: 1, create: 1, update: 1, remove: 1, upload: 1, createUser: 1, createUsers: 1, updateUser: 1, resetPassword: 1, changePassword: 1, deleteUser: 1 };
 
 // =====================================================================
 // Actions (same contract as js/local-server.js)
@@ -352,6 +352,49 @@ var ACTIONS = {
       insert_('lecturers', { id: uid_('lec'), user_id: row.id, staff_id: 'UPNM' + ('000' + n).slice(-3), full_name: row.full_name, email: row.email, department: row.department, position: 'Pensyarah', phone: '', location: '', bio: '', photo: '', created_at: now_(), updated_at: now_() });
     }
     return safeUser_(row);
+  },
+
+  /** Cipta banyak akaun pensyarah sekali gus (import CSV). Baris sah dicipta; baris tidak sah dilaporkan dalam `errors` (indeks mengikut urutan permintaan). Satu bacaan + satu penulisan setiap jadual. */
+  createUsers: function (p, ctx) {
+    needAdmin_(ctx);
+    var list = p.users;
+    if (!list || !list.length) throw httpErr_('Tiada pengguna untuk dicipta.', 400);
+    if (list.length > 500) throw httpErr_('Maksimum 500 baris setiap import.', 400);
+    var users = rows_('users'), lecs = rows_('lecturers'), names = {}, mails = {}, staff = {};
+    users.forEach(function (u) { names[String(u.username).toLowerCase()] = 1; mails[String(u.email).toLowerCase()] = 1; });
+    lecs.forEach(function (l) { staff[String(l.staff_id).toLowerCase()] = 1; });
+    var gradeOk = ['DS11', 'DS13', 'DS14', 'VK7', 'VK6', 'VK5'], posOk = ['Profesor', 'Profesor Madya', 'Pensyarah Kanan', 'Pensyarah', 'Tutor'], fieldOk = ['Sains & Teknologi', 'Sains Sosial', 'Klinikal'];
+    var dateKeys = ['grade_since', 'appointed_on', 'confirmed_on', 'vk7_since'], created = [], errors = [], urows = [], lrows = [], count = lecs.length;
+    list.forEach(function (r, i) {
+      r = r || {};
+      var msg = '';
+      if (!r.username || !r.email || !r.full_name || !r.password) msg = 'Medan wajib tidak lengkap.';
+      else if (String(r.password).length < 8) msg = 'Kata laluan mestilah sekurang-kurangnya 8 aksara.';
+      else if (names[String(r.username).toLowerCase()]) msg = 'Nama pengguna sudah digunakan.';
+      else if (mails[String(r.email).toLowerCase()]) msg = 'E-mel sudah didaftarkan.';
+      else if (r.staff_id && staff[String(r.staff_id).toLowerCase()]) msg = 'No. staf sudah digunakan.';
+      else if (r.position && posOk.indexOf(r.position) < 0) msg = 'Jawatan tidak sah.';
+      else if (r.grade && gradeOk.indexOf(r.grade) < 0) msg = 'Gred tidak sah.';
+      else if (r.field && fieldOk.indexOf(r.field) < 0) msg = 'Bidang tidak sah.';
+      else if (['has_phd', 'has_prof_qual'].some(function (k) { return r[k] && ['Ya', 'Tidak'].indexOf(r[k]) < 0; })) msg = 'Nilai Ya/Tidak tidak sah.';
+      else if (dateKeys.some(function (k) { return r[k] && !/^\d{4}-\d{2}-\d{2}$/.test(r[k]); })) msg = 'Format tarikh tidak sah.';
+      if (msg) { errors.push({ index: i, message: msg }); return; }
+      var salt = uid_('s'), at = now_(), count1 = ++count;
+      var u = { id: uid_('usr'), username: r.username, email: r.email, full_name: r.full_name, role: 'lecturer', department: r.department || '', status: 'Active', salt: salt, password_hash: hash_(salt, r.password), last_login: '', created_at: at, updated_at: at };
+      var lec = { id: uid_('lec'), user_id: u.id, staff_id: r.staff_id || 'UPNM' + ('000' + count1).slice(-3), full_name: r.full_name, email: r.email, department: r.department || '', position: r.position || 'Pensyarah', phone: '', location: '', bio: '', photo: '', created_at: at, updated_at: at };
+      ['grade', 'grade_since', 'appointed_on', 'confirmed_on', 'vk7_since', 'field', 'has_phd', 'has_prof_qual'].forEach(function (k) { if (r[k]) lec[k] = r[k]; });
+      names[String(u.username).toLowerCase()] = 1; mails[String(u.email).toLowerCase()] = 1; staff[String(lec.staff_id).toLowerCase()] = 1;
+      urows.push(toArr_('users', u)); lrows.push(toArr_('lecturers', lec));
+      var safe = safeUser_(u); safe.index = i; created.push(safe);
+    });
+    [['users', urows], ['lecturers', lrows]].forEach(function (x) {
+      var t = x[0], data = x[1]; if (!data.length) return;
+      var sh = sheet_(t), start = sh.getLastRow() + 1, end = start + data.length - 1;
+      if (sh.getMaxRows() < end) sh.insertRowsAfter(sh.getMaxRows(), end - sh.getMaxRows());
+      var range = sh.getRange(start, 1, data.length, T[t].length);
+      range.setNumberFormat('@'); range.setValues(data);         // teks biasa: elak Sheets menukar tarikh/no. staf
+    });
+    return { created: created, errors: errors };
   },
 
   updateUser: function (p, ctx) {

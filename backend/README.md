@@ -37,6 +37,10 @@ URL aplikasi web ialah awam, tetapi setiap tindakan kecuali `login` memerlukan t
 4. Dalam `js/api.js` halakan `transport()` ke titik akhir baharu. **Tiada perubahan kod paparan.**
 5. Pindahkan muat naik daripada Drive ke cakera/S3 (`documents.file_ref`) dan cincang semula kata laluan kepada bcrypt pada log masuk pertama.
 
+## Import pengguna pukal (CSV)
+
+Admin → **Urus Pengguna → Import CSV**. Tindakan `createUsers` (≤ 500 baris, pensyarah sahaja) memerlukan `Code.gs` terkini di-deploy sebagai **versi baharu**. Templat CSV boleh dimuat turun dalam panel import; kata laluan awal dijana jika dikosongkan dan senarai akaun boleh dimuat turun sekali sahaja.
+
 ## Data sebenar sahaja
 
 Aplikasi tidak lagi mempunyai data contoh. Pensyarah dan rekod dimasukkan melalui **Urus Pengguna** dan borang rekod. Jika Sheet anda masih ada baki baris contoh lama (id bermula `demo_`), jalankan fungsi **`buangDataContoh`** sekali dari editor Apps Script; data sebenar tidak disentuh.
