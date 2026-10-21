@@ -1,6 +1,6 @@
 # Bahagian belakang Apps Script (pangkalan data Google Sheets)
 
-Hamparan anda: `1LFZkj30JrlinLjcabWfZ-yEcO08EVwcDt2MPR0prRF0` (dikodkan keras sebagai `SPREADSHEET_ID` dalam `Code.gs`).
+Hamparan: buka Apps Script melalui **Extensions → Apps Script** daripada Google Sheet anda sendiri. `setup()` menyimpan ID Sheet itu dalam Script Properties (tiada ID dikodkan keras dalam `Code.gs`).
 
 ## Persediaan sekali sahaja
 

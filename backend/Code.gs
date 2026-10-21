@@ -7,7 +7,16 @@
  * Full steps: backend/README.md
  */
 
-var SPREADSHEET_ID = '1LFZkj30JrlinLjcabWfZ-yEcO08EVwcDt2MPR0prRF0';
+var SPREADSHEET_ID = '';   // pilihan: kosongkan jika skrip dibuka dari Sheet anda (Extensions > Apps Script); setup() menyimpan ID Sheet dalam Script Properties
+
+/** Sheet pangkalan data: dari Script Properties (diset oleh setup()), kemudian SPREADSHEET_ID, kemudian Sheet yang mengandungi skrip. */
+function getSS_() {
+  var id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID') || SPREADSHEET_ID;
+  if (id) return SpreadsheetApp.openById(id);
+  var active = SpreadsheetApp.getActiveSpreadsheet();
+  if (!active) throw new Error('Sheet pangkalan data tidak ditemui. Buka Apps Script melalui Extensions > Apps Script daripada Google Sheet anda, kemudian jalankan setup().');
+  return active;
+}
 var DRIVE_FOLDER_NAME = 'FSTP_Talent_Map_Files';
 var SESSION_SECONDS = 6 * 3600;          // CacheService maximum is 6 hours
 var MAX_FILE_BYTES = 5 * 1024 * 1024;
@@ -60,7 +69,9 @@ var CATEGORY_MS = { 'Cybersecurity': 'Keselamatan Siber', 'Artificial Intelligen
 
 /** Creates every table (sheet) with headers, locks columns to plain text, seeds categories + the admin account. */
 function setup() {
-  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var ss = SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error('Jalankan setup() daripada projek Apps Script yang dibuka melalui Extensions > Apps Script dalam Google Sheet anda.');
+  PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', ss.getId());
   Object.keys(T).forEach(function (name) {
     var sh = ss.getSheetByName(name) || ss.insertSheet(name);
     var cols = T[name];
@@ -108,7 +119,7 @@ function resetAdminPassword() {
 
 /** Wipes ALL data rows (keeps headers). Run by hand only. */
 function resetAllData() {
-  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var ss = getSS_();
   Object.keys(T).forEach(function (n) { var sh = ss.getSheetByName(n); if (sh && sh.getLastRow() > 1) sh.deleteRows(2, sh.getLastRow() - 1); });
   setup();
 }
@@ -416,7 +427,7 @@ var ACTIONS = {
 // =====================================================================
 
 function sheet_(t) {
-  var sh = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(t);
+  var sh = getSS_().getSheetByName(t);
   if (!sh) throw httpErr_('Pangkalan data belum disediakan. Jalankan setup() dalam Apps Script.', 500);
   return sh;
 }
