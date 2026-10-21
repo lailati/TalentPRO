@@ -19,6 +19,14 @@ Sistem **Kenaikan Pangkat** staf akademik FSTP (UPNM), projek PSM, berdasarkan G
 9. Laluan aset **relatif**; routing berasaskan hash.
 10. Baca "Gotchas" (PROJECT.md §20) sebelum menyentuh Pages, Apps Script, Three.js atau drawer.
 
+## Apabila `backend/Code.gs` berubah (wajib)
+Pengguna menampal `Code.gs` ke Apps Script sendiri, jadi **setiap kali Code.gs diubah, nyatakan dengan jelas dalam jawapan akhir** apa yang perlu dibuat:
+1. **Salin** kandungan `backend/Code.gs` yang baharu ke Apps Script (Ctrl+A, Ctrl+V, Ctrl+S). Boleh salin ke clipboard untuk pengguna (`Get-Content backend\Code.gs -Raw -Encoding UTF8 | Set-Clipboard`).
+2. **Fungsi yang perlu dijalankan dari editor** (pilih dalam dropdown, klik Run), atau nyatakan "tiada fungsi perlu dijalankan". Contoh: `setup()` hanya jika ada jadual/lajur baharu; `buangDataContoh()`, `resetAdminPassword()`, `terjemahDataKeBM()` hanya jika berkaitan.
+3. **Deploy versi baharu**: Deploy → Manage deployments → Edit → Version: New version → Deploy (tanpa ini `/exec` masih guna kod lama).
+4. Senaraikan **tindakan/fungsi baharu atau berubah** dan apa yang tak berfungsi sebelum deploy.
+Jangan anggap pengguna tahu langkah ini; ulang setiap kali.
+
 ## Larangan
 - Jangan commit PDF, imej mockup, `.pptx`, kata laluan, token atau data sebenar.
 - Auto commit + push ke `origin/main` dibenarkan oleh pengguna (hook Stop → `tools/autopush.ps1`). Repo ini **awam**: jangan letak rahsia di mana-mana fail. Selain itu, jangan cipta projek awan atau jadikan sesuatu awam tanpa kebenaran pengguna; jangan force-push.

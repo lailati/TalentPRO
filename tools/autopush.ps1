@@ -12,6 +12,10 @@ if ($LASTEXITCODE -eq 0) { exit 0 }   # tiada perubahan
 $bad = & $git diff --cached --name-only | Where-Object { $_ -match '(^|/)\.env|\.(pdf|pptx|key)$' }
 if ($bad) { & $git reset -q; Write-Error "Auto-push dibatalkan, fail sensitif: $bad"; exit 1 }
 
+# Berhenti jika sesuatu fail hampir dikosongkan (cth. tersalah tampal/simpan): lebih 100 baris dibuang dan 5x lebih banyak daripada yang ditambah
+$shrunk = & $git diff --cached --numstat | Where-Object { $f = $_ -split "`t"; $f[0] -ne '-' -and [int]$f[1] -gt 100 -and [int]$f[1] -gt 5 * [int]$f[0] } | ForEach-Object { ($_ -split "`t")[2] }
+if ($shrunk) { & $git reset -q; Write-Error "Auto-push dibatalkan: fail ini kehilangan hampir seluruh kandungan: $shrunk. Semak, kemudian commit secara manual."; exit 1 }
+
 $msg = "Auto: kemas kini " + (Get-Date -Format 'yyyy-MM-dd HH:mm')
 & $git commit -q -m $msg -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 & $git push -q origin HEAD
