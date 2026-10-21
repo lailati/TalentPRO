@@ -8,6 +8,23 @@
 
 ---
 
+## Fokus semasa: Kenaikan Pangkat (KP) sahaja
+
+Sejak pusingan housekeeping terkini, **antara muka hanya memaparkan modul Kenaikan Pangkat**, berdasarkan *Garis Panduan Kenaikan Pangkat Staf Akademik UPNM (LPU 28 Ogos 2025)* (PDF dalam `Rujukan/`, tidak di-commit).
+
+| | Kekal di UI | Disembunyikan / dibuang daripada UI |
+|---|---|---|
+| Skrin | Papan Kerja KP (admin), Kenaikan Pangkat Saya (pensyarah), Panduan, Pensyarah (direktori + profil + maklumat perkhidmatan), Urus Pengguna, Akaun | Pemetaan Bakat, Kategori Kepakaran, Statistik, Laporan, Papan Pemuka lama (kini alihan ke `#/kp-admin` atau `#/kp`), galaksi 3D |
+| Rekod | Aktiviti Akademik, Penyelidikan, Penerbitan, Konsultansi, Pencapaian (anugerah/pingat), Dokumen, Markah LPPT, Hukuman Tatatertib | Kepakaran, Pensijilan, Latihan |
+
+**Sebab:** enjin KP (`js/promotion/engine.js`) hanya membaca `activities`, `research`, `publications`, `consultancy`, `lppt_scores`, `disciplinary` dan medan perkhidmatan pada `lecturers`. Teks PDF (diekstrak dan disemak) tidak menjadikan kepakaran, pensijilan atau latihan sebagai bukti; tetapi Lampiran menyenaraikan **anugerah/pingat** (D1–D2, E1–E2, B15–B18), jadi *Pencapaian* dikekalkan.
+
+**Backend tidak diubah:** jadual `expertise`, `expertise_categories`, `certifications`, `training` masih wujud dalam Sheet/`Code.gs`/`schema.sql` dan dalam `snapshot` (supaya data lama tidak hilang dan boleh dipulihkan); UI sahaja yang tidak memaparkannya. Definisi `ENTITIES` dikekalkan dalam `js/schema.js`, tetapi `ENTITY_ORDER` hanya menyenaraikan jenis rekod KP. Bahagian di bawah yang menerangkan pemetaan bakat (§6.4 sebahagian, §6.6 galaksi, dll.) kini bersifat sejarah/rujukan.
+
+Laluan: `#/dashboard` dan log masuk beralih ke `#/kp-admin` (admin) atau `#/kp` (pensyarah). Laluan lama `#/talent`, `#/categories`, `#/stats`, `#/reports`, `#/expertise`, `#/certifications`, `#/training` memaparkan "Halaman tidak tersedia".
+
+---
+
 ## 0. Quick facts
 
 | | |

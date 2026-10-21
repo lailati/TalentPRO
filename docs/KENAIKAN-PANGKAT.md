@@ -10,6 +10,10 @@ Garis Panduan itu rumit (108 halaman). Sistem ini menyembunyikan kerumitannya di
 - **Pentadbir**: papan kerja (`#/kp-admin`) dengan tab *Perlu tindakan / Semua / Calon berpotensi*; butiran permohonan menunjukkan **satu langkah semasa**, siapa yang bertindak, senarai semak, dan butang keputusan dalam bahasa biasa.
 - **Butang "?"** di sebelah setiap istilah / butang yang kelihatan rumit (kira-kira 150 entri dalam `js/help.js`, dengan rujukan Perenggan ). Butang **Bantuan** di bar atas menerangkan halaman semasa. Borang menyembunyikan medan kenaikan pangkat di bawah bahagian pilihan yang dilipat, dan medan lain muncul hanya apabila relevan (contoh: jenis aktiviti).
 
+## Rekod bukti yang dipaparkan
+
+Aktiviti Akademik, Penyelidikan, Penerbitan, Konsultansi, Pencapaian (anugerah/pingat, Lampiran D1–D2, E1–E2, B15–B18), Dokumen, serta Markah LPPT dan Hukuman Tatatertib (admin sahaja). Kepakaran, Pensijilan dan Latihan tidak dipaparkan kerana tidak menjadi bukti dalam Garis Panduan; jadual backendnya dikekalkan. Papan Pemuka lama kini beralih terus ke `#/kp-admin` (admin) atau `#/kp` (pensyarah).
+
 ## Laluan gred yang dilindungi
 
 DS11 → DS13 → DS14 → VK7 → VK6 → VK5. (Laluan Guru Bahasa dan Pensyarah Perubatan "time-based" tidak dilaksanakan.)

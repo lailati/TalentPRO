@@ -6,20 +6,16 @@ import { wireHelp, openPageHelp } from './help.js';
 import { ACTIVE_STATUSES } from './promotion/workflow.js';
 
 const app = $('#app');
+const home = () => (store.me && store.me.role === 'admin' ? '#/kp-admin' : '#/kp');   // halaman utama mengikut peranan
 let cleanup = null;
 let shellEl = null;
 
 // route table: pattern -> {view module, roles}
 const ROUTES = [
-  ['dashboard', 'dashboard', ['admin', 'lecturer']],
   ['profile', 'profile', ['lecturer']],
   ['lecturers', 'lecturers', ['admin']],
   ['lecturer/:id', 'profileView', ['admin', 'lecturer']],
-  ['talent', 'talent', ['admin']],
   ['users', 'users', ['admin']],
-  ['categories', 'categories', ['admin']],
-  ['stats', 'stats', ['admin']],
-  ['reports', 'reports', ['admin']],
   ['account', 'account', ['admin', 'lecturer']],
   ['kp', 'kp', ['lecturer']],
   ['kp/mohon', 'kpMohon', ['lecturer']],
@@ -45,29 +41,22 @@ function match(path) {
 function navFor(role) {
   const ent = (k) => ({ href: '#/' + k, key: k, label: role === 'admin' ? ENTITIES[k].plural : ENTITIES[k].mine, icon: ENTITIES[k].icon });
   if (role === 'admin') return [
-    { href: '#/dashboard', key: 'dashboard', label: 'Papan Pemuka', icon: 'dashboard' },
-    { grp: 'Pengurusan' },
-    { href: '#/users', key: 'users', label: 'Urus Pengguna', icon: 'user' },
-    { href: '#/lecturers', key: 'lecturers', label: 'Pensyarah', icon: 'users' },
-    { href: '#/categories', key: 'categories', label: 'Kategori Kepakaran', icon: 'tag' },
-    { href: '#/talent', key: 'talent', label: 'Pemetaan Bakat', icon: 'map' },
     { grp: 'Kenaikan Pangkat' },
     { href: '#/kp-admin', key: 'kp-admin', label: 'Papan Kerja', icon: 'target' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { grp: 'Rekod' },
+    { grp: 'Pengurusan' },
+    { href: '#/lecturers', key: 'lecturers', label: 'Pensyarah', icon: 'users' },
+    { href: '#/users', key: 'users', label: 'Urus Pengguna', icon: 'user' },
+    { grp: 'Rekod Bukti' },
     ...ENTITY_ORDER.map(ent),
     ...ADMIN_ENTITY_ORDER.map(ent),
-    { grp: 'Analisis' },
-    { href: '#/stats', key: 'stats', label: 'Statistik', icon: 'chart' },
-    { href: '#/reports', key: 'reports', label: 'Laporan', icon: 'report' },
   ];
   return [
-    { href: '#/dashboard', key: 'dashboard', label: 'Papan Pemuka', icon: 'dashboard' },
-    { href: '#/profile', key: 'profile', label: 'Profil Saya', icon: 'user' },
     { grp: 'Kenaikan Pangkat' },
     { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat Saya', icon: 'target' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { grp: 'Rekod Saya' },
+    { href: '#/profile', key: 'profile', label: 'Profil Saya', icon: 'user' },
+    { grp: 'Rekod Bukti Saya' },
     ...ENTITY_ORDER.map(ent),
   ];
 }
@@ -79,7 +68,7 @@ function renderShell() {
     <div class="shell" id="shell">
       <header class="topbar">
         <button class="icon-btn menu-btn" id="menu" aria-label="Buka/tutup navigasi" aria-expanded="false">${icon('menu', 24)}</button>
-        <a class="brand" href="#/dashboard" aria-label="Laman utama TalentPro">${logo(34)}<span>TalentPro<small>UPNM · Fakulti Sains dan Teknologi Pertahanan</small></span></a>
+        <a class="brand" href="${home()}" aria-label="Laman utama TalentPro">${logo(34)}<span>TalentPro<small>UPNM · Fakulti Sains dan Teknologi Pertahanan</small></span></a>
         <span class="grow"></span>
         <button class="help-top" id="phelp" aria-label="Bantuan untuk halaman ini" title="Apa yang boleh saya lakukan di halaman ini?"><span class="q">?</span><span class="t">Bantuan</span></button>
         <div class="rel"><button class="icon-btn" id="bell" aria-label="Notifikasi" aria-haspopup="true" aria-expanded="false">${icon('bell', 22)}<span class="dot" id="bell-n" hidden></span></button><div id="bell-pop"></div></div>
@@ -101,14 +90,12 @@ function renderShell() {
 
 function activityFeed() {
   const rows = [...store.activity_log].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 5);
-  const soon = store.certifications.filter((c) => c.expiry_date && (new Date(c.expiry_date) - Date.now()) / 864e5 <= 90 && new Date(c.expiry_date) > Date.now());
-  return { rows, soon };
+  return { rows };
 }
 function updateChrome() {
   if (!shellEl) return;
-  const { soon } = activityFeed();
-  const dot = $('#bell-n'); dot.hidden = !soon.length; dot.textContent = soon.length;
-  const counts = { lecturers: store.lecturers.length, users: store.users.length, categories: store.expertise_categories.length };
+  const dot = $('#bell-n'); dot.hidden = true;
+  const counts = { lecturers: store.lecturers.length, users: store.users.length };
   ENTITY_ORDER.forEach((k) => (counts[k] = store[k].length));
   ADMIN_ENTITY_ORDER.forEach((k) => (counts[k] = store[k].length));
   counts['kp-admin'] = store.promotion_applications.filter((a) => ACTIVE_STATUSES.includes(a.status) && a.status !== 'draf').length || null;
@@ -135,18 +122,17 @@ function wirePopovers() {
   });
 }
 const bellHtml = () => {
-  const { rows, soon } = activityFeed();
-  return html`<div class="pop" role="region" aria-label="Notifikasi"><h4>Notifikasi</h4>${soon.map((c) => html`<div class="note">${icon('alert', 18)}<span><b>${c.name}</b> tamat tempoh pada ${fmtDate(c.expiry_date)}${store.me.role === 'admin' ? ' · ' + (store.lecturers.find((l) => l.id === c.lecturer_id) || {}).full_name : ''}</span></div>`)}${rows.map((r) => html`<div class="note">${icon('check', 18)}<span>${r.message}<br><small class="faint">${fmtDate(r.created_at)}${store.me.role === 'admin' ? ' · ' + ((store.lecturers.find((l) => l.id === r.lecturer_id) || {}).full_name || '') : ''}</small></span></div>`)}${!rows.length && !soon.length ? html`<div class="note">Tiada notifikasi baharu.</div>` : ''}</div>`;
+  const { rows } = activityFeed();
+  return html`<div class="pop" role="region" aria-label="Notifikasi"><h4>Notifikasi</h4>${rows.map((r) => html`<div class="note">${icon('check', 18)}<span>${r.message}<br><small class="faint">${fmtDate(r.created_at)}${store.me.role === 'admin' ? ' · ' + ((store.lecturers.find((l) => l.id === r.lecturer_id) || {}).full_name || '') : ''}</small></span></div>`)}${!rows.length ? html`<div class="note">Tiada notifikasi baharu.</div>` : ''}</div>`;
 };
 const userHtml = () => html`<div class="pop" role="menu"><h4>${store.me.full_name}</h4><a href="#/account" role="menuitem">${icon('key', 18)} Akaun &amp; kata laluan</a><button class="mi" data-do="theme" role="menuitem">${icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon', 18)} Tukar tema</button><button class="mi" data-do="logout" role="menuitem">${icon('out', 18)} Log keluar</button></div>`;
 
 let curPath = '';
 function pageKey() {
   const p = curPath, admin = store.me && store.me.role === 'admin';
-  if (p === 'dashboard') return admin ? 'dashboard_admin' : 'dashboard_lecturer';
   if (p === 'kp') return 'kp'; if (p === 'kp/mohon') return 'kp_mohon'; if (p.startsWith('kp-admin/')) return 'kp_detail'; if (p.startsWith('kp/')) return 'kp';
   if (p === 'kp-admin') return 'kp_admin'; if (p === 'panduan') return 'panduan';  if (p.startsWith('lecturer/')) return 'lecturers';
-  return ['profile', 'lecturers', 'talent', 'users', 'categories', 'stats', 'reports', 'account', 'lppt_scores', 'disciplinary'].includes(p) ? p : 'records';
+  return ['profile', 'lecturers', 'users', 'account', 'lppt_scores', 'disciplinary'].includes(p) ? p : 'records';
 }
 let revalidating = null;
 async function route() {
@@ -158,13 +144,13 @@ async function route() {
     if (r) revalidating = r.revalidate;
   }
   if (!store.me) { return renderLogin(); }
-  if (path === 'login' || path === '') { location.hash = '#/dashboard'; return; }
+  if (path === 'login' || path === '' || path === 'dashboard') { location.hash = home(); return; }   // 'dashboard' dikekalkan sebagai alihan untuk pautan lama
   if (!shellEl || !document.body.contains(shellEl)) renderShell();
   curPath = path;
   const m = match(path);
   const view = $('#view');
   if (!m || !m.roles.includes(store.me.role)) {
-    mount(view, html`<div class="empty card">${icon('alert', 36)}<h3>Halaman tidak tersedia</h3><p>${m ? 'Peranan anda tidak dibenarkan membuka halaman ini.' : 'Halaman tersebut tidak wujud.'}</p><p><a class="btn primary" href="#/dashboard" style="margin-top:14px">Kembali ke papan pemuka</a></p></div>`);
+    mount(view, html`<div class="empty card">${icon('alert', 36)}<h3>Halaman tidak tersedia</h3><p>${m ? 'Peranan anda tidak dibenarkan membuka halaman ini.' : 'Halaman tersebut tidak wujud.'}</p><p><a class="btn primary" href="${home()}" style="margin-top:14px">Kembali ke laman utama</a></p></div>`);
     return;
   }
   const base = m.pat.split('/')[0];

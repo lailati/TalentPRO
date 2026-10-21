@@ -222,7 +222,9 @@ ENTITIES.disciplinary = {
   ],
 };
 
-export const ENTITY_ORDER = ['expertise', 'research', 'publications', 'certifications', 'training', 'consultancy', 'achievements', 'activities', 'documents'];
+// Fokus Kenaikan Pangkat: hanya jenis rekod yang menjadi bukti dalam Garis Panduan (Lampiran A–E). Kepakaran, pensijilan dan latihan
+// tidak dipaparkan lagi (definisi ENTITIES dikekalkan kerana backend masih memegang jadual tersebut).
+export const ENTITY_ORDER = ['activities', 'research', 'publications', 'consultancy', 'achievements', 'documents'];
 export const ADMIN_ENTITY_ORDER = ['lppt_scores', 'disciplinary'];
 
 export const MAX_FILE_BYTES = 5 * 1024 * 1024;

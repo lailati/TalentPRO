@@ -1,4 +1,4 @@
-// Sistem bantuan berpandu: butang "?" kecil di sebelah istilah / butang yang rumit, dan "Bantuan halaman" di bar atas.
+﻿// Sistem bantuan berpandu: butang "?" kecil di sebelah istilah / butang yang rumit, dan "Bantuan halaman" di bar atas.
 // Semua teks dalam bahasa biasa (bukan bahasa undang-undang). Rujukan "Perenggan " ialah Garis Panduan Kenaikan Pangkat Staf Akademik UPNM.
 import { raw, esc, icon, openDrawer, html, $ } from './util.js';
 
@@ -98,10 +98,7 @@ export const HELP = {
 
   // ---------- Butang & ciri sedia ada ----------
   btn_export_csv: { t: 'Eksport CSV', b: 'Memuat turun senarai di bawah (selepas carian / penapis) sebagai fail CSV yang boleh dibuka dalam Excel atau Google Sheets.' },
-  btn_galaxy: { t: 'Galaksi 3D', b: 'Paparan 3D kepakaran fakulti. Setiap bulatan besar ialah satu kategori kepakaran; setiap titik ialah seorang pensyarah. Seret untuk memutar, tatal untuk zum, klik titik untuk membuka profil.' },
   btn_view_toggle: { t: 'Kad atau Galaksi 3D', b: '"Kad" menunjukkan senarai pensyarah yang sepadan. "Galaksi 3D" menunjukkan taburan yang sama secara visual; carian dan penapis di atas turut menyerlahkan titik yang sepadan.' },
-  tm_search: { t: 'Cara mencari', b: 'Taip nama pensyarah, bidang kepakaran atau topik penyelidikan. Gunakan penapis Jabatan dan Tahap untuk mengecilkan hasil, atau klik satu kategori di sebelah kiri.' },
-  tm_sort: { t: 'Isih', b: '"Kaitan" meletakkan pakar yang paling sepadan di atas (tahap tinggi, pengalaman lama). "Pengalaman" mengikut tahun pengalaman.' },
   users_reset_pw: { t: 'Tetap semula kata laluan', b: 'Menetapkan kata laluan baharu bagi pengguna ini (minimum 8 aksara dengan huruf dan nombor). Sampaikan kata laluan kepada pengguna dan minta mereka menukarnya.' },
   users_delete: { t: 'Padam pengguna', b: 'Memadam akaun DAN semua rekod pensyarah itu secara kekal. Jika hanya mahu menghalang log masuk, ubah status kepada "Tidak Aktif" sebaliknya.' },
   users_role: { t: 'Peranan', b: '"Pensyarah" boleh mengurus rekod sendiri. "Pentadbir" boleh melihat semua rekod, mengurus akaun dan kategori, serta memproses permohonan kenaikan pangkat. Peranan tidak boleh ditukar selepas akaun dicipta.' },
@@ -127,15 +124,9 @@ export const HELP = {
 
 // Bantuan halaman: apa fungsi halaman dan tiga tugas biasa
 export const PAGE_HELP = {
-  dashboard_admin: { t: 'Papan Pemuka Pentadbir', b: 'Gambaran keseluruhan bakat fakulti.', tasks: ['Lihat jumlah pensyarah, kategori, penerbitan dan pensijilan pada kad di atas.', 'Teroka Galaksi Kepakaran 3D (klik titik untuk membuka profil pensyarah).', 'Pergi ke Kenaikan Pangkat di menu kiri untuk memproses permohonan.'] },
-  dashboard_lecturer: { t: 'Papan Pemuka Anda', b: 'Ringkasan rekod anda.', tasks: ['Semak peratus kelengkapan profil dan lengkapkan yang kurang.', 'Klik mana-mana kad untuk menambah atau melihat rekod.', 'Buka Kenaikan Pangkat untuk menyemak kelayakan anda.'] },
   profile: { t: 'Profil Saya', b: 'Maklumat peribadi dan profesional anda.', tasks: ['Tukar gambar profil.', 'Kemas kini telefon, lokasi dan biodata.', 'Kemas kini H-indeks SCOPUS anda (digunakan oleh semakan Kenaikan Pangkat).'] },
   lecturers: { t: 'Direktori Pensyarah', b: 'Semua pensyarah FSTP.', tasks: ['Cari mengikut nama, no. staf atau e-mel.', 'Tapis mengikut jabatan.', 'Klik seorang pensyarah untuk melihat profil dan menyunting maklumat perkhidmatan.'] },
-  talent: { t: 'Pemetaan Bakat', b: 'Cari pakar mengikut kepakaran.', tasks: ['Taip kata kunci (contoh "forensik") atau pilih satu kategori di kiri.', 'Tapis jabatan dan tahap kepakaran.', 'Tukar ke Galaksi 3D untuk melihat taburan secara visual.'] },
   users: { t: 'Urus Pengguna', b: 'Akaun pengguna sistem.', tasks: ['Tambah akaun pensyarah atau pentadbir.', 'Tetap semula kata laluan bagi pengguna yang terlupa.', 'Ubah status kepada Tidak Aktif untuk menghalang log masuk.'] },
-  categories: { t: 'Kategori Kepakaran', b: 'Bidang yang boleh dipetakan kepada pensyarah.', tasks: ['Tambah atau namakan semula kategori.', 'Pilih warna untuk carta dan galaksi.', 'Kategori yang sedang digunakan tidak boleh dipadam.'] },
-  stats: { t: 'Statistik', b: 'Angka kepakaran dan output fakulti.', tasks: ['Lihat kategori yang paling ramai pakar.', 'Kenal pasti pensyarah yang belum merekodkan kepakaran.'] },
-  reports: { t: 'Laporan', b: 'Jana laporan fakulti.', tasks: ['Pilih jenis laporan.', 'Tapis mengikut jabatan, tahap atau tahun.', 'Eksport CSV atau cetak ke PDF.'] },
   account: { t: 'Akaun & Kata Laluan', b: 'Tetapan akaun anda.', tasks: ['Tukar kata laluan anda (minimum 8 aksara dengan huruf dan nombor).'] },
   records: { t: 'Halaman Rekod', b: 'Senarai rekod anda.', tasks: ['Klik "Tambah" untuk rekod baharu — borang terbuka di sisi.', 'Gunakan kotak carian untuk menapis senarai.', 'Klik ikon pensil untuk mengubah atau tong sampah untuk memadam.'] },
   kp: { t: 'Kenaikan Pangkat Anda', b: 'Semak kesediaan anda dan mohon apabila bersedia.', tasks: ['Lihat status kesediaan dan perkara yang perlu dilengkapkan.', 'Klik "Tambah rekod" pada kad yang kurang — borang terbuka dengan jenis yang betul.', 'Apabila bersedia, klik "Mulakan permohonan".'] },

@@ -110,7 +110,7 @@ export function wireShow(form, fields) {
   form.addEventListener('input', upd); form.addEventListener('change', upd); upd();
 }
 
-const AUTO_HELP = { 'Papan Pemuka': () => (store.me && store.me.role === 'admin' ? 'dashboard_admin' : 'dashboard_lecturer'), 'Akaun & Kata Laluan': 'account', 'Kategori Kepakaran': 'categories', 'Pensyarah': 'lecturers', 'Profil Pensyarah': 'lecturers', 'Profil Saya': 'profile', 'Laporan': 'reports', 'Statistik': 'stats', 'Pemetaan Bakat': 'talent', 'Urus Pengguna': 'users' };
+const AUTO_HELP = { 'Akaun & Kata Laluan': 'account', 'Pensyarah': 'lecturers', 'Profil Pensyarah': 'lecturers', 'Profil Saya': 'profile', 'Urus Pengguna': 'users' };
 export const pageHead = (title, sub, actions = '', crumb = '', helpKey = (AUTO_HELP[title] instanceof Function ? AUTO_HELP[title]() : AUTO_HELP[title]) || '') => html`<div class="page-head"><div>${crumb ? html`<div class="crumb">${crumb}</div>` : ''}<h1>${title}${helpKey ? html` ${helpBtn(helpKey, title)}` : ''}</h1>${sub ? html`<p>${sub}</p>` : ''}</div><div class="row">${actions}</div></div>`;
 export const searchBox = (id, ph) => html`<div class="search">${icon('search', 18)}<input class="input" id="${id}" type="search" placeholder="${ph}" aria-label="${ph}"></div>`;
 export const debounce = (fn, ms = 150) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };

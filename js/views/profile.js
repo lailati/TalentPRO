@@ -5,7 +5,9 @@ import { html, mount, $, $$, avatar, toast, openDrawer, raw } from '../util.js';
 import { DEPARTMENTS, POSITIONS, GRADE_OPTIONS, FIELDS } from '../schema.js';
 import { fieldHtml, readForm, busy, pageHead } from './_ui.js';
 import { helpBtn } from '../help.js';
-import { completion } from './dashboard.js';
+
+// Kelengkapan maklumat peribadi dan profesional (rekod bukti dinilai oleh halaman Kenaikan Pangkat).
+const completion = (l) => { const c = [l.photo, l.phone, l.bio, l.location, l.position, l.department, l.full_name]; return Math.round((100 * c.filter(Boolean).length) / c.length); };
 
 const fields = (admin) => ({
   personal: [

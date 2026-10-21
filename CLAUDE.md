@@ -3,7 +3,9 @@
 Spesifikasi penuh projek ada dalam **[PROJECT.md](PROJECT.md)**. Baca bahagian berkaitan sebelum mengubah kod. Jika PROJECT.md dan kod berbeza, **kod yang menang** — kemas kini PROJECT.md.
 
 ## Ringkasan
-Sistem pemetaan bakat pensyarah FSTP (UPNM), projek PSM. Frontend HTML/CSS/JS (ES modules, **tiada build step**) + Three.js (CDN). Backend fasa 1: Google Apps Script + Sheets; fasa 2: PHP + MySQL. Mod sandbox: `?backend=local`.
+Sistem **Kenaikan Pangkat** staf akademik FSTP (UPNM), projek PSM, berdasarkan Garis Panduan Kenaikan Pangkat UPNM 2025 (`Rujukan/`, tidak di-commit). Frontend HTML/CSS/JS (ES modules, **tiada build step**) + Three.js (CDN, hanya latar log masuk). Backend fasa 1: Google Apps Script + Sheets; fasa 2: PHP + MySQL. Mod sandbox: `?backend=local` (bermula kosong).
+
+**Fokus:** UI hanya memaparkan KP dan rekod buktinya (lihat bahagian "Fokus semasa" dalam PROJECT.md). Ciri pemetaan bakat (kepakaran, kategori, galaksi 3D, statistik, laporan) telah dibuang daripada UI; jadual backendnya sengaja dikekalkan.
 
 ## Peraturan wajib
 1. **Semua teks paparan pengguna dalam Bahasa Malaysia** (glosari di PROJECT.md §8). Komen kod boleh Inggeris.
