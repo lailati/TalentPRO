@@ -1,4 +1,4 @@
-# Bahagian belakang Apps Script (pangkalan data Google Sheets)
+﻿# Bahagian belakang Apps Script (pangkalan data Google Sheets)
 
 Hamparan: buka Apps Script melalui **Extensions → Apps Script** daripada Google Sheet anda sendiri. `setup()` menyimpan ID Sheet itu dalam Script Properties (tiada ID dikodkan keras dalam `Code.gs`).
 
@@ -36,6 +36,11 @@ URL aplikasi web ialah awam, tetapi setiap tindakan kecuali `login` memerlukan t
 3. Tulis API PHP yang menyediakan tindakan dalam `Code.gs` (`login`, `snapshot`, `create`, `update`, `remove`, `upload`, `download`, `createUser`, …) dengan sampul JSON yang sama `{ok, data | error, code}`.
 4. Dalam `js/api.js` halakan `transport()` ke titik akhir baharu. **Tiada perubahan kod paparan.**
 5. Pindahkan muat naik daripada Drive ke cakera/S3 (`documents.file_ref`) dan cincang semula kata laluan kepada bcrypt pada log masuk pertama.
+
+## Peranan (admin, hr, lecturer)
+
+Akaun `admin` yang dicipta oleh `setup()` ialah **Admin Sistem** (akaun sahaja; tiada akses data kenaikan pangkat). Akaun **Pegawai KP (HR)** dicipta oleh Admin Sistem melalui Urus Pengguna → Tambah Pengguna → Peranan "Pegawai KP (HR)". Tiada fungsi editor perlu dijalankan untuk peranan `hr` (ia nilai baharu dalam lajur `role`). Selepas menampal `Code.gs` baharu, buat **Deploy → Manage deployments → Edit → New version**.
+ole). Selepas menampal Code.gs baharu, buat **Deploy → Manage deployments → Edit → New version**.
 
 ## Import pengguna pukal (CSV)
 

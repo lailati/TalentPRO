@@ -1,4 +1,4 @@
-// Enjin semakan kelayakan kenaikan pangkat. Tulen: tiada DOM / penyimpanan. Input = rekod pensyarah; output = penjelasan bahasa biasa.
+﻿// Enjin semakan kelayakan kenaikan pangkat. Tulen: tiada DOM / penyimpanan. Input = rekod pensyarah; output = penjelasan bahasa biasa.
 import {
   RULES, NEXT_GRADE, COMPONENT, COMPONENTS, GENERAL_CONDITIONS, PENALTY_MONTHS, CONSULT_KIND_OK, ACTIVITY_KINDS, fieldIdx, isExternalGrant,
   gradeLabel, lampiranPublication, lampiranResearch, lampiranConsult,
@@ -238,7 +238,7 @@ export function generalChecks(lec, T, toGrade, today = new Date()) {
 export function evaluate(lec, T, opts = {}) {
   const today = opts.today || new Date();
   const from = lec.grade; const to = opts.to || NEXT_GRADE[from];
-  if (!from || !GRADES_OK(from)) return { ok: false, reason: 'no_grade', message: 'Gred semasa anda belum ditetapkan oleh Pentadbir (Maklumat Perkhidmatan).' };
+  if (!from || !GRADES_OK(from)) return { ok: false, reason: 'no_grade', message: 'Gred semasa anda belum ditetapkan oleh Pegawai KP (HR) (Maklumat Perkhidmatan).' };
   if (!to || !RULES[to]) return { ok: false, reason: 'top', message: 'Anda sudah berada di gred tertinggi dalam laluan ini.' };
   const field = opts.field || lec.field || 'Sains & Teknologi';
   const f = fieldIdx(field);

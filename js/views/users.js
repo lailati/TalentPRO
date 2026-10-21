@@ -1,10 +1,11 @@
-import * as api from '../api.js';
+﻿import * as api from '../api.js';
 import { store } from '../api.js';
 import { html, mount, $, icon, toast, openDrawer, confirmDialog, fmtDate, download } from '../util.js';
 import { parseCsv, validateUserRows, templateCsv, credentialsCsv, USER_COLUMNS, MAX_BULK_ROWS } from '../csv.js';
 import { DEPARTMENTS, ROLE_LABEL } from '../schema.js';
 import { fieldHtml, readForm, busy, dataTable, pageHead, searchBox, cell, debounce } from './_ui.js';
 
+const OFFICE_DEPTS = [...DEPARTMENTS, 'Pejabat Fakulti', 'Pejabat Pendaftar'];
 const strongPw = (p) => p.length >= 8 && /[A-Za-z]/.test(p) && /\d/.test(p);
 
 export async function render(root) {
@@ -13,7 +14,7 @@ export async function render(root) {
     rows: () => store.users, searchText: (u) => [u.full_name, u.username, u.email, u.role, u.department].join(' '),
     columns: [
       { label: 'Nama', key: 'full_name', render: (u) => html`<b>${u.full_name}</b>` }, { label: 'Nama Pengguna', key: 'username' }, { label: 'E-mel', key: 'email' },
-      { label: 'Peranan', key: 'role', render: (u) => html`<span class="badge ${u.role === 'admin' ? 'info' : 'mute'}">${ROLE_LABEL[u.role] || u.role}</span>` },
+      { label: 'Peranan', key: 'role', render: (u) => html`<span class="badge ${u.role === 'admin' ? 'info' : u.role === 'hr' ? 'warn' : 'mute'}">${ROLE_LABEL[u.role] || u.role}</span>` },
       { label: 'Jabatan', key: 'department' }, { label: 'Status', key: 'status', fmt: 'status' },
       { label: 'Log masuk terakhir', key: 'last_login', render: (u) => (u.last_login ? fmtDate(u.last_login) : html`<span class="faint">Tidak pernah</span>`) },
     ],
@@ -24,8 +25,8 @@ export async function render(root) {
   const userForm = (u) => {
     const F = [
       { name: 'full_name', label: 'Nama Penuh', type: 'text', required: true }, { name: 'username', label: 'Nama Pengguna', type: 'text', required: true, readonly: !!u, autocomplete: 'off' },
-      { name: 'email', label: 'E-mel', type: 'email', required: true }, { name: 'role', label: 'Peranan', type: 'select', options: [['lecturer', 'Pensyarah'], ['admin', 'Pentadbir']], required: true, help: 'users_role' },
-      { name: 'department', label: 'Jabatan', type: 'select', options: [...DEPARTMENTS, 'Pejabat Fakulti', ...(u && ![...DEPARTMENTS, 'Pejabat Fakulti'].includes(u.department) && u.department ? [u.department] : [])], required: true }, { name: 'status', label: 'Status', type: 'select', options: [['Active', 'Aktif'], ['Inactive', 'Tidak Aktif']], required: true },
+      { name: 'email', label: 'E-mel', type: 'email', required: true }, { name: 'role', label: 'Peranan', type: 'select', options: [['lecturer', 'Pensyarah'], ['hr', 'Pegawai KP (HR)'], ['admin', 'Admin Sistem']], required: true, help: 'users_role' },
+      { name: 'department', label: 'Jabatan', type: 'select', options: [...OFFICE_DEPTS, ...(u && !OFFICE_DEPTS.includes(u.department) && u.department ? [u.department] : [])], required: true }, { name: 'status', label: 'Status', type: 'select', options: [['Active', 'Aktif'], ['Inactive', 'Tidak Aktif']], required: true },
       ...(u ? [] : [{ name: 'password', label: 'Kata Laluan Awal', type: 'password', required: true, minlen: 8, autocomplete: 'new-password' }]),
     ];
     openDrawer({
@@ -60,7 +61,7 @@ export async function render(root) {
       const existing = () => ({ usernames: new Set(store.users.map((u) => u.username.toLowerCase())), emails: new Set(store.users.map((u) => u.email.toLowerCase())), staffIds: new Set(store.lecturers.map((l) => String(l.staff_id).toLowerCase())) });
       const pick = (msg = '') => {
         mount(box, html`
-          <p class="muted">Cipta banyak akaun <b>pensyarah</b> sekali gus. Maksimum ${MAX_BULK_ROWS} baris setiap import. Akaun pentadbir dicipta satu demi satu melalui “Tambah Pengguna”.</p>
+          <p class="muted">Cipta banyak akaun <b>pensyarah</b> sekali gus. Maksimum ${MAX_BULK_ROWS} baris setiap import. Akaun Pegawai KP (HR) dan Admin Sistem dicipta satu demi satu melalui “Tambah Pengguna”.</p>
           <p class="small muted"><b>Lajur wajib:</b> ${USER_COLUMNS.filter((c) => c.required).map((c) => c.label).join(', ')}. <b>Pilihan:</b> ${USER_COLUMNS.filter((c) => !c.required).map((c) => c.label).join(', ')}. Jika <code>kata_laluan</code> kosong, sistem menjana kata laluan awal secara rawak. Tarikh: YYYY-MM-DD atau DD/MM/YYYY.</p>
           ${msg ? html`<div class="err-box" role="alert">${msg}</div>` : ''}
           <div class="row" style="margin:14px 0"><button type="button" class="btn ghost" id="tpl">${icon('report', 18)} Muat turun templat CSV</button></div>

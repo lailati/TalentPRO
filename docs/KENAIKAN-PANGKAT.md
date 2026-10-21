@@ -1,4 +1,4 @@
-# Modul Kenaikan Pangkat — panduan reka bentuk dan penggunaan
+﻿# Modul Kenaikan Pangkat — panduan reka bentuk dan penggunaan
 
 Modul ini melaksanakan **Garis Panduan Kenaikan Pangkat Staf Akademik UPNM (Edisi 2025, LPU 28 Ogos 2025)** di dalam Peta Bakat FSTP. Dokumen PDF Garis Panduan tidak disertakan dalam repositori (fail peribadi); semua peraturan dikodkan sebagai **data** dalam `js/promotion/guideline.js` dengan rujukan perenggan (Perenggan ).
 
@@ -7,12 +7,12 @@ Modul ini melaksanakan **Garis Panduan Kenaikan Pangkat Staf Akademik UPNM (Edis
 Garis Panduan itu rumit (108 halaman). Sistem ini menyembunyikan kerumitannya di belakang enjin peraturan, dan skrin hanya menunjukkan **satu perkara seterusnya**:
 
 - **Pensyarah**: satu halaman (`#/kp`) — gred sekarang → sasaran, cincin kesediaan, "3 perkara paling penting", dan **satu** butang utama (Mulakan permohonan / Lihat status). Butang "Tambah rekod" membuka borang dengan jenis rekod yang betul.
-- **Pentadbir**: papan kerja (`#/kp-admin`) dengan tab *Perlu tindakan / Semua / Calon berpotensi*; butiran permohonan menunjukkan **satu langkah semasa**, siapa yang bertindak, senarai semak, dan butang keputusan dalam bahasa biasa.
+- **Pegawai KP (HR)**: dashboard (#/hr) dan papan kerja (#/kp-admin) dengan tab *Perlu tindakan / Semua / Calon berpotensi*; butiran permohonan menunjukkan **satu langkah semasa**, siapa yang bertindak, senarai semak, dan butang keputusan dalam bahasa biasa.
 - **Butang "?"** di sebelah setiap istilah / butang yang kelihatan rumit (kira-kira 150 entri dalam `js/help.js`, dengan rujukan Perenggan ). Butang **Bantuan** di bar atas menerangkan halaman semasa. Borang menyembunyikan medan kenaikan pangkat di bawah bahagian pilihan yang dilipat, dan medan lain muncul hanya apabila relevan (contoh: jenis aktiviti).
 
 ## Rekod bukti yang dipaparkan
 
-Aktiviti Akademik, Penyelidikan, Penerbitan, Konsultansi, Pencapaian (anugerah/pingat, Lampiran D1–D2, E1–E2, B15–B18), Dokumen, serta Markah LPPT dan Hukuman Tatatertib (admin sahaja). Kepakaran, Pensijilan dan Latihan tidak dipaparkan kerana tidak menjadi bukti dalam Garis Panduan; jadual backendnya dikekalkan. Papan Pemuka lama kini beralih terus ke `#/kp-admin` (admin) atau `#/kp` (pensyarah).
+Aktiviti Akademik, Penyelidikan, Penerbitan, Konsultansi, Pencapaian (anugerah/pingat, Lampiran D1–D2, E1–E2, B15–B18), Dokumen (pensyarah menulis; HR membaca sahaja), serta Markah LPPT dan Hukuman Tatatertib (HR menulis). Kepakaran, Pensijilan dan Latihan tidak dipaparkan kerana tidak menjadi bukti dalam Garis Panduan; jadual backendnya dikekalkan. Papan Pemuka lama kini beralih ke halaman utama peranan: `#/users` (Admin Sistem), `#/hr` (HR) atau `#/kp` (pensyarah). Admin dan HR tidak memasukkan rekod bukti; pensyarah memasukkannya sendiri.
 
 ## Laluan gred yang dilindungi
 
@@ -37,10 +37,24 @@ Jadual peralihan sah berada di `js/promotion/workflow.js` **dan** disalin dalam 
 
 ## Peranan dan kebenaran
 
-- Pensyarah: baca-sahaja pada `lppt_scores`, `disciplinary`, `promotion_assessors`; **tidak boleh** menulis maklumat perkhidmatan (`SERVICE_FIELDS`) kecuali `scopus_h_index`.
-- Pentadbir: menulis `lppt_scores`, `disciplinary`, `promotion_assessors`, dan maklumat perkhidmatan (tab "Maklumat Perkhidmatan" dalam editor profil).
-- `promotion_applications` / `promotion_events`: tiada CRUD generik — hanya tindakan `promo*`.
+Tiga peranan (nilai users.role): `admin` = **Admin Sistem**, `hr` = **Pegawai KP (HR)**, `lecturer` = **Pensyarah**. Peranan tak boleh ditukar selepas akaun dicipta. Semua kebenaran dikuatkuasakan di pelayan (`js/local-server.js` dan `backend/Code.gs`), bukan di UI sahaja.
 
+| | Admin Sistem | Pegawai KP (HR) | Pensyarah |
+|---|---|---|---|
+| Akaun (cipta, import CSV, kata laluan, padam) dan kategori | ✔ | ✘ | ✘ |
+| Data KP, LPPT, tatatertib, maklumat perkhidmatan | ✘ (tidak dihantar dalam `snapshot`) | ✔ (tulis: LPPT, tatatertib, penilai luar, maklumat perkhidmatan, `staff_id`, semua tindakan `promo*`) | baca sendiri sahaja |
+| Rekod bukti (aktiviti, penyelidikan, penerbitan, konsultansi, pencapaian, dokumen) | ✘ | **baca/muat turun sahaja** | tulis rekod sendiri |
+| Dashboard HR (`#/hr`) | ✘ | ✔ | ✘ |
+| Cipta draf / hantar bagi pihak calon | ✘ | ✔ | permohonan sendiri |
+
+- Pensyarah: baca-sahaja pada `lppt_scores`, `disciplinary`, `promotion_assessors`; **tidak boleh** menulis maklumat perkhidmatan (`SERVICE_FIELDS`) kecuali `scopus_h_index`.
+- HR: hanya mengemas kini No. Staf dan Maklumat Perkhidmatan pada profil pensyarah (butang *Kemas Kini Maklumat Perkhidmatan*); profil peribadi dikemas kini oleh pensyarah sendiri.
+- `promotion_applications` / `promotion_events`: tiada CRUD generik, hanya tindakan `promo*`.
+- Akaun HR pertama dicipta oleh Admin Sistem melalui *Urus Pengguna → Tambah Pengguna → Peranan "Pegawai KP (HR)"*. Sandbox `?backend=local` mempunyai akaun `admin`/`admin` dan `hr`/`hr` (sandbox sahaja).
+
+## Dashboard HR (`#/hr`)
+
+Jubin ringkasan (dalam proses, tertunggak > 14 hari, rayuan, berjaya/tidak berjaya tahun ini, calon berpotensi); saluran permohonan mengikut peringkat dan senarai menunggu tindakan; amaran (rayuan tamat ≤ 7 hari, tertunggak, disekat tatatertib, maklumat perkhidmatan tidak lengkap, tiada markah LPPT); calon berpotensi dengan penapis jabatan/gred sasaran dan butang *Cipta draf*; statistik keputusan mengikut tahun, jabatan dan gred sasaran dengan **Eksport CSV** dan **Cetak**. Fail: `js/views/hrDashboard.js` (menggunakan semula `quickReadiness`, `disciplineBlocks` dan `appealInfo`).
 ## Fail
 
 | Fail | Peranan |

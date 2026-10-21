@@ -4,10 +4,10 @@ import { store, lecturerOf, myLecturer } from '../api.js';
 import { html, mount, $, icon, avatar, fmtDate } from '../util.js';
 import { ENTITIES } from '../schema.js';
 import { pageHead, cell, saveDownload } from './_ui.js';
-import { openProfileEditor } from './profile.js';
+import { openProfileEditor, openServiceEditor } from './profile.js';
 
 export async function render(root, { id }) {
-  const admin = store.me.role === 'admin';
+  const admin = store.me.role === 'hr';   // pegawai HR: melihat semua pensyarah dan mengemas kini maklumat perkhidmatan
   const l = lecturerOf(id);
   if (!l || (!admin && l.id !== (myLecturer() || {}).id)) { mount(root, html`<div class="card empty">${icon('alert', 36)}<h3>Pensyarah tidak ditemui</h3><p><a href="#/dashboard">Kembali ke laman utama</a></p></div>`); return; }
   const mine = (t) => store[t].filter((r) => r.lecturer_id === l.id);
@@ -17,7 +17,7 @@ export async function render(root, { id }) {
   const draw = () => {
     const lec = lecturerOf(id);
     mount(root, html`
-      ${pageHead('Profil Pensyarah', '', html`${admin ? html`<a class="btn ghost" href="#/lecturers">${icon('users', 18)} Semua pensyarah</a>` : ''}<button class="btn primary" id="edit">${icon('edit', 18)} Kemas Kini Profil</button>`)}
+      ${pageHead('Profil Pensyarah', '', html`${admin ? html`<a class="btn ghost" href="#/lecturers">${icon('users', 18)} Semua pensyarah</a>` : ''}<button class="btn primary" id="edit">${icon('edit', 18)} ${admin ? 'Kemas Kini Maklumat Perkhidmatan' : 'Kemas Kini Profil'}</button>`)}
       <section class="card profile-head">
         ${avatar(lec, 124)}
         <div class="stack" style="gap:10px">
@@ -32,7 +32,7 @@ export async function render(root, { id }) {
         <section class="card"><h3>Maklumat Perkhidmatan</h3><div class="tbl-wrap"><table><tbody>${service(lec).map(([k, v]) => html`<tr><th scope="row">${k}</th><td>${v}</td></tr>`)}</tbody></table></div></section>
         <section class="card"><h3>Penerbitan Terkini</h3>${mine('publications').length ? html`<ul class="act-list">${[...mine('publications')].sort((a, b) => b.year - a.year).slice(0, 5).map((p) => html`<li><span>${p.title}<br><small class="faint">${p.venue} · ${p.year}</small></span><span class="d">${cell('status', p.status)}</span></li>`)}</ul>` : html`<p class="muted">Belum ada penerbitan direkodkan.</p>`}</section>
       </div>`);
-    const eb = $('#edit', root); if (eb) eb.onclick = () => openProfileEditor(lec, draw);
+    const eb = $('#edit', root); if (eb) eb.onclick = () => (admin ? openServiceEditor(lec, draw) : openProfileEditor(lec, draw));
   };
   draw();
   if (!admin) { /* lecturers reach their own record pages through the sidebar */ }

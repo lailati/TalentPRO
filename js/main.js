@@ -1,30 +1,32 @@
 import * as api from './api.js';
 import { store, onChange, myLecturer } from './api.js';
 import { html, mount, $, $$, icon, logo, avatar, fmtDate } from './util.js';
-import { ENTITIES, ENTITY_ORDER, ADMIN_ENTITY_ORDER } from './schema.js';
+import { ENTITIES, ENTITY_ORDER, ADMIN_ENTITY_ORDER, ROLE_LABEL } from './schema.js';
 import { wireHelp, openPageHelp } from './help.js';
 import { ACTIVE_STATUSES } from './promotion/workflow.js';
 
 const app = $('#app');
-const home = () => (store.me && store.me.role === 'admin' ? '#/kp-admin' : '#/kp');   // halaman utama mengikut peranan
+// Tiga peranan: admin = Admin Sistem, hr = Pegawai Kenaikan Pangkat, lecturer = pensyarah.
+const home = () => ({ admin: '#/users', hr: '#/hr' }[store.me && store.me.role] || '#/kp');   // halaman utama mengikut peranan
 let cleanup = null;
 let shellEl = null;
 
 // route table: pattern -> {view module, roles}
 const ROUTES = [
   ['profile', 'profile', ['lecturer']],
-  ['lecturers', 'lecturers', ['admin']],
-  ['lecturer/:id', 'profileView', ['admin', 'lecturer']],
+  ['hr', 'hrDashboard', ['hr']],
+  ['lecturers', 'lecturers', ['hr']],
+  ['lecturer/:id', 'profileView', ['hr', 'lecturer']],
   ['users', 'users', ['admin']],
-  ['account', 'account', ['admin', 'lecturer']],
+  ['account', 'account', ['admin', 'hr', 'lecturer']],
   ['kp', 'kp', ['lecturer']],
   ['kp/mohon', 'kpMohon', ['lecturer']],
   ['kp/:id', 'kpStatus', ['lecturer']],
-  ['kp-admin', 'kpAdmin', ['admin']],
-  ['kp-admin/:id', 'kpDetail', ['admin']],
-  ['panduan', 'panduan', ['admin', 'lecturer']],
-  ...ADMIN_ENTITY_ORDER.map((e) => [e, 'records:' + e, ['admin']]),
-  ...ENTITY_ORDER.map((e) => [e, 'records:' + e, ['admin', 'lecturer']]),
+  ['kp-admin', 'kpAdmin', ['hr']],
+  ['kp-admin/:id', 'kpDetail', ['hr']],
+  ['panduan', 'panduan', ['hr', 'lecturer']],
+  ...ADMIN_ENTITY_ORDER.map((e) => [e, 'records:' + e, ['hr']]),
+  ...ENTITY_ORDER.map((e) => [e, 'records:' + e, ['hr', 'lecturer']]),
 ];
 
 function match(path) {
@@ -39,16 +41,21 @@ function match(path) {
 }
 
 function navFor(role) {
-  const ent = (k) => ({ href: '#/' + k, key: k, label: role === 'admin' ? ENTITIES[k].plural : ENTITIES[k].mine, icon: ENTITIES[k].icon });
-  if (role === 'admin') return [
+  const ent = (k) => ({ href: '#/' + k, key: k, label: role === 'hr' ? ENTITIES[k].plural : ENTITIES[k].mine, icon: ENTITIES[k].icon });
+  if (role === 'admin') return [   // Admin Sistem: akaun sahaja (tiada akses data Kenaikan Pangkat)
+    { grp: 'Pentadbiran Sistem' },
+    { href: '#/users', key: 'users', label: 'Urus Pengguna', icon: 'user' },
+  ];
+  if (role === 'hr') return [      // Pegawai KP (HR): urusan kenaikan pangkat; rekod bukti paparan sahaja
+    { href: '#/hr', key: 'hr', label: 'Dashboard HR', icon: 'dashboard' },
     { grp: 'Kenaikan Pangkat' },
     { href: '#/kp-admin', key: 'kp-admin', label: 'Papan Kerja', icon: 'target' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { grp: 'Pengurusan' },
-    { href: '#/lecturers', key: 'lecturers', label: 'Pensyarah', icon: 'users' },
-    { href: '#/users', key: 'users', label: 'Urus Pengguna', icon: 'user' },
-    { grp: 'Rekod Bukti' },
+    { grp: 'Pensyarah' },
+    { href: '#/lecturers', key: 'lecturers', label: 'Senarai Pensyarah', icon: 'users' },
+    { grp: 'Rekod Bukti (paparan)' },
     ...ENTITY_ORDER.map(ent),
+    { grp: 'Data HR' },
     ...ADMIN_ENTITY_ORDER.map(ent),
   ];
   return [
@@ -72,7 +79,7 @@ function renderShell() {
         <span class="grow"></span>
         <button class="help-top" id="phelp" aria-label="Bantuan untuk halaman ini" title="Apa yang boleh saya lakukan di halaman ini?"><span class="q">?</span><span class="t">Bantuan</span></button>
         <div class="rel"><button class="icon-btn" id="bell" aria-label="Notifikasi" aria-haspopup="true" aria-expanded="false">${icon('bell', 22)}<span class="dot" id="bell-n" hidden></span></button><div id="bell-pop"></div></div>
-        <div class="rel"><button class="user-chip" id="uchip" aria-haspopup="true" aria-expanded="false">${avatar(lec || { full_name: me.full_name }, 34)}<span class="n">${me.role === 'admin' ? 'Pentadbir' : me.full_name}</span>${icon('chevron', 14)}</button><div id="u-pop"></div></div>
+        <div class="rel"><button class="user-chip" id="uchip" aria-haspopup="true" aria-expanded="false">${avatar(lec || { full_name: me.full_name }, 34)}<span class="n">${me.role === 'lecturer' ? me.full_name : ROLE_LABEL[me.role]}</span>${icon('chevron', 14)}</button><div id="u-pop"></div></div>
       </header>
       <aside class="sidebar" id="sidebar" aria-label="Navigasi utama"><nav>${nav.map((n) => (n.grp ? html`<div class="grp">${n.grp}</div>` : html`<a class="nav-a" href="${n.href}" data-key="${n.key}">${icon(n.icon, 19)}<span>${n.label}</span><span class="count" data-count="${n.key}" hidden></span></a>`))}</nav></aside>
       <div class="scrim" id="scrim"></div>
@@ -123,13 +130,14 @@ function wirePopovers() {
 }
 const bellHtml = () => {
   const { rows } = activityFeed();
-  return html`<div class="pop" role="region" aria-label="Notifikasi"><h4>Notifikasi</h4>${rows.map((r) => html`<div class="note">${icon('check', 18)}<span>${r.message}<br><small class="faint">${fmtDate(r.created_at)}${store.me.role === 'admin' ? ' · ' + ((store.lecturers.find((l) => l.id === r.lecturer_id) || {}).full_name || '') : ''}</small></span></div>`)}${!rows.length ? html`<div class="note">Tiada notifikasi baharu.</div>` : ''}</div>`;
+  return html`<div class="pop" role="region" aria-label="Notifikasi"><h4>Notifikasi</h4>${rows.map((r) => html`<div class="note">${icon('check', 18)}<span>${r.message}<br><small class="faint">${fmtDate(r.created_at)}${store.me.role === 'hr' ? ' · ' + ((store.lecturers.find((l) => l.id === r.lecturer_id) || {}).full_name || '') : ''}</small></span></div>`)}${!rows.length ? html`<div class="note">Tiada notifikasi baharu.</div>` : ''}</div>`;
 };
 const userHtml = () => html`<div class="pop" role="menu"><h4>${store.me.full_name}</h4><a href="#/account" role="menuitem">${icon('key', 18)} Akaun &amp; kata laluan</a><button class="mi" data-do="theme" role="menuitem">${icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon', 18)} Tukar tema</button><button class="mi" data-do="logout" role="menuitem">${icon('out', 18)} Log keluar</button></div>`;
 
 let curPath = '';
 function pageKey() {
-  const p = curPath, admin = store.me && store.me.role === 'admin';
+  const p = curPath;
+  if (p === 'hr') return 'hr_dashboard';
   if (p === 'kp') return 'kp'; if (p === 'kp/mohon') return 'kp_mohon'; if (p.startsWith('kp-admin/')) return 'kp_detail'; if (p.startsWith('kp/')) return 'kp';
   if (p === 'kp-admin') return 'kp_admin'; if (p === 'panduan') return 'panduan';  if (p.startsWith('lecturer/')) return 'lecturers';
   return ['profile', 'lecturers', 'users', 'account', 'lppt_scores', 'disciplinary'].includes(p) ? p : 'records';

@@ -1,4 +1,4 @@
-// Hab Kenaikan Pangkat (pensyarah): satu skrin, satu tindakan utama — "Apa yang perlu saya buat seterusnya?"
+﻿// Hab Kenaikan Pangkat (pensyarah): satu skrin, satu tindakan utama — "Apa yang perlu saya buat seterusnya?"
 import { store, myLecturer } from '../api.js';
 import { html, mount, icon, fmtDate } from '../util.js';
 import { pageHead } from './_ui.js';
@@ -18,7 +18,7 @@ export async function render(root) {
 
   if (!ev.ok) {
     mount(root, html`${pageHead('Kenaikan Pangkat Saya', 'Semak kesediaan anda dan mohon apabila bersedia.', '', '', 'kp')}
-      <div class="card empty">${icon('info', 40)}<h3>${ev.reason === 'top' ? 'Anda sudah di gred tertinggi' : 'Gred anda belum ditetapkan'}</h3><p>${ev.message}</p><p class="small faint" style="margin-top:8px">Maklumat gred, tarikh lantikan dan pengesahan ialah data Pejabat Pendaftar yang dimasukkan oleh Pentadbir.</p></div>
+      <div class="card empty">${icon('info', 40)}<h3>${ev.reason === 'top' ? 'Anda sudah di gred tertinggi' : 'Gred anda belum ditetapkan'}</h3><p>${ev.message}</p><p class="small faint" style="margin-top:8px">Maklumat gred, tarikh lantikan dan pengesahan ialah data Pejabat Pendaftar yang dimasukkan oleh Pegawai KP (HR).</p></div>
       ${history(apps)}`);
     return;
   }

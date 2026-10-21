@@ -7,7 +7,8 @@ import { fieldHtml, readForm, busy, dataTable, pageHead, searchBox, cell, saveDo
 import { helpBtn } from '../help.js';
 
 export async function render(root, { entity, lecturer: lecFilter, add, ...query }) {
-  const E = ENTITIES[entity]; const admin = store.me.role === 'admin';
+  // `admin` di sini = pegawai HR (melihat semua pensyarah). Rekod bukti ialah baca sahaja bagi HR; hanya jadual `adminWrite` (LPPT, tatatertib) boleh disunting.
+  const E = ENTITIES[entity]; const admin = store.me.role === 'hr'; const canWrite = !admin || !!E.adminWrite;
   const me = myLecturer();
   const state = { lec: '' };
   const rowsFn = () => store[E.table].filter((r) => !state.lec || r.lecturer_id === state.lec);
@@ -19,16 +20,16 @@ export async function render(root, { entity, lecturer: lecFilter, add, ...query 
   };
 
   mount(root, html`
-    ${pageHead(admin ? E.plural : E.mine, admin ? `Rekod ${E.plural.toLowerCase()} semua pensyarah.` : `Urus rekod ${E.plural.toLowerCase()} anda.`,
-      html`<button class="btn ghost" id="exp">${icon('download', 18)} Eksport CSV</button><button class="btn primary" id="add">${icon('plus', 18)} Tambah ${E.singular}</button>`, '', E.helpKey || 'records')}
+    ${pageHead(admin ? E.plural : E.mine, admin ? `Rekod ${E.plural.toLowerCase()} semua pensyarah${canWrite ? '.' : ' (paparan sahaja; pensyarah memasukkan rekod ini sendiri).'}` : `Urus rekod ${E.plural.toLowerCase()} anda.`,
+      html`<button class="btn ghost" id="exp">${icon('download', 18)} Eksport CSV</button>${canWrite ? html`<button class="btn primary" id="add">${icon('plus', 18)} Tambah ${E.singular}</button>` : ''}`, '', E.helpKey || 'records')}
     <div class="toolbar">${searchBox('q', `Cari ${E.plural.toLowerCase()}…`)}${admin ? html`<select class="input" id="lf" style="max-width:260px" aria-label="Tapis mengikut pensyarah"><option value="">Semua pensyarah</option>${[...store.lecturers].sort((a, b) => a.full_name.localeCompare(b.full_name)).map((l) => html`<option value="${l.id}">${l.full_name}</option>`)}</select>` : ''}</div>
     <div id="tbl"></div>`);
 
   const tbl = dataTable($('#tbl', root), {
     columns, rows: rowsFn,
     searchText: (r) => [E.title(r), ...E.columns.map((c) => (c.fmt === 'category' ? (api.categoryOf(r[c.key]) || {}).name : r[c.key])), (lecturerOf(r.lecturer_id) || {}).full_name].join(' '),
-    actions: (r) => html`${docBtn(r)}<button class="icon-btn" data-edit="${r.id}" aria-label="Kemas kini ${E.title(r)}" title="Kemas kini">${icon('edit', 18)}</button><button class="icon-btn del" data-del="${r.id}" aria-label="Padam ${E.title(r)}" title="Padam">${icon('trash', 18)}</button>`,
-    empty: { title: `Belum ada rekod ${E.plural.toLowerCase()}`, text: `Tambah rekod ${E.singular.toLowerCase()} pertama anda untuk bermula.`, cta: html`<button class="btn primary" data-empty-add style="margin-top:14px">${icon('plus', 18)} Tambah ${E.singular}</button>` },
+    actions: (r) => html`${docBtn(r)}${canWrite ? html`<button class="icon-btn" data-edit="${r.id}" aria-label="Kemas kini ${E.title(r)}" title="Kemas kini">${icon('edit', 18)}</button><button class="icon-btn del" data-del="${r.id}" aria-label="Padam ${E.title(r)}" title="Padam">${icon('trash', 18)}</button>` : ''}`,
+    empty: canWrite ? { title: `Belum ada rekod ${E.plural.toLowerCase()}`, text: `Tambah rekod ${E.singular.toLowerCase()} pertama anda untuk bermula.`, cta: html`<button class="btn primary" data-empty-add style="margin-top:14px">${icon('plus', 18)} Tambah ${E.singular}</button>` } : { title: `Belum ada rekod ${E.plural.toLowerCase()}`, text: 'Pensyarah akan memasukkan rekod ini sendiri.' },
   });
   $('#q', root).oninput = debounce((e) => tbl.search(e.target.value));
   const lf = $('#lf', root); if (lf) { if (lecFilter) { lf.value = lecFilter; state.lec = lecFilter; tbl.refresh(); } lf.onchange = () => { state.lec = lf.value; tbl.refresh(); }; }
@@ -63,8 +64,8 @@ export async function render(root, { entity, lecturer: lecFilter, add, ...query 
       },
     });
   };
-  $('#add', root).onclick = () => form(null);
-  if (add) setTimeout(() => form(null), 60); // pautan terus dari halaman Kenaikan Pangkat: borang terbuka dengan jenis yang betul
+  const addBtn = $('#add', root); if (addBtn) addBtn.onclick = () => form(null);
+  if (add && canWrite) setTimeout(() => form(null), 60); // pautan terus dari halaman Kenaikan Pangkat: borang terbuka dengan jenis yang betul
   $('#exp', root).onclick = () => {
     const rows = rowsFn(); const head = [...(admin ? ['Pensyarah', 'No. Staf'] : []), ...E.columns.map((c) => c.label)];
     download(`${entity}.csv`, toCsv(head, rows.map((r) => [...(admin ? [(lecturerOf(r.lecturer_id) || {}).full_name, (lecturerOf(r.lecturer_id) || {}).staff_id] : []), ...E.columns.map((c) => (c.fmt === 'category' ? (api.categoryOf(r[c.key]) || {}).name : r[c.key]))])));

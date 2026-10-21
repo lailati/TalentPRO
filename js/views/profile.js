@@ -1,4 +1,4 @@
-// "My Profile" (lecturer edit form) — also reused by admin to edit any lecturer via openProfileEditor().
+// "My Profile" (lecturer edit form). HR edits service data through openServiceEditor().
 import * as api from '../api.js';
 import { store, myLecturer } from '../api.js';
 import { html, mount, $, $$, avatar, toast, openDrawer, raw } from '../util.js';
@@ -57,7 +57,7 @@ function formBody(l, admin) {
     <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-tab="personal">Maklumat Peribadi</button><button type="button" role="tab" aria-selected="false" data-tab="professional">Maklumat Profesional</button>${admin ? html`<button type="button" role="tab" aria-selected="false" data-tab="service">Maklumat Perkhidmatan</button>` : ''}</div>
     <div data-pane="personal" class="stack">${F.personal.map((f) => fieldHtml(f, l[f.name] ?? ''))}</div>
     <div data-pane="professional" class="stack" hidden>${F.professional.map((f) => fieldHtml(f, l[f.name] ?? ''))}</div>
-    ${admin ? html`<div data-pane="service" class="stack" hidden><p class="small muted">Data Pejabat Pendaftar yang digunakan oleh semakan Kenaikan Pangkat. Hanya Pentadbir boleh mengubahnya.</p>${F.service.map((f) => fieldHtml(f, l[f.name] ?? ''))}</div>` : ''}
+    ${admin ? html`<div data-pane="service" class="stack" hidden><p class="small muted">Data Pejabat Pendaftar yang digunakan oleh semakan Kenaikan Pangkat. Hanya Pegawai KP (HR) boleh mengubahnya.</p>${F.service.map((f) => fieldHtml(f, l[f.name] ?? ''))}</div>` : ''}
     <div class="form-actions"><button type="button" class="btn ghost" data-cancel>Batal</button><button class="btn primary" id="sv" type="submit">Simpan Profil</button></div>
   </form>`;
 }
@@ -81,7 +81,25 @@ function wire(el, l, admin, done) {
 }
 
 export function openProfileEditor(l, onSaved) {
-  openDrawer({ title: 'Kemas Kini Profil', body: formBody(l, store.me.role === 'admin'), onMount: (el, close) => wire(el, l, store.me.role === 'admin', (saved) => { close(); if (saved && onSaved) onSaved(); }) });
+  openDrawer({ title: 'Kemas Kini Profil', body: formBody(l, false), onMount: (el, close) => wire(el, l, false, (saved) => { close(); if (saved && onSaved) onSaved(); }) });
+}
+
+// Pegawai KP (HR): hanya No. Staf dan Maklumat Perkhidmatan (data HR). Profil peribadi dikemas kini oleh pensyarah sendiri.
+export function openServiceEditor(l, onSaved) {
+  const F = [{ name: 'staff_id', label: 'No. Staf', type: 'text', required: true }, ...fields(true).service];
+  openDrawer({
+    title: 'Kemas Kini Maklumat Perkhidmatan',
+    body: html`<form class="form" id="sf" novalidate><p class="small muted">Data Pejabat Pendaftar yang digunakan oleh semakan Kenaikan Pangkat untuk <b>${l.full_name}</b>.</p>${F.map((f) => fieldHtml(f, l[f.name] ?? ''))}<div class="form-actions"><button type="button" class="btn ghost" data-cancel>Batal</button><button class="btn primary" id="sv" type="submit">Simpan</button></div></form>`,
+    onMount: (el, close) => {
+      $('[data-cancel]', el).onclick = close;
+      $('#sf', el).onsubmit = async (ev) => {
+        ev.preventDefault(); const { values, ok } = readForm(ev.target, F); if (!ok) return;
+        const btn = $('#sv', el); busy(btn, true);
+        try { await api.update('lecturers', l.id, values); toast('Maklumat perkhidmatan disimpan.'); close(); if (onSaved) onSaved(); }
+        catch (e) { toast(e.message, 'err'); busy(btn, false, 'Simpan'); }
+      };
+    },
+  });
 }
 
 export async function render(root) {

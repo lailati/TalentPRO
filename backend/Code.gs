@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FSTP Talent Map — Google Apps Script backend (Google Sheets as the database).
  * Mirrors js/local-server.js action-for-action, so the web UI works unchanged.
  *
@@ -184,22 +184,25 @@ var ACTIONS = {
   me: function (p, ctx) { return { user: safeUser_(ctx.user) }; },
 
   snapshot: function (p, ctx) {
-    var admin = ctx.user.role === 'admin', lid = ctx.lecturer && ctx.lecturer.id, out = {};
-    out.users = admin ? rows_('users').map(safeUser_) : [safeUser_(ctx.user)];
-    out.lecturers = admin ? rows_('lecturers') : rows_('lecturers').filter(function (l) { return l.id === lid; });
+    // admin (sistem): semua akaun, tetapi tiada data KP/bukti dan tiada maklumat perkhidmatan.  hr: semua pensyarah dan semua data KP/bukti.  lecturer: miliknya sahaja.
+    var role = ctx.user.role, lid = ctx.lecturer && ctx.lecturer.id, out = {};
+    var extra = SERVICE_FIELDS.concat(['scopus_h_index']);
+    out.users = role === 'admin' ? rows_('users').map(safeUser_) : [safeUser_(ctx.user)];
+    out.lecturers = role === 'hr' ? rows_('lecturers') : role === 'admin' ? rows_('lecturers').map(function (l) { var c = {}; Object.keys(l).forEach(function (k) { if (extra.indexOf(k) < 0) c[k] = l[k]; }); return c; }) : rows_('lecturers').filter(function (l) { return l.id === lid; });
     out.expertise_categories = rows_('expertise_categories');
-    OWNED.forEach(function (t) { out[t] = admin ? rows_(t) : rows_(t).filter(function (r) { return r.lecturer_id === lid; }); });
+    OWNED.forEach(function (t) { out[t] = role === 'hr' ? rows_(t) : role === 'admin' ? [] : rows_(t).filter(function (r) { return r.lecturer_id === lid; }); });
     return out;
   },
 
   create: function (p, ctx) {
     var table = p.table, row = p.row || {};
     if (table !== 'expertise_categories' && (OWNED.indexOf(table) < 0 || ['activity_log', 'documents'].concat(ACTION_ONLY).indexOf(table) >= 0)) throw httpErr_('Jadual tidak sah.', 400);
-    var admin = ctx.user.role === 'admin';
-    if (table === 'expertise_categories' || ADMIN_WRITE.indexOf(table) >= 0) needAdmin_(ctx);
+    if (table === 'expertise_categories') needSys_(ctx);
+    else if (ADMIN_WRITE.indexOf(table) >= 0) needHr_(ctx);
+    else if (!ownLecturerId_(ctx)) throw httpErr_(EVIDENCE_MSG, 403);
     var r = clean_(table, row); r.id = uid_(table.slice(0, 3)); r.created_at = now_(); r.updated_at = now_();
     if (OWNED.indexOf(table) >= 0) {
-      r.lecturer_id = admin ? row.lecturer_id : (ctx.lecturer && ctx.lecturer.id);
+      r.lecturer_id = ADMIN_WRITE.indexOf(table) >= 0 ? row.lecturer_id : ownLecturerId_(ctx);
       if (!r.lecturer_id || !find_('lecturers', r.lecturer_id)) throw httpErr_('Pensyarah diperlukan.', 400);
       if (r.document_id) assertOwnsDoc_(r.document_id, r.lecturer_id);
     } else if (rows_(table).some(function (c) { return String(c.name).toLowerCase() === String(r.name).toLowerCase(); })) throw httpErr_('Kategori sudah wujud.', 409);
@@ -212,13 +215,17 @@ var ACTIONS = {
     var table = p.table;
     if (table !== 'lecturers' && table !== 'expertise_categories' && (OWNED.indexOf(table) < 0 || ['activity_log'].concat(ACTION_ONLY).indexOf(table) >= 0)) throw httpErr_('Jadual tidak sah.', 400);
     var row = find_(table, p.id); if (!row) throw httpErr_('Rekod tidak ditemui.', 404);
-    var admin = ctx.user.role === 'admin', mine = ctx.lecturer && ctx.lecturer.id;
-    if (table === 'expertise_categories' || ADMIN_WRITE.indexOf(table) >= 0) needAdmin_(ctx);
-    else if (table === 'lecturers') { if (!admin && row.id !== mine) throw httpErr_('Tidak dibenarkan.', 403); }
-    else if (!admin && row.lecturer_id !== mine) throw httpErr_('Tidak dibenarkan.', 403);
+    var role = ctx.user.role;
+    if (table === 'expertise_categories') needSys_(ctx);
+    else if (ADMIN_WRITE.indexOf(table) >= 0) needHr_(ctx);
+    else if (table === 'lecturers') { if (role === 'admin' || (role === 'lecturer' && row.id !== ownLecturerId_(ctx))) throw httpErr_('Tidak dibenarkan.', 403); }
+    else if (row.lecturer_id !== ownLecturerId_(ctx)) throw httpErr_(EVIDENCE_MSG, 403);
     var patch = clean_(table, p.patch || {});
     ['id', 'lecturer_id', 'user_id', 'created_at'].forEach(function (k) { delete patch[k]; });
-    if (table === 'lecturers' && !admin) { delete patch.staff_id; SERVICE_FIELDS.forEach(function (k) { delete patch[k]; }); }
+    if (table === 'lecturers') {   // maklumat perkhidmatan dan no. staf = data HR: HR sahaja boleh mengubahnya, dan HR tidak mengubah profil peribadi
+      if (role === 'hr') { Object.keys(patch).forEach(function (k) { if (k !== 'staff_id' && SERVICE_FIELDS.indexOf(k) < 0) delete patch[k]; }); }
+      else { delete patch.staff_id; SERVICE_FIELDS.forEach(function (k) { delete patch[k]; }); }
+    }
     if (table === 'documents') patch = { title: patch.title, doc_type: patch.doc_type };
     if (patch.document_id) assertOwnsDoc_(patch.document_id, row.lecturer_id);
     patch.updated_at = now_();
@@ -234,12 +241,11 @@ var ACTIONS = {
     var table = p.table;
     if (table !== 'expertise_categories' && (OWNED.indexOf(table) < 0 || ['activity_log'].concat(ACTION_ONLY).indexOf(table) >= 0)) throw httpErr_('Jadual tidak sah.', 400);
     var row = find_(table, p.id); if (!row) throw httpErr_('Rekod tidak ditemui.', 404);
-    var admin = ctx.user.role === 'admin';
-    if (ADMIN_WRITE.indexOf(table) >= 0) needAdmin_(ctx);
     if (table === 'expertise_categories') {
-      needAdmin_(ctx);
+      needSys_(ctx);
       if (rows_('expertise').some(function (e) { return e.category_id === p.id; })) throw httpErr_('Kategori ini sedang digunakan oleh rekod kepakaran pensyarah dan tidak boleh dipadam.', 409);
-    } else if (!admin && row.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw httpErr_('Tidak dibenarkan.', 403);
+    } else if (ADMIN_WRITE.indexOf(table) >= 0) needHr_(ctx);
+    else if (row.lecturer_id !== ownLecturerId_(ctx)) throw httpErr_(EVIDENCE_MSG, 403);
     if (table === 'documents') {
       trashFile_(row.file_ref);
       OWNED.forEach(function (t) { if (t === 'documents' || t === 'activity_log') return; rows_(t).forEach(function (x) { if (x.document_id === p.id) update_(t, x.id, { document_id: '' }); }); });
@@ -250,8 +256,8 @@ var ACTIONS = {
   },
 
   upload: function (p, ctx) {
-    var admin = ctx.user.role === 'admin', lid = admin ? p.lecturer_id : (ctx.lecturer && ctx.lecturer.id);
-    if (!lid || !find_('lecturers', lid)) throw httpErr_('Pensyarah diperlukan.', 400);
+    var lid = ownLecturerId_(ctx);
+    if (!lid) throw httpErr_(EVIDENCE_MSG, 403);
     if (Number(p.size) > MAX_FILE_BYTES) throw httpErr_('Fail melebihi 5 MB.', 400);
     var m = /^data:([\w\/+.\-]+);base64,(.+)$/.exec(String(p.dataUrl || ''));
     var okMime = /^(application\/pdf|image\/png|image\/jpeg|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document)$/;
@@ -268,21 +274,22 @@ var ACTIONS = {
 
   download: function (p, ctx) {
     var d = find_('documents', p.id); if (!d) throw httpErr_('Dokumen tidak ditemui.', 404);
-    if (ctx.user.role !== 'admin' && d.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw httpErr_('Tidak dibenarkan.', 403);
+    if (ctx.user.role !== 'hr' && d.lecturer_id !== ownLecturerId_(ctx)) throw httpErr_('Tidak dibenarkan.', 403);
     var blob = DriveApp.getFileById(d.file_ref).getBlob();
     return { file_name: d.file_name, mime: d.mime, dataUrl: 'data:' + d.mime + ';base64,' + Utilities.base64Encode(blob.getBytes()) };
   },
 
   // ---------- Kenaikan pangkat (aliran kerja; ikut js/promotion/workflow.js) ----------
   promoSave: function (p, ctx) {
-    var admin = ctx.user.role === 'admin', app = p.id ? find_('promotion_applications', p.id) : null;
-    var lec = find_('lecturers', admin ? (p.lecturer_id || (app && app.lecturer_id)) : (ctx.lecturer && ctx.lecturer.id));
+    if (ctx.user.role === 'admin') throw httpErr_('Tidak dibenarkan.', 403);
+    var hr = ctx.user.role === 'hr', app = p.id ? find_('promotion_applications', p.id) : null;
+    var lec = find_('lecturers', hr ? (p.lecturer_id || (app && app.lecturer_id)) : ownLecturerId_(ctx));
     if (!lec) throw httpErr_('Pensyarah diperlukan.', 400);
     if (app) {
       if (app.lecturer_id !== lec.id) throw httpErr_('Tidak dibenarkan.', 403);
       if (app.status !== 'draf') throw httpErr_('Permohonan hanya boleh dikemas kini semasa masih draf.', 409);
     } else {
-      if (!lec.grade || !NEXT_GRADE[lec.grade]) throw httpErr_('Gred semasa belum ditetapkan atau sudah di gred tertinggi. Hubungi Pentadbir.', 409);
+      if (!lec.grade || !NEXT_GRADE[lec.grade]) throw httpErr_('Gred semasa belum ditetapkan atau sudah di gred tertinggi. Hubungi Pegawai KP (HR).', 409);
       if (rows_('promotion_applications').some(function (a) { return a.lecturer_id === lec.id && ACTIVE_STATUSES.indexOf(a.status) >= 0; })) throw httpErr_('Anda sudah mempunyai permohonan yang sedang berjalan.', 409);
       app = { id: uid_('prm'), lecturer_id: lec.id, from_grade: lec.grade, to_grade: NEXT_GRADE[lec.grade], field: lec.field || 'Sains & Teknologi', status: 'draf', step_since: now_(), submitted_at: '', decision_date: '', effective_date: '', qualifications: '', work_history: '', thesis_title: '', note_candidate: '', checks: '{}', appeal_reason: '', created_at: now_(), updated_at: now_() };
       insert_('promotion_applications', app);
@@ -293,7 +300,7 @@ var ACTIONS = {
   },
   promoSubmit: function (p, ctx) {
     var app = find_('promotion_applications', p.id); if (!app) throw httpErr_('Permohonan tidak ditemui.', 404);
-    if (ctx.user.role !== 'admin' && app.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw httpErr_('Tidak dibenarkan.', 403);
+    if (ctx.user.role !== 'hr' && app.lecturer_id !== ownLecturerId_(ctx)) throw httpErr_('Tidak dibenarkan.', 403);
     if (app.status !== 'draf') throw httpErr_('Permohonan ini sudah dihantar.', 409);
     if (!p.ack) throw httpErr_('Sila tandakan pengakuan bahawa maklumat adalah benar.', 400);
     var saved = update_('promotion_applications', app.id, { status: 'fakulti', submitted_at: now_(), step_since: now_(), updated_at: now_() });
@@ -301,7 +308,7 @@ var ACTIONS = {
     return saved;
   },
   promoAct: function (p, ctx) {
-    needAdmin_(ctx);
+    needHr_(ctx);
     var app = find_('promotion_applications', p.id); if (!app) throw httpErr_('Permohonan tidak ditemui.', 404);
     var allowed = (ALLOWED_ACTS[app.status] || []).filter(function (a) { return !(app.status === 'lpu' && a === 'gagal' && ['VK7', 'VK6', 'VK5'].indexOf(app.to_grade) < 0); });
     if (allowed.indexOf(p.act) < 0) throw httpErr_('Tindakan tidak dibenarkan pada langkah ini.', 409);
@@ -314,13 +321,13 @@ var ACTIONS = {
     if (['berjaya', 'tidak_berjaya', 'rayuan_berjaya', 'rayuan_ditolak', 'ditarik_balik'].indexOf(to) >= 0) patch.decision_date = today;
     if (to === 'berjaya') patch.effective_date = p.effective || today;
     var saved = update_('promotion_applications', app.id, patch);
-    promoEvent_(app, ctx.user.full_name, String(p.as || 'Pentadbir').slice(0, 60), p.act, from, to, String(p.note || '').slice(0, 1000));
+    promoEvent_(app, ctx.user.full_name, String(p.as || 'Pegawai KP (HR)').slice(0, 60), p.act, from, to, String(p.note || '').slice(0, 1000));
     log_(app.lecturer_id, to === 'berjaya' ? 'Permohonan kenaikan pangkat berjaya' : 'Status permohonan kenaikan pangkat dikemas kini');
     return saved;
   },
   promoAppeal: function (p, ctx) {
     var app = find_('promotion_applications', p.id); if (!app) throw httpErr_('Permohonan tidak ditemui.', 404);
-    if (ctx.user.role !== 'admin' && app.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw httpErr_('Tidak dibenarkan.', 403);
+    if (ctx.user.role !== 'hr' && app.lecturer_id !== ownLecturerId_(ctx)) throw httpErr_('Tidak dibenarkan.', 403);
     var days = app.decision_date ? (new Date().getTime() - new Date(app.decision_date).getTime()) / 864e5 : 999;
     if (app.status !== 'tidak_berjaya' || days > APPEAL_DAYS) throw httpErr_('Tempoh rayuan 30 hari telah tamat atau rayuan tidak dibenarkan bagi status ini.', 409);
     if (String(p.reason || '').trim().length < 20) throw httpErr_('Sila nyatakan alasan rayuan (sekurang-kurangnya 20 aksara).', 400);
@@ -330,21 +337,21 @@ var ACTIONS = {
   },
   promoRemove: function (p, ctx) {
     var app = find_('promotion_applications', p.id); if (!app) throw httpErr_('Permohonan tidak ditemui.', 404);
-    var admin = ctx.user.role === 'admin';
-    if (!admin && (app.lecturer_id !== (ctx.lecturer && ctx.lecturer.id) || app.status !== 'draf')) throw httpErr_('Hanya draf sendiri boleh dipadam.', 403);
+    if (ctx.user.role !== 'hr' && (app.lecturer_id !== ownLecturerId_(ctx) || app.status !== 'draf')) throw httpErr_('Hanya draf sendiri boleh dipadam.', 403);
     deleteWhere_('promotion_events', 'application_id', app.id); deleteWhere_('promotion_assessors', 'application_id', app.id); delete_('promotion_applications', app.id);
     return { id: p.id };
   },
 
   createUser: function (p, ctx) {
-    needAdmin_(ctx);
+    needSys_(ctx);
     var u = p.user || {};
     if (!u.username || !u.email || !u.full_name || !u.password) throw httpErr_('Medan wajib tidak lengkap.', 400);
     if (String(u.password).length < 8) throw httpErr_('Kata laluan mestilah sekurang-kurangnya 8 aksara.', 400);
     var all = rows_('users');
     if (all.some(function (x) { return String(x.username).toLowerCase() === String(u.username).toLowerCase(); })) throw httpErr_('Nama pengguna sudah digunakan.', 409);
     if (all.some(function (x) { return String(x.email).toLowerCase() === String(u.email).toLowerCase(); })) throw httpErr_('E-mel sudah didaftarkan.', 409);
-    var role = u.role === 'admin' ? 'admin' : 'lecturer', salt = uid_('s');
+    if (['admin', 'hr', 'lecturer'].indexOf(u.role) < 0) throw httpErr_('Peranan tidak sah.', 400);
+    var role = u.role, salt = uid_('s');
     var row = { id: uid_('usr'), username: u.username, email: u.email, full_name: u.full_name, role: role, department: u.department || '', status: u.status || 'Active', salt: salt, password_hash: hash_(salt, u.password), last_login: '', created_at: now_(), updated_at: now_() };
     insert_('users', row);
     if (role === 'lecturer') {
@@ -356,7 +363,7 @@ var ACTIONS = {
 
   /** Cipta banyak akaun pensyarah sekali gus (import CSV). Baris sah dicipta; baris tidak sah dilaporkan dalam `errors` (indeks mengikut urutan permintaan). Satu bacaan + satu penulisan setiap jadual. */
   createUsers: function (p, ctx) {
-    needAdmin_(ctx);
+    needSys_(ctx);
     var list = p.users;
     if (!list || !list.length) throw httpErr_('Tiada pengguna untuk dicipta.', 400);
     if (list.length > 500) throw httpErr_('Maksimum 500 baris setiap import.', 400);
@@ -398,7 +405,7 @@ var ACTIONS = {
   },
 
   updateUser: function (p, ctx) {
-    needAdmin_(ctx);
+    needSys_(ctx);
     var u = find_('users', p.id); if (!u) throw httpErr_('Pengguna tidak ditemui.', 404);
     var patch = p.patch || {};
     if (u.id === ctx.user.id && patch.status && patch.status !== 'Active') throw httpErr_('Anda tidak boleh menyahaktifkan akaun sendiri.', 400);
@@ -412,7 +419,7 @@ var ACTIONS = {
   },
 
   resetPassword: function (p, ctx) {
-    needAdmin_(ctx);
+    needSys_(ctx);
     if (!p.password || String(p.password).length < 8) throw httpErr_('Kata laluan mestilah sekurang-kurangnya 8 aksara.', 400);
     if (!find_('users', p.id)) throw httpErr_('Pengguna tidak ditemui.', 404);
     var salt = uid_('s'); update_('users', p.id, { salt: salt, password_hash: hash_(salt, p.password), updated_at: now_() });
@@ -427,7 +434,7 @@ var ACTIONS = {
   },
 
   deleteUser: function (p, ctx) {
-    needAdmin_(ctx);
+    needSys_(ctx);
     if (p.id === ctx.user.id) throw httpErr_('Anda tidak boleh memadam akaun sendiri.', 400);
     var lec = rows_('lecturers').filter(function (l) { return l.user_id === p.id; })[0];
     if (lec) {
@@ -497,7 +504,11 @@ function session_(token) {
   var lecturer = rows_('lecturers').filter(function (l) { return l.user_id === user.id; })[0] || null;
   return { user: user, lecturer: lecturer };
 }
-function needAdmin_(ctx) { if (ctx.user.role !== 'admin') throw httpErr_('Untuk pentadbir sahaja.', 403); }
+// Tiga peranan: admin = Admin Sistem (akaun, tetapan), hr = Pegawai Kenaikan Pangkat (urusan KP), lecturer = pensyarah (rekod bukti sendiri).
+function needSys_(ctx) { if (ctx.user.role !== 'admin') throw httpErr_('Untuk Admin Sistem sahaja.', 403); }
+function needHr_(ctx) { if (ctx.user.role !== 'hr') throw httpErr_('Untuk Pegawai Kenaikan Pangkat (HR) sahaja.', 403); }
+function ownLecturerId_(ctx) { return ctx.user.role === 'lecturer' && ctx.lecturer ? ctx.lecturer.id : null; }
+var EVIDENCE_MSG = 'Rekod bukti dimasukkan dan diubah oleh pensyarah sendiri.';
 function nextStatus_(toGrade, cur) {
   var seq = ['draf', 'fakulti', 'pendaftar', 'saringan', 'penilai', 'pemilih', 'lpu', 'syarahan', 'berjaya'].filter(function (s) {
     if (s === 'penilai') return ['DS14', 'VK7', 'VK6', 'VK5'].indexOf(toGrade) >= 0;        // DS13: tiada Penilai Luar (§3.5.1)

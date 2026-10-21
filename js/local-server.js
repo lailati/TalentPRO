@@ -1,6 +1,6 @@
-// In-browser stand-in for the Apps Script backend (backend/Code.gs).
+﻿// In-browser stand-in for the Apps Script backend (backend/Code.gs).
 // Same actions, same rules (auth, ownership, referential integrity) so the UI cannot tell them apart.
-import { TABLES, OWNED, ENTITIES, MAX_FILE_BYTES, ADMIN_WRITE, ACTION_ONLY, SERVICE_FIELDS, POSITIONS } from './schema.js';
+import { TABLES, OWNED, ENTITIES, MAX_FILE_BYTES, ADMIN_WRITE, ACTION_ONLY, SERVICE_FIELDS, LECTURER_EXTRA_COLS, POSITIONS } from './schema.js';
 import { NEXT_GRADE, stepsFor, GRADES, FIELDS } from './promotion/guideline.js';
 import { allowedActs, nextStatus, ACTIVE_STATUSES, appealInfo } from './promotion/workflow.js';
 
@@ -45,14 +45,15 @@ const DEFAULT_CATEGORIES = [
   ['Internet Benda (IoT)', '#4f46e5'], ['Matematik & Pemodelan', '#be185d'], ['Teknologi Pertahanan', '#475569'], ['Lain-lain', '#64748b'],
 ];
 async function ensureBootstrap() {
-  if (localStorage.getItem('ftm:boot') === '1') return;
+  if (localStorage.getItem('ftm:boot') === '2') return;
   const now = nowIso();
   TABLES.forEach((t) => write(t, []));
   write('expertise_categories', DEFAULT_CATEGORIES.map(([name, color]) => ({ id: uid('cat'), name, color, description: '', created_at: now, updated_at: now })));
-  const salt = uid('s');
-  write('users', [{ id: uid('usr'), username: 'admin', email: 'admin@fstp.upnm.edu.my', full_name: 'Pentadbir Fakulti', role: 'admin', department: 'Pejabat Fakulti', status: 'Active', salt, password_hash: await hashPw(salt, 'admin'), last_login: '', created_at: now, updated_at: now }]);
+  const acct = async (username, email, full_name, role, department, password) => { const salt = uid('s'); return { id: uid('usr'), username, email, full_name, role, department, status: 'Active', salt, password_hash: await hashPw(salt, password), last_login: '', created_at: now, updated_at: now }; };
+  // Akaun sandbox sahaja (pelayan sebenar tiada akaun lalai selain admin dari setup()).
+  write('users', [await acct('admin', 'admin@fstp.upnm.edu.my', 'Admin Sistem', 'admin', 'Pejabat Fakulti', 'admin'), await acct('hr', 'hr@fstp.upnm.edu.my', 'Pegawai Kenaikan Pangkat', 'hr', 'Pejabat Pendaftar', 'hr')]);
   ['ftm:seeded', 'ftm:sessions'].forEach((k) => localStorage.removeItem(k));
-  localStorage.setItem('ftm:boot', '1');
+  localStorage.setItem('ftm:boot', '2');
 }
 
 function session(token) {
@@ -66,7 +67,13 @@ function session(token) {
 }
 
 const safeUser = ({ password_hash, salt, ...u }) => u;
-const needAdmin = (ctx) => { if (ctx.user.role !== 'admin') throw new HttpError('Untuk pentadbir sahaja.', 403); };
+// Tiga peranan: admin = Admin Sistem (akaun, tetapan), hr = Pegawai Kenaikan Pangkat (urusan KP), lecturer = pensyarah (rekod bukti sendiri).
+const needSys = (ctx) => { if (ctx.user.role !== 'admin') throw new HttpError('Untuk Admin Sistem sahaja.', 403); };
+const needHr = (ctx) => { if (ctx.user.role !== 'hr') throw new HttpError('Untuk Pegawai Kenaikan Pangkat (HR) sahaja.', 403); };
+const ownLecturerId = (ctx) => (ctx.user.role === 'lecturer' && ctx.lecturer ? ctx.lecturer.id : null);
+// Rekod bukti: hanya pensyarah memasukkan/mengubahnya sendiri (HR baca sahaja, Admin Sistem tiada akses).
+const EVIDENCE = OWNED.filter((t) => !['activity_log', ...ADMIN_WRITE, ...ACTION_ONLY].includes(t));
+const EVIDENCE_MSG = 'Rekod bukti dimasukkan dan diubah oleh pensyarah sendiri.';
 
 const S = (t) => (ENTITIES[t] ? ENTITIES[t].singular.toLowerCase() : t);
 function logActivity(lecturer_id, message) {
@@ -99,23 +106,24 @@ const actions = {
 
   // One round trip hands the client everything it may see.
   async snapshot(_p, ctx) {
-    const out = {};
-    const isAdmin = ctx.user.role === 'admin';
+    const out = {}; const role = ctx.user.role;
     const lid = ctx.lecturer && ctx.lecturer.id;
-    out.users = isAdmin ? read('users').map(safeUser) : [safeUser(ctx.user)];
-    out.lecturers = isAdmin ? read('lecturers') : read('lecturers').filter((l) => l.id === lid);
+    // admin (sistem): semua akaun, tetapi tiada data KP/bukti dan tiada maklumat perkhidmatan.  hr: semua pensyarah dan semua data KP/bukti.  lecturer: miliknya sahaja.
+    out.users = role === 'admin' ? read('users').map(safeUser) : [safeUser(ctx.user)];
+    out.lecturers = role === 'hr' ? read('lecturers') : role === 'admin' ? read('lecturers').map((l) => { const c = { ...l }; LECTURER_EXTRA_COLS.forEach((k) => delete c[k]); return c; }) : read('lecturers').filter((l) => l.id === lid);
     out.expertise_categories = read('expertise_categories');
-    OWNED.forEach((t) => { out[t] = isAdmin ? read(t) : read(t).filter((r) => r.lecturer_id === lid); });
+    OWNED.forEach((t) => { out[t] = role === 'hr' ? read(t) : role === 'admin' ? [] : read(t).filter((r) => r.lecturer_id === lid); });
     return out;
   },
 
   async create({ table, row }, ctx) {
     if (!['expertise_categories', ...OWNED].includes(table) || ['activity_log', 'documents', ...ACTION_ONLY].includes(table)) throw new HttpError('Jadual tidak sah.');
-    const isAdmin = ctx.user.role === 'admin';
-    if (table === 'expertise_categories' || ADMIN_WRITE.includes(table)) needAdmin(ctx);
+    if (table === 'expertise_categories') needSys(ctx);
+    else if (ADMIN_WRITE.includes(table)) needHr(ctx);
+    else if (!ownLecturerId(ctx)) throw new HttpError(EVIDENCE_MSG, 403);
     const r = { ...row, id: uid(table.slice(0, 3)), created_at: nowIso(), updated_at: nowIso() };
     if (OWNED.includes(table)) {
-      r.lecturer_id = isAdmin ? row.lecturer_id : ctx.lecturer && ctx.lecturer.id;
+      r.lecturer_id = ADMIN_WRITE.includes(table) ? row.lecturer_id : ownLecturerId(ctx);
       if (!r.lecturer_id || !read('lecturers').some((l) => l.id === r.lecturer_id)) throw new HttpError('Pensyarah diperlukan.');
       if (r.document_id) assertOwnsDoc(r.document_id, r.lecturer_id);
     }
@@ -130,13 +138,17 @@ const actions = {
     const rows = read(table);
     const row = rows.find((r) => r.id === id);
     if (!row) throw new HttpError('Rekod tidak ditemui.', 404);
-    const isAdmin = ctx.user.role === 'admin';
-    if (table === 'expertise_categories' || ADMIN_WRITE.includes(table)) needAdmin(ctx);
-    else if (table === 'lecturers') { if (!isAdmin && row.id !== (ctx.lecturer && ctx.lecturer.id)) throw new HttpError('Tidak dibenarkan.', 403); }
-    else if (!isAdmin && row.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw new HttpError('Tidak dibenarkan.', 403);
+    const role = ctx.user.role;
+    if (table === 'expertise_categories') needSys(ctx);
+    else if (ADMIN_WRITE.includes(table)) needHr(ctx);
+    else if (table === 'lecturers') { if (role === 'admin' || (role === 'lecturer' && row.id !== ownLecturerId(ctx))) throw new HttpError('Tidak dibenarkan.', 403); }
+    else if (row.lecturer_id !== ownLecturerId(ctx)) throw new HttpError(EVIDENCE_MSG, 403);
     let { id: _i, lecturer_id, user_id, created_at, ...safe } = patch;
     if (table === 'documents') safe = { title: safe.title, doc_type: safe.doc_type }; // file body/metadata are immutable
-    if (table === 'lecturers' && !isAdmin) { delete safe.staff_id; SERVICE_FIELDS.forEach((k) => delete safe[k]); } // maklumat perkhidmatan = data HR, pentadbir sahaja
+    if (table === 'lecturers') { // maklumat perkhidmatan dan no. staf = data HR: HR sahaja boleh mengubahnya, dan HR tidak mengubah profil peribadi
+      if (role === 'hr') safe = Object.fromEntries(Object.entries(safe).filter(([k]) => k === 'staff_id' || SERVICE_FIELDS.includes(k)));
+      else { delete safe.staff_id; SERVICE_FIELDS.forEach((k) => delete safe[k]); }
+    }
     if (safe.document_id) assertOwnsDoc(safe.document_id, row.lecturer_id);
     Object.assign(row, safe, { updated_at: nowIso() });
     write(table, rows);
@@ -153,12 +165,11 @@ const actions = {
     const rows = read(table);
     const row = rows.find((r) => r.id === id);
     if (!row) throw new HttpError('Rekod tidak ditemui.', 404);
-    const isAdmin = ctx.user.role === 'admin';
-    if (ADMIN_WRITE.includes(table)) needAdmin(ctx);
     if (table === 'expertise_categories') {
-      needAdmin(ctx);
+      needSys(ctx);
       if (read('expertise').some((e) => e.category_id === id)) throw new HttpError('Kategori ini sedang digunakan oleh rekod kepakaran pensyarah dan tidak boleh dipadam.', 409);
-    } else if (!isAdmin && row.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw new HttpError('Tidak dibenarkan.', 403);
+    } else if (ADMIN_WRITE.includes(table)) needHr(ctx);
+    else if (row.lecturer_id !== ownLecturerId(ctx)) throw new HttpError(EVIDENCE_MSG, 403);
     write(table, rows.filter((r) => r.id !== id));
     if (table === 'documents') {
       await blobOp('readwrite', (s) => s.delete(id));
@@ -170,9 +181,8 @@ const actions = {
   },
 
   async upload({ lecturer_id, doc_type, title, file_name, mime, size, dataUrl }, ctx) {
-    const isAdmin = ctx.user.role === 'admin';
-    const lid = isAdmin ? lecturer_id : ctx.lecturer && ctx.lecturer.id;
-    if (!lid) throw new HttpError('Pensyarah diperlukan.');
+    const lid = ownLecturerId(ctx);
+    if (!lid) throw new HttpError(EVIDENCE_MSG, 403);
     if (size > MAX_FILE_BYTES) throw new HttpError('Fail melebihi 5 MB.');
     if (!/^data:(application\/pdf|image\/(png|jpeg)|application\/(msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document))/.test(dataUrl)) throw new HttpError('Jenis fail tidak disokong.');
     const row = { id: uid('doc'), lecturer_id: lid, doc_type, title: title || file_name, file_name, mime, size, created_at: nowIso(), updated_at: nowIso() };
@@ -185,7 +195,7 @@ const actions = {
   async download({ id }, ctx) {
     const d = read('documents').find((x) => x.id === id);
     if (!d) throw new HttpError('Dokumen tidak ditemui.', 404);
-    if (ctx.user.role !== 'admin' && d.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw new HttpError('Tidak dibenarkan.', 403);
+    if (ctx.user.role !== 'hr' && d.lecturer_id !== ownLecturerId(ctx)) throw new HttpError('Tidak dibenarkan.', 403);
     const dataUrl = await blobOp('readonly', (s) => s.get(id));
     return { file_name: d.file_name, mime: d.mime, dataUrl: dataUrl || '' };
   },
@@ -193,14 +203,15 @@ const actions = {
 
   // ---------- Kenaikan pangkat (aliran kerja disemak di pelayan; lihat js/promotion/workflow.js) ----------
   async promoSave(p, ctx) {
-    const admin = ctx.user.role === 'admin';
-    const lec = read('lecturers').find((l) => l.id === (admin ? p.lecturer_id || (p.id && (read('promotion_applications').find((a) => a.id === p.id) || {}).lecturer_id) : ctx.lecturer && ctx.lecturer.id));
+    if (ctx.user.role === 'admin') throw new HttpError('Tidak dibenarkan.', 403);
+    const hr = ctx.user.role === 'hr';
+    const lec = read('lecturers').find((l) => l.id === (hr ? p.lecturer_id || (p.id && (read('promotion_applications').find((a) => a.id === p.id) || {}).lecturer_id) : ownLecturerId(ctx)));
     if (!lec) throw new HttpError('Pensyarah diperlukan.');
     const rows = read('promotion_applications');
     let app = p.id && rows.find((a) => a.id === p.id);
     if (app) { if (app.lecturer_id !== lec.id) throw new HttpError('Tidak dibenarkan.', 403); if (app.status !== 'draf') throw new HttpError('Permohonan hanya boleh dikemas kini semasa masih draf.', 409); }
     else {
-      if (!lec.grade || !NEXT_GRADE[lec.grade]) throw new HttpError('Gred semasa belum ditetapkan atau sudah di gred tertinggi. Hubungi Pentadbir.', 409);
+      if (!lec.grade || !NEXT_GRADE[lec.grade]) throw new HttpError('Gred semasa belum ditetapkan atau sudah di gred tertinggi. Hubungi Pegawai KP (HR).', 409);
       if (rows.some((a) => a.lecturer_id === lec.id && ACTIVE_STATUSES.includes(a.status))) throw new HttpError('Anda sudah mempunyai permohonan yang sedang berjalan.', 409);
       app = { id: uid('prm'), lecturer_id: lec.id, from_grade: lec.grade, to_grade: NEXT_GRADE[lec.grade], field: lec.field || 'Sains & Teknologi', status: 'draf', step_since: nowIso(), submitted_at: '', decision_date: '', effective_date: '', qualifications: '', work_history: '', thesis_title: '', note_candidate: '', checks: '{}', appeal_reason: '', created_at: nowIso(), updated_at: nowIso() };
       rows.push(app);
@@ -212,7 +223,7 @@ const actions = {
   async promoSubmit({ id, ack }, ctx) {
     const rows = read('promotion_applications'); const app = rows.find((a) => a.id === id);
     if (!app) throw new HttpError('Permohonan tidak ditemui.', 404);
-    if (ctx.user.role !== 'admin' && app.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw new HttpError('Tidak dibenarkan.', 403);
+    if (ctx.user.role !== 'hr' && app.lecturer_id !== ownLecturerId(ctx)) throw new HttpError('Tidak dibenarkan.', 403);
     if (app.status !== 'draf') throw new HttpError('Permohonan ini sudah dihantar.', 409);
     if (!ack) throw new HttpError('Sila tandakan pengakuan bahawa maklumat adalah benar.');
     app.status = 'fakulti'; app.submitted_at = nowIso(); app.step_since = nowIso(); app.updated_at = nowIso(); write('promotion_applications', rows);
@@ -220,7 +231,7 @@ const actions = {
     return app;
   },
   async promoAct({ id, act, note, as, checks, effective }, ctx) {
-    needAdmin(ctx);
+    needHr(ctx);
     const rows = read('promotion_applications'); const app = rows.find((a) => a.id === id);
     if (!app) throw new HttpError('Permohonan tidak ditemui.', 404);
     let to; try { to = nextStatus(app.status, act, app.to_grade); } catch (e) { throw new HttpError(e.message, 409); }
@@ -231,14 +242,14 @@ const actions = {
     if (['berjaya', 'tidak_berjaya', 'rayuan_berjaya', 'rayuan_ditolak', 'ditarik_balik'].includes(to)) app.decision_date = today;
     if (to === 'berjaya') app.effective_date = effective || today;
     write('promotion_applications', rows);
-    promoEvent(app, ctx.user.full_name, String(as || 'Pentadbir').slice(0, 60), act, from, to, String(note || '').slice(0, 1000));
+    promoEvent(app, ctx.user.full_name, String(as || 'Pegawai KP (HR)').slice(0, 60), act, from, to, String(note || '').slice(0, 1000));
     logActivity(app.lecturer_id, to === 'berjaya' ? 'Permohonan kenaikan pangkat berjaya' : 'Status permohonan kenaikan pangkat dikemas kini');
     return app;
   },
   async promoAppeal({ id, reason }, ctx) {
     const rows = read('promotion_applications'); const app = rows.find((a) => a.id === id);
     if (!app) throw new HttpError('Permohonan tidak ditemui.', 404);
-    if (ctx.user.role !== 'admin' && app.lecturer_id !== (ctx.lecturer && ctx.lecturer.id)) throw new HttpError('Tidak dibenarkan.', 403);
+    if (ctx.user.role !== 'hr' && app.lecturer_id !== ownLecturerId(ctx)) throw new HttpError('Tidak dibenarkan.', 403);
     const ai = appealInfo(app); if (!ai.can) throw new HttpError('Tempoh rayuan 30 hari telah tamat atau rayuan tidak dibenarkan bagi status ini.', 409);
     if (String(reason || '').trim().length < 20) throw new HttpError('Sila nyatakan alasan rayuan (sekurang-kurangnya 20 aksara).');
     app.status = 'rayuan'; app.appeal_reason = String(reason).slice(0, 2000); app.step_since = nowIso(); app.updated_at = nowIso(); write('promotion_applications', rows);
@@ -248,17 +259,17 @@ const actions = {
   async promoRemove({ id }, ctx) {
     const rows = read('promotion_applications'); const app = rows.find((a) => a.id === id);
     if (!app) throw new HttpError('Permohonan tidak ditemui.', 404);
-    const admin = ctx.user.role === 'admin';
-    if (!admin && (app.lecturer_id !== (ctx.lecturer && ctx.lecturer.id) || app.status !== 'draf')) throw new HttpError('Hanya draf sendiri boleh dipadam.', 403);
+    if (ctx.user.role !== 'hr' && (app.lecturer_id !== ownLecturerId(ctx) || app.status !== 'draf')) throw new HttpError('Hanya draf sendiri boleh dipadam.', 403);
     write('promotion_applications', rows.filter((a) => a.id !== id)); write('promotion_events', read('promotion_events').filter((e) => e.application_id !== id)); write('promotion_assessors', read('promotion_assessors').filter((x) => x.application_id !== id));
     return { id };
   },
 
   // ---- accounts (admin) ----
   async createUser({ user }, ctx) {
-    needAdmin(ctx);
+    needSys(ctx);
     const { username, email, full_name, role, department, status, password } = user;
     if (!username || !email || !full_name || !password) throw new HttpError('Medan wajib tidak lengkap.');
+    if (!['admin', 'hr', 'lecturer'].includes(role)) throw new HttpError('Peranan tidak sah.');
     if (password.length < 8) throw new HttpError('Kata laluan mestilah sekurang-kurangnya 8 aksara.');
     const users = read('users');
     if (users.some((u) => u.username.toLowerCase() === username.toLowerCase())) throw new HttpError('Nama pengguna sudah digunakan.', 409);
@@ -275,7 +286,7 @@ const actions = {
   },
   /** Cipta banyak akaun pensyarah sekali gus (import CSV). Baris sah dicipta; baris tidak sah dilaporkan dalam `errors` (indeks mengikut urutan permintaan). */
   async createUsers({ users: list }, ctx) {
-    needAdmin(ctx);
+    needSys(ctx);
     if (!Array.isArray(list) || !list.length) throw new HttpError('Tiada pengguna untuk dicipta.');
     if (list.length > 500) throw new HttpError('Maksimum 500 baris setiap import.');
     const users = read('users'), lecs = read('lecturers');
@@ -305,7 +316,7 @@ const actions = {
     return { created, errors };
   },
   async updateUser({ id, patch }, ctx) {
-    needAdmin(ctx);
+    needSys(ctx);
     const users = read('users'); const u = users.find((x) => x.id === id);
     if (!u) throw new HttpError('Pengguna tidak ditemui.', 404);
     if (u.id === ctx.user.id && patch.status && patch.status !== 'Active') throw new HttpError('Anda tidak boleh menyahaktifkan akaun sendiri.');
@@ -317,7 +328,7 @@ const actions = {
     return safeUser(u);
   },
   async resetPassword({ id, password }, ctx) {
-    needAdmin(ctx);
+    needSys(ctx);
     if (!password || password.length < 8) throw new HttpError('Kata laluan mestilah sekurang-kurangnya 8 aksara.');
     const users = read('users'); const u = users.find((x) => x.id === id);
     if (!u) throw new HttpError('Pengguna tidak ditemui.', 404);
@@ -332,7 +343,7 @@ const actions = {
     return true;
   },
   async deleteUser({ id }, ctx) {
-    needAdmin(ctx);
+    needSys(ctx);
     if (id === ctx.user.id) throw new HttpError('Anda tidak boleh memadam akaun sendiri.');
     const lec = read('lecturers').find((l) => l.user_id === id);
     if (lec) {

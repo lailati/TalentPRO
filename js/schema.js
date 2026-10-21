@@ -3,7 +3,7 @@
 // bentuk yang sama boleh dipindahkan terus ke MySQL (lihat docs/schema.sql dan backend/Code.gs).
 //
 // Konvensyen bahasa: SEMUA teks yang dipaparkan kepada pengguna dalam Bahasa Malaysia.
-// Kod teknikal yang digunakan oleh logik sistem (role: admin|lecturer, status akaun: Active|Inactive)
+// Kod teknikal yang digunakan oleh logik sistem (role: admin|hr|lecturer, status akaun: Active|Inactive)
 // kekal sebagai kod dan diterjemah ketika paparan melalui ROLE_LABEL / ACCOUNT_STATUS_LABEL.
 
 import { PERINGKAT, GRANT_SOURCES, PUB_TYPES, PUB_INDEXING, AUTHOR_ROLES, CONSULT_KINDS, CONSULT_ROLES, CONSULT_KIND_OK, ACTIVITY_KINDS, ACTIVITY_GROUPS, PENALTIES, FIELDS, GRADES } from './promotion/guideline.js';
@@ -12,7 +12,7 @@ export const LEVELS = ['Asas', 'Pertengahan', 'Mahir', 'Pakar'];
 export const DEPARTMENTS = ['Sains Komputer', 'Teknologi Maklumat', 'Matematik', 'Kejuruteraan', 'Lain-lain'];
 export const POSITIONS = ['Profesor', 'Profesor Madya', 'Pensyarah Kanan', 'Pensyarah', 'Tutor'];
 
-export const ROLE_LABEL = { admin: 'Pentadbir', lecturer: 'Pensyarah' };
+export const ROLE_LABEL = { admin: 'Admin Sistem', hr: 'Pegawai KP (HR)', lecturer: 'Pensyarah' };
 export const ACCOUNT_STATUS_LABEL = { Active: 'Aktif', Inactive: 'Tidak Aktif' };
 
 export const TABLES = [

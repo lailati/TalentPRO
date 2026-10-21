@@ -1,4 +1,4 @@
-// Aliran kerja permohonan (Garis Panduan Perenggan 5.3): peraturan peralihan, digunakan oleh UI dan bahagian belakang setempat.
+﻿// Aliran kerja permohonan (Garis Panduan Perenggan 5.3): peraturan peralihan, digunakan oleh UI dan bahagian belakang setempat.
 // (backend/Code.gs mempunyai salinan kecil jadual ini — kemas kini kedua-duanya serentak.)
 import { stepsFor, nextStepId, isProfessorGrade, APPEAL_DAYS, STEP } from './guideline.js';
 

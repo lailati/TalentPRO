@@ -5,7 +5,7 @@ import { dataTable, pageHead, searchBox, debounce } from './_ui.js';
 
 export async function render(root) {
   const st = { dept: '' };
-  mount(root, html`${pageHead('Pensyarah', 'Direktori semua pensyarah FSTP.', html`<a class="btn primary" href="#/users">${icon('plus', 18)} Tambah akaun pensyarah</a>`)}
+  mount(root, html`${pageHead('Pensyarah', 'Direktori semua pensyarah FSTP. Akaun pensyarah dicipta oleh Admin Sistem.')}
     <div class="toolbar">${searchBox('q', 'Cari nama, no. staf atau e-mel…')}<select class="input" id="d" style="max-width:240px" aria-label="Jabatan"><option value="">Semua jabatan</option>${DEPARTMENTS.map((d) => html`<option>${d}</option>`)}</select></div><div id="t"></div>`);
   const EVIDENCE = ['activities', 'research', 'publications', 'consultancy'];   // rekod bukti yang dibaca enjin Kenaikan Pangkat
   const evidence = (l) => EVIDENCE.reduce((n, k) => n + store[k].filter((r) => r.lecturer_id === l.id).length, 0);

@@ -24,7 +24,7 @@ export const HELP = {
   // ---------- Syarat umum ----------
   gc_confirmed: { t: 'Disahkan dalam perkhidmatan', b: 'Anda mesti telah disahkan dalam jawatan. Tarikh pengesahan direkodkan oleh Pejabat Pendaftar. Jika kosong, hubungi Pentadbir.', ref: 'Perenggan 2.3.1(a)' },
   gc_permanent: { t: 'Lantikan tetap', b: 'Hanya staf lantikan tetap boleh dipertimbangkan. Staf kontrak dan pinjaman mengikut garis panduan ini hanya bagi pelantikan ke gred lebih tinggi.', ref: 'Perenggan 2.3.4(b), 1.4' },
-  gc_lppt: { t: 'Markah LPPT', b: 'Laporan Penilaian Prestasi Tahunan (LPPT) tiga tahun terkini mesti ada dan puratanya sekurang-kurangnya 80%. Markah dimasukkan oleh Pentadbir.', ref: 'Perenggan 2.3.2(a)' },
+  gc_lppt: { t: 'Markah LPPT', b: 'Laporan Penilaian Prestasi Tahunan (LPPT) tiga tahun terkini mesti ada dan puratanya sekurang-kurangnya 80%. Markah dimasukkan oleh Pegawai KP (HR).', ref: 'Perenggan 2.3.2(a)' },
   gc_discipline: { t: 'Hukuman tatatertib', b: 'Calon yang pernah dihukum tidak layak untuk satu tempoh: Amaran 12 bulan, Denda 18, Lucut Hak Emolumen 24, Tangguh Pergerakan Gaji 30, Turun Gaji 36, Turun Pangkat 48 bulan — dikira dari tarikh hukuman.', ref: 'Perenggan 2.3.5–2.3.8' },
   gc_service: { t: 'Tempoh perkhidmatan (hanya ke DS13)', b: 'Calon yang memiliki PhD layak dipertimbangkan. Tanpa PhD: perlu 12 tahun di Gred DS11. Tanpa PhD tetapi ada kelayakan profesional (contoh Ir.): perlu 10 tahun perkhidmatan.', ref: 'Perenggan 6.2 nota (c)–(e)' },
   gc_asset: { t: 'Pengisytiharan harta', b: 'Surat kelulusan pengisytiharan harta mesti dilampirkan. Disahkan oleh Pejabat Pendaftar.', ref: 'Perenggan 2.3.1(e), 5.2.2' },
@@ -93,7 +93,7 @@ export const HELP = {
 
   // ---------- Halaman rekod ----------
   ent_activities: { t: 'Aktiviti Akademik', b: 'Tempat mencatat penyeliaan pelajar, semester pengajaran, jawatankuasa, jawatan pentadbiran dan pengiktirafan akademik. Rekod-rekod ini digunakan oleh semakan Kenaikan Pangkat — anda tidak perlu mengisinya dua kali.' },
-  ent_lppt: { t: 'Markah LPPT', b: 'Pentadbir memasukkan markah LPPT setiap tahun. Tiga tahun terkini mesti ada dan puratanya sekurang-kurangnya 80%.', ref: 'Perenggan 2.3.2(a)' },
+  ent_lppt: { t: 'Markah LPPT', b: 'Pegawai KP (HR) memasukkan markah LPPT setiap tahun. Tiga tahun terkini mesti ada dan puratanya sekurang-kurangnya 80%.', ref: 'Perenggan 2.3.2(a)' },
   ent_disciplinary: { t: 'Hukuman Tatatertib', b: 'Hanya rekod hukuman yang menjejaskan kelayakan. Sistem mengira tarikh calon boleh dipertimbangkan semula.', ref: 'Perenggan 2.3.5–2.3.8' },
 
   // ---------- Butang & ciri sedia ada ----------
@@ -101,7 +101,7 @@ export const HELP = {
   btn_view_toggle: { t: 'Kad atau Galaksi 3D', b: '"Kad" menunjukkan senarai pensyarah yang sepadan. "Galaksi 3D" menunjukkan taburan yang sama secara visual; carian dan penapis di atas turut menyerlahkan titik yang sepadan.' },
   users_reset_pw: { t: 'Tetap semula kata laluan', b: 'Menetapkan kata laluan baharu bagi pengguna ini (minimum 8 aksara dengan huruf dan nombor). Sampaikan kata laluan kepada pengguna dan minta mereka menukarnya.' },
   users_delete: { t: 'Padam pengguna', b: 'Memadam akaun DAN semua rekod pensyarah itu secara kekal. Jika hanya mahu menghalang log masuk, ubah status kepada "Tidak Aktif" sebaliknya.' },
-  users_role: { t: 'Peranan', b: '"Pensyarah" boleh mengurus rekod sendiri. "Pentadbir" boleh melihat semua rekod, mengurus akaun dan kategori, serta memproses permohonan kenaikan pangkat. Peranan tidak boleh ditukar selepas akaun dicipta.' },
+  users_role: { t: 'Peranan', b: '"Pensyarah" memasukkan dan mengurus rekod bukti sendiri. "Pegawai KP (HR)" memproses permohonan kenaikan pangkat, melihat (tanpa mengubah) rekod bukti, dan mengurus markah LPPT, tatatertib serta maklumat perkhidmatan. "Admin Sistem" mengurus akaun pengguna sahaja dan tidak melihat data kenaikan pangkat. Peranan tidak boleh ditukar selepas akaun dicipta.' },
   cat_color: { t: 'Warna kategori', b: 'Warna digunakan dalam carta dan galaksi 3D. Masukkan kod hex 6 digit seperti #1d5fd1.' },
   reports_filters: { t: 'Penapis laporan', b: 'Pilih jenis laporan, kemudian tapis mengikut jabatan, tahap atau tahun. Pratonton dipaparkan terus; gunakan Eksport CSV atau Cetak untuk menyimpan.' },
   reports_print: { t: 'Cetak / PDF', b: 'Membuka dialog cetak pelayar. Pilih "Simpan sebagai PDF" untuk mendapatkan fail PDF.' },
@@ -131,6 +131,7 @@ export const PAGE_HELP = {
   records: { t: 'Halaman Rekod', b: 'Senarai rekod anda.', tasks: ['Klik "Tambah" untuk rekod baharu — borang terbuka di sisi.', 'Gunakan kotak carian untuk menapis senarai.', 'Klik ikon pensil untuk mengubah atau tong sampah untuk memadam.'] },
   kp: { t: 'Kenaikan Pangkat Anda', b: 'Semak kesediaan anda dan mohon apabila bersedia.', tasks: ['Lihat status kesediaan dan perkara yang perlu dilengkapkan.', 'Klik "Tambah rekod" pada kad yang kurang — borang terbuka dengan jenis yang betul.', 'Apabila bersedia, klik "Mulakan permohonan".'] },
   kp_mohon: { t: 'Permohonan Kenaikan Pangkat', b: 'Empat langkah ringkas.', tasks: ['Semak maklumat peribadi dan kelayakan.', 'Semak aktiviti yang dikumpul daripada rekod anda.', 'Beri pengakuan dan hantar kepada Fakulti.'] },
+  hr_dashboard: { t: 'Dashboard HR', b: 'Gambaran lengkap proses kenaikan pangkat untuk tindakan seterusnya.', tasks: ['Lihat jubin ringkasan dan saluran permohonan mengikut peringkat.', 'Semak bahagian Amaran: rayuan hampir tamat, permohonan tertunggak, tatatertib dan maklumat yang tidak lengkap.', 'Gunakan Calon berpotensi untuk mencipta draf bagi pensyarah yang hampir layak.', 'Eksport CSV atau Cetak statistik keputusan untuk mesyuarat.'] },
   kp_admin: { t: 'Papan Kerja Kenaikan Pangkat', b: 'Semua permohonan mengikut langkah.', tasks: ['Klik "Perlu tindakan" untuk melihat apa yang menunggu anda.', 'Klik satu permohonan untuk melihat langkah seterusnya.', 'Gunakan "Calon berpotensi" untuk mencari pensyarah yang sudah hampir layak.'] },
   kp_detail: { t: 'Butiran Permohonan', b: 'Satu permohonan, satu tindakan seterusnya.', tasks: ['Baca "Apa berlaku di langkah ini".', 'Tandakan item semakan dan klik butang keputusan.', 'Semak garis masa dan penilai luar di sebelah kanan.'] },
   panduan: { t: 'Panduan Kenaikan Pangkat', b: 'Ringkasan Garis Panduan dalam bahasa biasa.', tasks: ['Cari soalan di kotak carian.', 'Gunakan Kalkulator tatatertib untuk mengira tempoh tidak layak.'] },

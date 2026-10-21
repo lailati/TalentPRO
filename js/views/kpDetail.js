@@ -1,4 +1,4 @@
-// Butiran permohonan (pentadbir): SATU langkah semasa, siapa yang bertindak, apa yang disemak, dan butang keputusan.
+﻿// Butiran permohonan (pentadbir): SATU langkah semasa, siapa yang bertindak, apa yang disemak, dan butang keputusan.
 import * as api from '../api.js';
 import { store, lecturerOf } from '../api.js';
 import { html, mount, $, $$, icon, toast, avatar, fmtDate, openDrawer, confirmDialog } from '../util.js';
@@ -21,7 +21,7 @@ export async function render(root, { id }) {
     const asr = store.promotion_assessors.filter((x) => x.application_id === id);
     const ev = evaluate(lec, store, { to: app.to_grade, field: app.field });
     const st = STEP[app.status]; const checks = JSON.parse(app.checks || '{}');
-    const btns = actButtons(app); const roles = ACTOR_ROLES[app.status] || ['Pentadbir'];
+    const btns = actButtons(app); const roles = ACTOR_ROLES[app.status] || ['Pegawai KP (HR)'];
     const ap = appealInfo(app);
 
     let action;

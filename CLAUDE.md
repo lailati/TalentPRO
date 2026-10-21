@@ -1,4 +1,4 @@
-# CLAUDE.md — Peta Bakat FSTP
+﻿# CLAUDE.md — Peta Bakat FSTP
 
 Spesifikasi penuh projek ada dalam **[PROJECT.md](PROJECT.md)**. Baca bahagian berkaitan sebelum mengubah kod. Jika PROJECT.md dan kod berbeza, **kod yang menang** — kemas kini PROJECT.md.
 
@@ -18,6 +18,10 @@ Sistem **Kenaikan Pangkat** staf akademik FSTP (UPNM), projek PSM, berdasarkan G
 8. Tiada framework/build tool. Jangan tambah npm dependency tanpa bincang.
 9. Laluan aset **relatif**; routing berasaskan hash.
 10. Baca "Gotchas" (PROJECT.md §20) sebelum menyentuh Pages, Apps Script, Three.js atau drawer.
+
+## Peranan (tiga) dan kebenaran
+- `admin` = Admin Sistem (akaun/import CSV/kategori; **tiada** data KP), `hr` = Pegawai KP (urusan KP; tulis LPPT, tatatertib, penilai luar, maklumat perkhidmatan, tindakan `promo*`), `lecturer` = pensyarah (satu-satunya yang menulis rekod bukti, miliknya sendiri). HR hanya baca rekod bukti.
+- Kebenaran dikuatkuasakan di **kedua-dua** backend (`js/local-server.js` dan `backend/Code.gs`) dan mesti sama; UI hanya menyembunyikan butang. Jadual penuh: `docs/KENAIKAN-PANGKAT.md`.
 
 ## Apabila `backend/Code.gs` berubah (wajib)
 Pengguna menampal `Code.gs` ke Apps Script sendiri, jadi **setiap kali Code.gs diubah, nyatakan dengan jelas dalam jawapan akhir** apa yang perlu dibuat:

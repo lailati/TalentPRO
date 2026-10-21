@@ -19,9 +19,11 @@ Sejak pusingan housekeeping terkini, **antara muka hanya memaparkan modul Kenaik
 
 **Sebab:** enjin KP (`js/promotion/engine.js`) hanya membaca `activities`, `research`, `publications`, `consultancy`, `lppt_scores`, `disciplinary` dan medan perkhidmatan pada `lecturers`. Teks PDF (diekstrak dan disemak) tidak menjadikan kepakaran, pensijilan atau latihan sebagai bukti; tetapi Lampiran menyenaraikan **anugerah/pingat** (D1–D2, E1–E2, B15–B18), jadi *Pencapaian* dikekalkan.
 
-**Backend tidak diubah:** jadual `expertise`, `expertise_categories`, `certifications`, `training` masih wujud dalam Sheet/`Code.gs`/`schema.sql` dan dalam `snapshot` (supaya data lama tidak hilang dan boleh dipulihkan); UI sahaja yang tidak memaparkannya. Definisi `ENTITIES` dikekalkan dalam `js/schema.js`, tetapi `ENTITY_ORDER` hanya menyenaraikan jenis rekod KP. Bahagian di bawah yang menerangkan pemetaan bakat (§6.4 sebahagian, §6.6 galaksi, dll.) kini bersifat sejarah/rujukan.
+**Peranan (3):** `admin` = Admin Sistem (akaun, import CSV; tiada data KP), `hr` = Pegawai KP (HR) (seluruh proses KP, dashboard `#/hr`, menulis LPPT/tatatertib/penilai luar/maklumat perkhidmatan, rekod bukti baca sahaja), `lecturer` = pensyarah (menulis rekod bukti sendiri). Jadual kebenaran penuh: `docs/KENAIKAN-PANGKAT.md` bahagian "Peranan dan kebenaran". Dalam §5 di bawah, "admin" bagi tindakan KP kini bermaksud `hr` dan bagi akaun bermaksud `admin` (Admin Sistem); `snapshot` dibezakan mengikut peranan.
 
-Laluan: `#/dashboard` dan log masuk beralih ke `#/kp-admin` (admin) atau `#/kp` (pensyarah). Laluan lama `#/talent`, `#/categories`, `#/stats`, `#/reports`, `#/expertise`, `#/certifications`, `#/training` memaparkan "Halaman tidak tersedia".
+**Backend jadual tidak diubah:** jadual `expertise`, `expertise_categories`, `certifications`, `training` masih wujud dalam Sheet/`Code.gs`/`schema.sql` dan dalam `snapshot` (supaya data lama tidak hilang dan boleh dipulihkan); UI sahaja yang tidak memaparkannya. Definisi `ENTITIES` dikekalkan dalam `js/schema.js`, tetapi `ENTITY_ORDER` hanya menyenaraikan jenis rekod KP. Bahagian di bawah yang menerangkan pemetaan bakat (§6.4 sebahagian, §6.6 galaksi, dll.) kini bersifat sejarah/rujukan.
+
+Laluan: `#/dashboard` dan log masuk beralih ke halaman utama peranan (`#/users` Admin Sistem, `#/hr` Pegawai KP, `#/kp` pensyarah). Laluan lama `#/talent`, `#/categories`, `#/stats`, `#/reports`, `#/expertise`, `#/certifications`, `#/training` memaparkan "Halaman tidak tersedia".
 
 ---
 

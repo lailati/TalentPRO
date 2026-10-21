@@ -1,4 +1,4 @@
--- Skema MySQL 8: sasaran untuk berpindah daripada Google Sheets.
+﻿-- Skema MySQL 8: sasaran untuk berpindah daripada Google Sheets.
 -- Nama jadual dan lajur sama dengan tab Sheet dalam backend/Code.gs, jadi pemindahan hanyalah:
 --   eksport setiap tab sebagai CSV -> LOAD DATA INFILE (atau import melalui phpMyAdmin) -> selesai.
 -- Kemudian gantikan backend/Code.gs dengan API PHP/REST yang menyediakan tindakan yang sama (lihat backend/README.md).
@@ -9,7 +9,7 @@ CREATE TABLE users (
   username VARCHAR(60) NOT NULL UNIQUE,
   email VARCHAR(120) NOT NULL UNIQUE,
   full_name VARCHAR(120) NOT NULL,
-  role ENUM('admin','lecturer') NOT NULL,
+  role ENUM('admin','hr','lecturer') NOT NULL,
   department VARCHAR(80),
   status ENUM('Active','Inactive') NOT NULL DEFAULT 'Active',
   salt VARCHAR(40) NOT NULL,
