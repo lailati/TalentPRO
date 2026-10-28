@@ -3,7 +3,13 @@ import { html, raw, icon, fmtDate } from '../util.js';
 import { helpBtn } from '../help.js';
 import { GRADES, GRADE, COMPONENT, STATUS_LABEL, stepsFor, gradeLabel } from '../promotion/guideline.js';
 
-export const suggestHref = (s) => (!s ? '' : s.entity === 'profile' ? '#/profile' : `#/${s.entity}?add=1${s.kind ? '&kind=' + encodeURIComponent(s.kind) : ''}`);
+// Pautan "Tambah rekod": membuka borang dengan jenis dan nilai awal yang betul bagi kriteria itu (records.js membaca query[nama medan]).
+export const suggestHref = (s) => {
+  if (!s) return '';
+  if (s.entity === 'profile') return '#/profile';
+  const q = new URLSearchParams({ add: '1', ...(s.kind ? { kind: s.kind } : {}), ...(s.prefill || {}) });
+  return `#/${s.entity}?${q}`;
+};
 
 export const verdictTone = { ready: 'ok', conditions: 'info', near: 'warn', far: 'mute' };
 

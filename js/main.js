@@ -21,6 +21,7 @@ const ROUTES = [
   ['account', 'account', ['admin', 'hr', 'lecturer']],
   ['kp', 'kp', ['lecturer']],
   ['kp/mohon', 'kpMohon', ['lecturer']],
+  ['kp/kriteria', 'kpKriteria', ['lecturer']],
   ['kp/:id', 'kpStatus', ['lecturer']],
   ['kp-admin', 'kpAdmin', ['hr']],
   ['kp-admin/:id', 'kpDetail', ['hr']],
@@ -61,6 +62,7 @@ function navFor(role) {
   return [
     { grp: 'Kenaikan Pangkat' },
     { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat Saya', icon: 'target' },
+    { href: '#/kp/kriteria', key: 'kriteria', label: 'Senarai Semak Kriteria', icon: 'report' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
     { href: '#/profile', key: 'profile', label: 'Profil Saya', icon: 'user' },
     { grp: 'Rekod Bukti Saya' },
@@ -138,6 +140,7 @@ let curPath = '';
 function pageKey() {
   const p = curPath;
   if (p === 'hr') return 'hr_dashboard';
+  if (p === 'kp/kriteria') return 'kp_kriteria';
   if (p === 'kp') return 'kp'; if (p === 'kp/mohon') return 'kp_mohon'; if (p.startsWith('kp-admin/')) return 'kp_detail'; if (p.startsWith('kp/')) return 'kp';
   if (p === 'kp-admin') return 'kp_admin'; if (p === 'panduan') return 'panduan';  if (p.startsWith('lecturer/')) return 'lecturers';
   return ['profile', 'lecturers', 'users', 'account', 'lppt_scores', 'disciplinary'].includes(p) ? p : 'records';
@@ -161,7 +164,7 @@ async function route() {
     mount(view, html`<div class="empty card">${icon('alert', 36)}<h3>Halaman tidak tersedia</h3><p>${m ? 'Peranan anda tidak dibenarkan membuka halaman ini.' : 'Halaman tersebut tidak wujud.'}</p><p><a class="btn primary" href="${home()}" style="margin-top:14px">Kembali ke laman utama</a></p></div>`);
     return;
   }
-  const base = m.pat.split('/')[0];
+  const base = m.pat === 'kp/kriteria' ? 'kriteria' : m.pat.split('/')[0];
   $$('.nav-a').forEach((a) => (a.dataset.key === base ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
   document.title = 'TalentPro';
   try {

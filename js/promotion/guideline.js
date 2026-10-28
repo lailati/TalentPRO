@@ -73,6 +73,7 @@ export const ACTIVITY_KINDS = {
   ik_editor: { group: 'Pengiktirafan Akademik', label: 'Editor jurnal berindeks', lampiran: 'D21–D22', fields: ['title', 'level'], comp: 'pengiktirafan' },
   ik_editor_scopus: { group: 'Pengiktirafan Akademik', label: 'Editor jurnal SCOPUS', lampiran: 'D21–D22', fields: ['title', 'level'], comp: 'pengiktirafan' },
   ik_penilai_jurnal: { group: 'Pengiktirafan Akademik', label: 'Penilai artikel jurnal berindeks', lampiran: 'D23–D24', fields: ['title', 'level'], comp: 'pengiktirafan' },
+  ik_penilai_jurnal_scopus: { group: 'Pengiktirafan Akademik', label: 'Penilai artikel jurnal SCOPUS', lampiran: 'D23–D24', fields: ['title', 'level'], comp: 'pengiktirafan' },
   ik_penilai_buku: { group: 'Pengiktirafan Akademik', label: 'Penilai manuskrip buku / bab buku', lampiran: 'D23–D24', fields: ['title', 'level'], comp: 'pengiktirafan' },
   ik_penilai_kp: { group: 'Pengiktirafan Akademik', label: 'Penilai luar kenaikan pangkat Profesor / Profesor Madya', lampiran: 'D15–D18', fields: ['title', 'level'], comp: 'pengiktirafan' },
   ik_tesis: { group: 'Pengiktirafan Akademik', label: 'Pemeriksa luar tesis', lampiran: 'D29–D32', fields: ['student', 'title', 'level'], comp: 'pengiktirafan' },
@@ -101,7 +102,7 @@ const grantTotal = (total, per, role = 'led') => L('grantTotal', { total, per, r
 const grantLed = (n, ext) => L('grantLed', { n, ext });
 const hIdx = (n) => L('hIndex', { n });
 const scopus = (n) => L('scopusMain', { n });
-const scopusPlus = (n, others) => L('scopusPlus', { n, others });
+const scopusPlus = (n, others, mainOnly = false) => L('scopusPlus', { n, others, mainOnly });   // mainOnly: penerbitan setara hanya sebagai Penulis Utama (VK6 Sains Sosial / Klinikal)
 const recog = (kinds, n, p = {}) => L('recog', { kinds, n, ...p });
 const lead = (kinds, levels, n, label) => L('lead', { kinds, levels, n, label });
 const consult = (n, utama, utamaN, value) => ANY('Perundingan (pilih satu)', L('consultCount', { n, utama }), L('consultValue', { utamaN, value }));
@@ -113,7 +114,7 @@ export const RULES = {
   // Perenggan 6.2 — Pensyarah Kanan (DS13). Aktiviti dinilai ketika di DS11 sahaja (nota b).
   DS13: (f) => ({
     windowKey: 'grade_since',
-    windowNote: 'Hanya aktiviti ketika anda di Gred DS11 dikira (Perenggan 6.2 nota b).',
+    windowNote: 'Hanya aktiviti ketika anda di Gred DS11 dikira (Perenggan 6.2 nota b).' + (f === 2 ? ' Garis panduan DS13 tiada lajur Klinikal, jadi nilai Sains Sosial digunakan.' : ''),
     components: {
       pengajaran: teach(1),
       penyeliaan: ANY('Penyeliaan (pilih satu)', L('svPsm', { n: 5 }), L('svInvolved', { n: 3, label: 'Terlibat menyelia 3 pelajar Sarjana (Kerja Kursus)' }), L('svInvolvedAny', { kinds: ['sv_msc_res', 'sv_phd'], n: 1, label: 'Terlibat menyelia 1 pelajar Sarjana / PhD (Penyelidikan)' })),
@@ -144,7 +145,7 @@ export const RULES = {
       penyeliaan: ANY('Penyeliaan (pilih satu)', sv({ phdMain: 1, mscRes: 2 }), sv({ phdMain: 2 }), sv({ phdMain: 1, mscRes: 1, kk: 3 })),
       penyelidikan: ALL('Penyelidikan', grantTotal(pick([250000, 150000, 250000], f), pick([20000, 5000, 20000], f)), grantLed(5, 3)),
       penerbitan: ALL('Penerbitan', hIdx(pick([6, 4, 6], f)), ANY('Artikel SCOPUS (pilih satu)', scopus(pick([30, 20, 15], f)), scopusPlus(pick([15, 15, 10], f), pick([15, 5, 5], f)))),
-      pengiktirafan: recogAny(f, { editor: 1, penilaiJurnal: 5, penilaiBuku: 2, mooc: 2, micro: 20, ucaptama: 2, penilaiKP: 2, tesis: [3, 3, 0], klinikal: 3 }),
+      pengiktirafan: recogAny(f, { editor: 1, penilaiJurnal: 5, penilaiBuku: 2, mooc: 2, micro: 20, ucaptama: 2, penilaiKP: 2, tesis: [3, 3, 3], klinikal: 3 }),   // Perenggan 6.4: Klinikal ada kedua-dua 3 pemeriksa luar tesis ATAU 3 pemeriksa klinikal luar
       kepimpinan: ALL('Kepimpinan, khidmat & perundingan', ANY('Jawatankuasa / program pelajar (pilih satu)', lead(['kp_pengerusi'], KB, 1, '1 jawatan pengerusi peringkat kebangsaan / antarabangsa'), lead(['kp_ajk'], KB, 2, '2 keahlian jawatankuasa peringkat kebangsaan / antarabangsa'), lead(['kp_pelajar'], PERINGKAT, 4, 'Ketua 4 program pembangunan pelajar')), consult(5, 3, 2, 50000)),
     },
     after: 'Syarahan Ilmiah wajib selepas berjaya temuduga; pelantikan VK7 hanya disahkan untuk pergerakan gaji selepas syarahan (Perenggan 2.1(z), 6.4).',
@@ -157,7 +158,7 @@ export const RULES = {
       pengajaran: teach(6),
       penyeliaan: ANY('Penyeliaan (pilih satu)', sv({ phdMain: 4, mscRes: 4 }), sv({ phdMain: 6 }), sv({ phdMain: 3, mscRes: 6 }), f === 2 ? sv({ phdMain: 2, phdCo: 1, mscRes: 5, kk: 3 }) : sv({ phdMain: 3, mscRes: 5, kk: 3 })),
       penyelidikan: ALL('Penyelidikan', grantTotal(pick([640000, 400000, 640000], f), pick([20000, 5000, 20000], f)), grantLed(8, 5)),
-      penerbitan: ALL('Penerbitan', hIdx(pick([10, 7, 10], f)), ANY('Artikel SCOPUS (pilih satu)', scopus(pick([45, 35, 23], f)), scopusPlus(pick([23, 23, 18], f), pick([22, 12, 5], f)))),
+      penerbitan: ALL('Penerbitan', hIdx(pick([10, 7, 10], f)), ANY('Artikel SCOPUS (pilih satu)', scopus(pick([45, 35, 23], f)), scopusPlus(pick([23, 23, 18], f), pick([22, 12, 5], f), f !== 0))),   // Perenggan 6.5: Sosial/Klinikal "sebagai Penulis Utama", S&T termasuk penulis bersama
       pengiktirafan: recogAny(f, { editor: 2, penilaiJurnal: 10, penilaiBuku: 4, mooc: 4, micro: 40, ucaptama: 4, penilaiKP: 3, tesis: [6, 6, 3], klinikal: 4 }),
       kepimpinan: ALL('Kepimpinan, khidmat & perundingan', L('adminTerms', { n: 1 }), ANY('Jawatankuasa (pilih satu)', lead(['kp_pengerusi'], KB, 2, '2 jawatan pengerusi peringkat kebangsaan / antarabangsa'), lead(['kp_ajk'], KB, 4, '4 keahlian jawatankuasa peringkat kebangsaan / antarabangsa')), consult(7, 5, 3, 100000)),
       syarahan: L('flagSyarahanPerdana'),
@@ -172,7 +173,7 @@ export const RULES = {
       penyeliaan: ALL('Penyeliaan', ANY('Penyeliaan (pilih satu)', sv({ phdMain: 7, mscRes: 7 }), sv({ phdMain: 11 }), f === 2 ? sv({ phdMain: 4, phdCo: 3, mscRes: 6, kk: 3 }) : sv({ phdMain: 7, mscRes: 6, kk: 3 })), L('svPostdoc', { n: 1 })),
       penyelidikan: ALL('Penyelidikan', grantTotal(pick([1000000, 600000, 1000000], f), pick([20000, 5000, 20000], f)), grantLed(10, 7)),
       penerbitan: ALL('Penerbitan', hIdx(pick([15, 11, 15], f)), ANY('Artikel SCOPUS (pilih satu)', scopus(pick([60, 50, 30], f)), scopusPlus(pick([30, 30, 25], f), pick([30, 20, 5], f)))),
-      pengiktirafan: recogAny(f, { editor: 4, editorScopus: true, penilaiJurnal: 15, penilaiBuku: 6, mooc: 8, micro: 80, ucaptama: 4, ucaptamaIntl: 2, penilaiKP: 6, tesis: [12, 12, 6], klinikal: 8 }),
+      pengiktirafan: recogAny(f, { editor: 4, editorScopus: true, penilaiJurnal: 15, penilaiJurnalScopus: 5, penilaiBuku: 6, mooc: 8, micro: 80, ucaptama: 4, ucaptamaIntl: 2, penilaiKP: 6, tesis: [12, 12, 6], klinikal: 8 }),
       kepimpinan: ALL('Kepimpinan, khidmat & perundingan', L('adminTerms', { n: 2 }), ANY('Jawatankuasa (pilih satu)', lead(['kp_pengerusi'], KB, 4, '4 jawatan pengerusi peringkat kebangsaan / antarabangsa'), lead(['kp_ajk'], KB, 8, '8 keahlian jawatankuasa peringkat kebangsaan / antarabangsa')), consult(9, 7, 4, 200000)),
     },
   }),
@@ -184,7 +185,9 @@ function recogAny(f, n) {
   const tesis = Array.isArray(n.tesis) ? n.tesis[f] : n.tesis;
   if (n.ucaptama) alts.push(recog(['ik_ucaptama'], n.ucaptama, { label: `${n.ucaptama} ucaptama peringkat kebangsaan / antarabangsa${n.ucaptamaIntl ? ` (sekurang-kurangnya ${n.ucaptamaIntl} antarabangsa)` : ''}`, levels: KB, minIntl: n.ucaptamaIntl || 0 }));
   if (n.editor) alts.push(recog(n.editorScopus ? ['ik_editor_scopus'] : ['ik_editor', 'ik_editor_scopus'], n.editor, { label: `${n.editor} editor jurnal ${n.editorScopus ? 'SCOPUS' : 'berindeks'}` }));
-  if (n.penilaiJurnal) alts.push(recog(['ik_penilai_jurnal'], n.penilaiJurnal, { label: `${n.penilaiJurnal} penilai artikel jurnal berindeks` }));
+  if (n.penilaiJurnal) alts.push(recog(['ik_penilai_jurnal', 'ik_penilai_jurnal_scopus'], n.penilaiJurnal, n.penilaiJurnalScopus
+    ? { label: `${n.penilaiJurnal} penilai artikel jurnal berindeks, ${n.penilaiJurnalScopus} daripadanya jurnal SCOPUS`, minKind: { kind: 'ik_penilai_jurnal_scopus', n: n.penilaiJurnalScopus, name: 'penilai jurnal SCOPUS' } }
+    : { label: `${n.penilaiJurnal} penilai artikel jurnal berindeks` }));
   if (n.penilaiBuku) alts.push(recog(['ik_penilai_buku'], n.penilaiBuku, { label: `${n.penilaiBuku} penilai manuskrip buku / bab buku` }));
   if (n.penilaiKP) alts.push(recog(['ik_penilai_kp'], n.penilaiKP, { label: `${n.penilaiKP} penilai kenaikan pangkat Profesor Madya / Profesor` }));
   if (tesis) alts.push(recog(['ik_tesis'], tesis, { label: `${tesis} pemeriksa luar tesis` }));

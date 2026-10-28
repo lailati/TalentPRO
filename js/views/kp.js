@@ -37,10 +37,10 @@ export async function render(root) {
     ${ladder(ev.from, ev.to)}
     <section class="kp-hero" aria-label="Ringkasan kesediaan">
       ${ring(s.pct, 'kesediaan')}
-      <div class="stack" style="gap:12px;position:relative;z-index:1"><div>${hero}</div><div class="row">${cta}<button class="btn ghost" id="pv">${icon('print', 18)} Pratonton borang</button>${helpBtn('kp_preview')}${helpBtn('readiness', 'kesediaan')}</div><p class="small" style="opacity:.75">Aktiviti dikira ${ev.window.note || ''}${ev.window.start ? ` (mulai ${ev.window.start})` : ''} ${helpBtn('window')}</p></div>
+      <div class="stack" style="gap:12px;position:relative;z-index:1"><div>${hero}</div><div class="row">${cta}<a class="btn ghost" href="#/kp/kriteria">${icon('report', 18)} Senarai semak kriteria</a><button class="btn ghost" id="pv">${icon('print', 18)} Pratonton borang</button>${helpBtn('kp_preview')}${helpBtn('readiness', 'kesediaan')}</div><p class="small" style="opacity:.75">${ev.window.note || ''}${ev.window.start ? ` (mulai ${ev.window.start})` : ''} ${helpBtn('window')}</p></div>
     </section>
     ${!active && top.length ? html`<section class="card" id="todo" style="margin-top:18px"><h3>3 perkara paling penting sekarang ${helpBtn('verdict')}</h3>${top.map((g, i) => html`<div class="todo"><span class="n">${i + 1}</span><div class="tx"><b>${g.compLabel}</b><span>${g.text}</span></div>${g.suggest ? html`<a class="btn outline sm" href="${suggestHref(g.suggest)}">${icon('plus', 15)} ${g.suggest.text}</a>` : ''}</div>`)}</section>` : ''}
-    <h2 style="font-size:18px;font-weight:800;margin:26px 0 12px">Bahagian penilaian ${helpBtn('or_branch', 'cara membaca')}</h2>
+    <h2 style="font-size:18px;font-weight:800;margin:26px 0 12px">Bahagian penilaian ${helpBtn('or_branch', 'cara membaca')} <a class="small" href="#/kp/kriteria" style="font-weight:600">Lihat rekod yang dikira dan tidak dikira →</a></h2>
     <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))">${ev.components.map((c) => componentCard(c))}</div>
     <section class="card" style="margin-top:18px"><h3>Syarat umum</h3><p class="small muted" style="margin:-6px 0 8px">Sistem menyemak yang boleh disemak; yang lain disahkan oleh Pejabat Pendaftar / Fakulti semasa permohonan.</p>${generalList(ev.general)}</section>
     ${history(apps)}`);

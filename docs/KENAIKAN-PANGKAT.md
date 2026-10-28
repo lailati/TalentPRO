@@ -55,6 +55,23 @@ Tiga peranan (nilai users.role): `admin` = **Admin Sistem**, `hr` = **Pegawai KP
 ## Dashboard HR (`#/hr`)
 
 Jubin ringkasan (dalam proses, tertunggak > 14 hari, rayuan, berjaya/tidak berjaya tahun ini, calon berpotensi); saluran permohonan mengikut peringkat dan senarai menunggu tindakan; amaran (rayuan tamat ≤ 7 hari, tertunggak, disekat tatatertib, maklumat perkhidmatan tidak lengkap, tiada markah LPPT); calon berpotensi dengan penapis jabatan/gred sasaran dan butang *Cipta draf*; statistik keputusan mengikut tahun, jabatan dan gred sasaran dengan **Eksport CSV** dan **Cetak**. Fail: `js/views/hrDashboard.js` (menggunakan semula `quickReadiness`, `disciplineBlocks` dan `appealInfo`).
+
+## Modul pensyarah: senarai semak, rekod dikira dan panduan bukti
+
+- **Senarai Semak Kriteria** (`#/kp/kriteria`, `js/views/kpKriteria.js`): setiap kriteria bagi gred sasaran dengan status hidup, kod Lampiran, jurang dan pautan **Tambah rekod** yang membuka borang dengan nilai awal yang betul (cth. penerbitan SCOPUS: status *Diterbitkan*, Penulis Utama). Pilih gred lebih tinggi untuk **pratonton** (tidak boleh dimohon) dan bidang (S&T / Sains Sosial / Klinikal).
+- **Rekod saya** di bawah setiap bahagian (`explainRecords()` dalam `engine.js`): setiap rekod ditanda *Dikira* atau *Tidak dikira* beserta sebab (belum Diterbitkan, belum didaftarkan di PPI, status Dirancang, pelajar belum bergraduat, bukan Penyelia Utama, di luar tetingkap tahun, jenis perundingan tidak dikira, dll.), dan penunjuk *Bukti* (ada dokumen atau tidak). Pautan ikon pensil membuka rekod (`?edit=<id>`).
+- **Bila saya layak?** (`eligibility()`): tarikh pengesahan, tamat tempoh tatatertib, tempoh perkhidmatan DS13 (12 tahun tanpa PhD / 10 tahun dengan kelayakan profesional / PhD), LPPT 3 tahun, dan tetingkap aktiviti.
+- **Panduan bukti Lampiran** (`js/promotion/lampiran-data.js`): dalam borang rekod, kotak "Bukti yang diperlukan" menyenaraikan maklumat Lampiran 1 bagi jenis yang dipilih dan dokumen yang disyorkan. Disusun mengikut jenis rekod kerana jadual Lampiran dalam teks tidak sejajar dengan tepat antara kod dan nama baris; kod rujukan kekal yang dipakai `ACTIVITY_KINDS`.
+- **Permohonan**: kesediaan dikira semula pada setiap langkah; jika kriteria belum dipenuhi, pensyarah **diberi amaran dan boleh menghantar juga** (keputusan oleh Fakulti / jawatankuasa; tiada sekatan di pelayan). Borang Lampiran 1 hanya menyenaraikan rekod yang dikira; rekod lain disenaraikan berasingan dengan sebab.
+
+### Pembetulan enjin mengikut teks Garis Panduan (disahkan)
+- VK7 Klinikal: 3 pemeriksa luar tesis **atau** 3 pemeriksa klinikal luar (Perenggan 6.4).
+- VK5 (semua bidang): 15 penilai jurnal berindeks **dan 5 daripadanya SCOPUS** (jenis aktiviti baharu *Penilai artikel jurnal SCOPUS*, tanpa lajur Sheet baharu).
+- VK6 Sains Sosial / Klinikal: penerbitan setara hanya sebagai Penulis Utama (S&T membenarkan penulis bersama) (Perenggan 6.5).
+- Perundingan berstatus *Dirancang* tidak dikira (seperti penyelidikan).
+- DS13 tiada lajur Klinikal dalam Garis Panduan: nilai Sains Sosial digunakan dan dinyatakan pada nota tetingkap.
+- Tidak diubah (disemak, bukan percanggahan): Sarjana Klinikal dan Diploma Pascasiswazah (Perenggan 6.7.3 hanya menetapkan kesetaraan; tiada gred yang memerlukannya).
+
 ## Fail
 
 | Fail | Peranan |
@@ -64,7 +81,9 @@ Jubin ringkasan (dalam proses, tertunggak > 14 hari, rayuan, berjaya/tidak berja
 | `js/promotion/workflow.js` | jadual peralihan, label butang, tempoh rayuan |
 | `js/help.js` | daftar bantuan "?" dan bantuan halaman |
 | `js/views/kp*.js`, `panduan.js`, `lampiran.js` | skrin |
-| `tools/test-engine.mjs` | 21 ujian unit yang memetik perenggan Garis Panduan |
+| `js/promotion/lampiran-data.js` | panduan bukti mengikut jenis rekod (Lampiran 1) |
+| `js/views/kpKriteria.js` | senarai semak kriteria, rekod dikira, tarikh kelayakan |
+| `tools/test-engine.mjs` | 39 ujian unit yang memetik perenggan Garis Panduan (gred DS13–VK5, kesetaraan, tatatertib, `explainRecords`, `eligibility`) |
 
 Jalankan ujian: `node tools/test-engine.mjs`.
 
@@ -72,6 +91,8 @@ Jalankan ujian: `node tools/test-engine.mjs`.
 
 - Belum diuji dengan pensyarah / pegawai sebenar (UAT dirancang).
 - Laluan Guru Bahasa dan Pensyarah Perubatan "time-based" tidak dilaksanakan.
+- Pengajaran: beban jam kredit, "3 tahun terkini" dan markah penilaian pelajar belum dimodelkan (hanya semester + kursus teradun). Lampiran 2 (penilaian Jawatankuasa Kesepakaran) tidak dijana.
+- Kriteria "dalam bidang kepakaran" bagi penerbitan, perundingan dan penyeliaan disahkan oleh jawatankuasa, bukan oleh sistem.
 - Andaian: pengajaran DS13 = sekurang-kurangnya 1 semester + 1 kursus teradun; "kategori kecil" pengiktirafan dipermudah; bendera Syarahan Perdana / Monograf (VK6, VK5) direkodkan pada rekod pensyarah oleh Pejabat Pendaftar.
 - Semakan sistem hanyalah panduan: keputusan sebenar dibuat oleh Fakulti, Pejabat Pendaftar dan jawatankuasa.
 

@@ -21,6 +21,8 @@ Sejak pusingan housekeeping terkini, **antara muka hanya memaparkan modul Kenaik
 
 **Peranan (3):** `admin` = Admin Sistem (akaun, import CSV; tiada data KP), `hr` = Pegawai KP (HR) (seluruh proses KP, dashboard `#/hr`, menulis LPPT/tatatertib/penilai luar/maklumat perkhidmatan, rekod bukti baca sahaja), `lecturer` = pensyarah (menulis rekod bukti sendiri). Jadual kebenaran penuh: `docs/KENAIKAN-PANGKAT.md` bahagian "Peranan dan kebenaran". Dalam §5 di bawah, "admin" bagi tindakan KP kini bermaksud `hr` dan bagi akaun bermaksud `admin` (Admin Sistem); `snapshot` dibezakan mengikut peranan.
 
+**Modul pensyarah:** senarai semak kriteria (`#/kp/kriteria`), rekod dikira/tidak dikira beserta sebab, tarikh kelayakan, panduan bukti Lampiran dalam borang, dan amaran (tanpa sekatan) semasa hantar; lihat `docs/KENAIKAN-PANGKAT.md`. Semua logik berada di klien (`js/promotion/*`, `js/views/kp*.js`); `Code.gs` tidak berubah untuk ciri ini.
+
 **Backend jadual tidak diubah:** jadual `expertise`, `expertise_categories`, `certifications`, `training` masih wujud dalam Sheet/`Code.gs`/`schema.sql` dan dalam `snapshot` (supaya data lama tidak hilang dan boleh dipulihkan); UI sahaja yang tidak memaparkannya. Definisi `ENTITIES` dikekalkan dalam `js/schema.js`, tetapi `ENTITY_ORDER` hanya menyenaraikan jenis rekod KP. Bahagian di bawah yang menerangkan pemetaan bakat (§6.4 sebahagian, §6.6 galaksi, dll.) kini bersifat sejarah/rujukan.
 
 Laluan: `#/dashboard` dan log masuk beralih ke halaman utama peranan (`#/users` Admin Sistem, `#/hr` Pegawai KP, `#/kp` pensyarah). Laluan lama `#/talent`, `#/categories`, `#/stats`, `#/reports`, `#/expertise`, `#/certifications`, `#/training` memaparkan "Halaman tidak tersedia".

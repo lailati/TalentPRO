@@ -43,7 +43,7 @@ python -m http.server 5173
 Buka http://localhost:5173/?backend=local (login `admin` / `admin`).
 
 ## Semak sebelum siap
-Senarai penerimaan: PROJECT.md §19. Pengesahan deploy: §11.4.
+Senarai penerimaan: PROJECT.md §19. Pengesahan deploy: §11.4. Selepas mengubah `js/promotion/*`, jalankan `node tools/test-engine.mjs` (Node dipasang); semua ujian mesti lulus. Setiap nombor kriteria baharu mesti disahkan terhadap teks Garis Panduan (`Rujukan/`).
 
 ## Gaya kerja
 - Perubahan kecil dan fokus; satu commit bagi satu tujuan.
