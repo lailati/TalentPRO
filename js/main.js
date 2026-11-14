@@ -60,11 +60,11 @@ function navFor(role) {
     ...ADMIN_ENTITY_ORDER.map(ent),
   ];
   return [
+    { href: '#/profile', key: 'profile', label: 'Profil', icon: 'user' },
     { grp: 'Kenaikan Pangkat' },
-    { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat Saya', icon: 'target' },
+    { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat', icon: 'target' },
     { href: '#/kp/kriteria', key: 'kriteria', label: 'Senarai Semak Kriteria', icon: 'report' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { href: '#/profile', key: 'profile', label: 'Profil', icon: 'user' },
     { grp: 'Rekod Bukti' },
     ...ENTITY_ORDER.map(ent),
   ];
