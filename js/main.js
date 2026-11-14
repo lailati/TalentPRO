@@ -61,7 +61,7 @@ function navFor(role) {
   ];
   return [
     { grp: 'Kenaikan Pangkat' },
-    { href: '#/kp', key: 'kp', label: 'Ringkasan Kesediaan', icon: 'target' },
+    { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat Saya', icon: 'target' },
     { href: '#/kp/kriteria', key: 'kriteria', label: 'Senarai Semak Kriteria', icon: 'report' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
     { href: '#/profile', key: 'profile', label: 'Profil', icon: 'user' },
