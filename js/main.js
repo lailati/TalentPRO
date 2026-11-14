@@ -42,7 +42,7 @@ function match(path) {
 }
 
 function navFor(role) {
-  const ent = (k) => ({ href: '#/' + k, key: k, label: role === 'hr' ? ENTITIES[k].plural : ENTITIES[k].mine, icon: ENTITIES[k].icon });
+  const ent = (k) => ({ href: '#/' + k, key: k, label: ENTITIES[k].plural, icon: ENTITIES[k].icon });
   if (role === 'admin') return [   // Admin Sistem: akaun sahaja (tiada akses data Kenaikan Pangkat)
     { grp: 'Pentadbiran Sistem' },
     { href: '#/users', key: 'users', label: 'Urus Pengguna', icon: 'user' },
@@ -61,11 +61,11 @@ function navFor(role) {
   ];
   return [
     { grp: 'Kenaikan Pangkat' },
-    { href: '#/kp', key: 'kp', label: 'Kenaikan Pangkat Saya', icon: 'target' },
+    { href: '#/kp', key: 'kp', label: 'Ringkasan Kesediaan', icon: 'target' },
     { href: '#/kp/kriteria', key: 'kriteria', label: 'Senarai Semak Kriteria', icon: 'report' },
     { href: '#/panduan', key: 'panduan', label: 'Panduan', icon: 'book' },
-    { href: '#/profile', key: 'profile', label: 'Profil Saya', icon: 'user' },
-    { grp: 'Rekod Bukti Saya' },
+    { href: '#/profile', key: 'profile', label: 'Profil', icon: 'user' },
+    { grp: 'Rekod Bukti' },
     ...ENTITY_ORDER.map(ent),
   ];
 }
