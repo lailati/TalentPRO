@@ -31,7 +31,7 @@ export async function render(root, { to, field }) {
   const fi = GRADES.findIndex((g) => g.code === lec.grade);
   const targets = fi >= 0 ? GRADES.slice(fi + 1) : [];
   const next = NEXT_GRADE[lec.grade];
-  const back = html`<a class="btn ghost" href="#/kp">${icon('back', 18)} Kenaikan Pangkat Saya</a>`;
+  const back = html`<a class="btn ghost" href="#/kp">${icon('back', 18)} Kenaikan Pangkat</a>`;
   if (!next) {
     mount(root, html`${pageHead('Senarai Semak Kriteria', 'Kriteria Garis Panduan bagi gred sasaran anda.', back, '', 'kp_kriteria')}<div class="card empty">${icon('info', 40)}<h3>${lec.grade ? 'Anda sudah di gred tertinggi' : 'Gred anda belum ditetapkan'}</h3><p>Gred, tarikh lantikan dan pengesahan ialah data Pejabat Pendaftar yang dimasukkan oleh Pegawai KP (HR).</p></div>`);
     return;

@@ -17,7 +17,7 @@ export async function render(root) {
   const ev = evaluate(lec, store, { today: new Date() });
 
   if (!ev.ok) {
-    mount(root, html`${pageHead('Kenaikan Pangkat Saya', 'Semak kesediaan anda dan mohon apabila bersedia.', '', '', 'kp')}
+    mount(root, html`${pageHead('Kenaikan Pangkat', 'Semak kesediaan anda dan mohon apabila bersedia.', '', '', 'kp')}
       <div class="card empty">${icon('info', 40)}<h3>${ev.reason === 'top' ? 'Anda sudah di gred tertinggi' : 'Gred anda belum ditetapkan'}</h3><p>${ev.message}</p><p class="small faint" style="margin-top:8px">Maklumat gred, tarikh lantikan dan pengesahan ialah data Pejabat Pendaftar yang dimasukkan oleh Pegawai KP (HR).</p></div>
       ${history(apps)}`);
     return;
@@ -33,7 +33,7 @@ export async function render(root) {
     : html`<h2>${s.verdictText}</h2><p>${s.ready ? `Semua kriteria wajib bagi ${gradeLabel(ev.to)} telah dipenuhi mengikut rekod anda. Anda boleh memulakan permohonan.` : `${s.metCount} daripada ${s.total} bahagian penilaian telah dipenuhi untuk ${gradeLabel(ev.to)}. Ikuti senarai "perkara paling penting" di bawah untuk melengkapkan rekod anda.`}</p>`;
 
   mount(root, html`
-    ${pageHead('Kenaikan Pangkat Saya', `${gradeLabel(ev.from)} → ${gradeLabel(ev.to)}`, html`<a class="btn ghost" href="#/panduan">${icon('book', 18)} Panduan</a>`, '', 'kp')}
+    ${pageHead('Kenaikan Pangkat', `${gradeLabel(ev.from)} → ${gradeLabel(ev.to)}`, html`<a class="btn ghost" href="#/panduan">${icon('book', 18)} Panduan</a>`, '', 'kp')}
     ${ladder(ev.from, ev.to)}
     <section class="kp-hero" aria-label="Ringkasan kesediaan">
       ${ring(s.pct, 'kesediaan')}

@@ -124,7 +124,7 @@ export const HELP = {
 
 // Bantuan halaman: apa fungsi halaman dan tiga tugas biasa
 export const PAGE_HELP = {
-  profile: { t: 'Profil Saya', b: 'Maklumat peribadi dan profesional anda.', tasks: ['Tukar gambar profil.', 'Kemas kini telefon, lokasi dan biodata.', 'Kemas kini H-indeks SCOPUS anda (digunakan oleh semakan Kenaikan Pangkat).'] },
+  profile: { t: 'Profil', b: 'Maklumat peribadi dan profesional anda.', tasks: ['Tukar gambar profil.', 'Kemas kini telefon, lokasi dan biodata.', 'Kemas kini H-indeks SCOPUS anda (digunakan oleh semakan Kenaikan Pangkat).'] },
   lecturers: { t: 'Direktori Pensyarah', b: 'Semua pensyarah FSTP.', tasks: ['Cari mengikut nama, no. staf atau e-mel.', 'Tapis mengikut jabatan.', 'Klik seorang pensyarah untuk melihat profil dan menyunting maklumat perkhidmatan.'] },
   users: { t: 'Urus Pengguna', b: 'Akaun pengguna sistem.', tasks: ['Tambah akaun pensyarah atau pentadbir.', 'Tetap semula kata laluan bagi pengguna yang terlupa.', 'Ubah status kepada Tidak Aktif untuk menghalang log masuk.'] },
   account: { t: 'Akaun & Kata Laluan', b: 'Tetapan akaun anda.', tasks: ['Tukar kata laluan anda (minimum 8 aksara dengan huruf dan nombor).'] },

@@ -1,4 +1,4 @@
-// "My Profile" (lecturer edit form). HR edits service data through openServiceEditor().
+﻿// "My Profile" (lecturer edit form). HR edits service data through openServiceEditor().
 import * as api from '../api.js';
 import { store, myLecturer } from '../api.js';
 import { html, mount, $, $$, avatar, toast, openDrawer, raw } from '../util.js';
@@ -106,7 +106,7 @@ export async function render(root) {
   const l = myLecturer();
   const draw = () => {
     const cur = myLecturer();
-    mount(root, html`${pageHead('Profil Saya', `Kelengkapan profil: ${completion(cur)}%`)}<section class="card" style="max-width:720px">${formBody(cur, false)}</section>`);
+    mount(root, html`${pageHead('Profil', `Kelengkapan profil: ${completion(cur)}%`)}<section class="card" style="max-width:720px">${formBody(cur, false)}</section>`);
     wire(root, cur, false, () => draw());
   };
   draw();

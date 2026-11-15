@@ -1,4 +1,4 @@
-// Sumber rujukan tunggal untuk model data.
+﻿// Sumber rujukan tunggal untuk model data.
 // Nama jadual/lajur ialah snake_case dan relasional (id + *_id sebagai kunci asing) supaya
 // bentuk yang sama boleh dipindahkan terus ke MySQL (lihat docs/schema.sql dan backend/Code.gs).
 //
@@ -40,7 +40,7 @@ const STATUS_PROJEK = ['Sedang Berjalan', 'Selesai', 'Dirancang'];
 // fmt: cara sel dipaparkan. field.type: text | number | date | url | textarea | select | category | file
 export const ENTITIES = {
   expertise: {
-    table: 'expertise', icon: 'brain', tint: 'blue', singular: 'Kepakaran', plural: 'Kepakaran', mine: 'Kepakaran Saya',
+    table: 'expertise', icon: 'brain', tint: 'blue', singular: 'Kepakaran', plural: 'Kepakaran', mine: 'Kepakaran',
     title: (r) => r.area,
     columns: [
       { key: 'area', label: 'Kepakaran' }, { key: 'category_id', label: 'Kategori', fmt: 'category' },
@@ -56,7 +56,7 @@ export const ENTITIES = {
     ],
   },
   research: {
-    table: 'research', icon: 'flask', tint: 'green', singular: 'Penyelidikan', plural: 'Penyelidikan', mine: 'Penyelidikan Saya',
+    table: 'research', icon: 'flask', tint: 'green', singular: 'Penyelidikan', plural: 'Penyelidikan', mine: 'Penyelidikan',
     title: (r) => r.title,
     columns: [
       { key: 'title', label: 'Tajuk' }, { key: 'area', label: 'Bidang' }, { key: 'category', label: 'Kategori' },
@@ -77,7 +77,7 @@ export const ENTITIES = {
     ],
   },
   publications: {
-    table: 'publications', icon: 'book', tint: 'purple', singular: 'Penerbitan', plural: 'Penerbitan', mine: 'Penerbitan Saya',
+    table: 'publications', icon: 'book', tint: 'purple', singular: 'Penerbitan', plural: 'Penerbitan', mine: 'Penerbitan',
     title: (r) => r.title,
     columns: [
       { key: 'title', label: 'Tajuk' }, { key: 'type', label: 'Jenis' }, { key: 'indexing', label: 'Indeks' }, { key: 'venue', label: 'Jurnal / Penerbit' },
@@ -96,7 +96,7 @@ export const ENTITIES = {
     ],
   },
   certifications: {
-    table: 'certifications', icon: 'award', tint: 'amber', singular: 'Pensijilan', plural: 'Pensijilan', mine: 'Pensijilan Saya',
+    table: 'certifications', icon: 'award', tint: 'amber', singular: 'Pensijilan', plural: 'Pensijilan', mine: 'Pensijilan',
     title: (r) => r.name,
     columns: [
       { key: 'name', label: 'Pensijilan' }, { key: 'issuer', label: 'Badan Pengeluar' },
@@ -112,7 +112,7 @@ export const ENTITIES = {
     ],
   },
   training: {
-    table: 'training', icon: 'cap', tint: 'teal', singular: 'Latihan', plural: 'Latihan', mine: 'Latihan Saya',
+    table: 'training', icon: 'cap', tint: 'teal', singular: 'Latihan', plural: 'Latihan', mine: 'Latihan',
     title: (r) => r.name,
     columns: [
       { key: 'name', label: 'Latihan / Kursus' }, { key: 'organizer', label: 'Penganjur' },
@@ -129,7 +129,7 @@ export const ENTITIES = {
     ],
   },
   consultancy: {
-    table: 'consultancy', icon: 'briefcase', tint: 'rose', singular: 'Konsultansi', plural: 'Konsultansi', mine: 'Konsultansi Saya',
+    table: 'consultancy', icon: 'briefcase', tint: 'rose', singular: 'Konsultansi', plural: 'Konsultansi', mine: 'Konsultansi',
     title: (r) => r.project,
     columns: [
       { key: 'project', label: 'Projek' }, { key: 'client', label: 'Organisasi / Klien' },
@@ -149,7 +149,7 @@ export const ENTITIES = {
     ],
   },
   achievements: {
-    table: 'achievements', icon: 'star', tint: 'indigo', singular: 'Pencapaian', plural: 'Pencapaian', mine: 'Pencapaian Saya',
+    table: 'achievements', icon: 'star', tint: 'indigo', singular: 'Pencapaian', plural: 'Pencapaian', mine: 'Pencapaian',
     title: (r) => r.name,
     columns: [
       { key: 'name', label: 'Pencapaian' }, { key: 'category', label: 'Kategori' }, { key: 'year', label: 'Tahun', fmt: 'num' },
@@ -163,7 +163,7 @@ export const ENTITIES = {
     ],
   },
   documents: {
-    table: 'documents', icon: 'file', tint: 'slate', singular: 'Dokumen', plural: 'Dokumen', mine: 'Dokumen Saya',
+    table: 'documents', icon: 'file', tint: 'slate', singular: 'Dokumen', plural: 'Dokumen', mine: 'Dokumen',
     title: (r) => r.title,
     columns: [
       { key: 'title', label: 'Nama Dokumen' }, { key: 'doc_type', label: 'Jenis' },
@@ -179,7 +179,7 @@ export const ENTITIES = {
 
 const lv = { name: 'level', label: 'Peringkat', type: 'select', options: PERINGKAT, help: 'f_act_level' };
 ENTITIES.activities = {
-  table: 'activities', icon: 'target', tint: 'teal', singular: 'Aktiviti', plural: 'Aktiviti Akademik', mine: 'Aktiviti Akademik Saya', helpKey: 'ent_activities',
+  table: 'activities', icon: 'target', tint: 'teal', singular: 'Aktiviti', plural: 'Aktiviti Akademik', mine: 'Aktiviti Akademik', helpKey: 'ent_activities',
   title: (r) => (ACTIVITY_KINDS[r.kind] ? ACTIVITY_KINDS[r.kind].label : r.kind) + (r.title ? ` — ${r.title}` : r.student ? ` — ${r.student}` : ''),
   columns: [
     { key: 'kind', label: 'Jenis aktiviti', fmt: 'actkind' }, { key: 'title', label: 'Tajuk / Nama', fmt: 'actname' }, { key: 'year', label: 'Tahun', fmt: 'num' }, { key: 'level', label: 'Peringkat' }, { key: 'role', label: 'Peranan' },
