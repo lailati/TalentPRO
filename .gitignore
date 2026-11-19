@@ -31,3 +31,6 @@ screenshots/
 
 # Draf tesis (mengandungi ringkasan dokumen SULIT): jangan push ke repo awam
 Tesis/
+
+# Backend PHP: konfigurasi tempatan dan data masa jalan (rahsia)
+backend-php/config.local.php

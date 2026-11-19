@@ -520,6 +520,8 @@ pages:
 4. In `js/api.js` replace the GAS branch of `transport()` (or add a `'php'` backend in `config.js`). No view changes. Remove CORS workaround if same-origin.
 5. Optional: server-side pagination/search for large tables.
 
+**Status PSM II (peringkat 1 dibina):** `backend-php/` melaksanakan langkah 3 untuk `login`, `logout`, `me` dan `changePassword` sahaja (sampul sama dengan §5, kod HTTP sebenar turut dihantar). Skema skop tesis (10 jadual, dua peranan `admin`/`lecturer`, tanpa modul permohonan) ialah `docs/talentpro_mysql.sql`, bukan `docs/schema.sql` yang lebih besar. Tiada tindakan data lagi dan `js/api.js` belum mempunyai transport `php`. Lihat `backend-php/README.md` untuk persediaan, ujian (34 semakan) dan keputusan keselamatan.
+
 ---
 
 ## 12.1 Database-style guide (use any database; keep the invariants)
