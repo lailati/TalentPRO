@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="670" height="750" viewBox="0 0 670 750" font-family="Arial, Helvetica, sans-serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs><rect width="100%" height="100%" fill="#fff"/>
+<path d="M335,86 L335,116 L165,116 L165,146" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M64,192 L64,241 L90,241" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M64,241 L64,305 L90,305" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M64,305 L64,369 L90,369" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M64,369 L64,433 L90,433" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M64,433 L64,497 L90,497" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M64,497 L64,561 L90,561" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M335,86 L335,116 L505,116 L505,146" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,192 L404,241 L430,241" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,241 L404,305 L430,305" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,305 L404,369 L430,369" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,369 L404,433 L430,433" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,433 L404,497 L430,497" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,497 L404,561 L430,561" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,561 L404,625 L430,625" fill="none" stroke="#111" stroke-width="1.3"/>
+<path d="M404,625 L404,689 L430,689" fill="none" stroke="#111" stroke-width="1.3"/>
+<rect x="190" y="30" width="290" height="56" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="335" y="63" text-anchor="middle" font-size="14" font-weight="bold">Sistem TalentPro</text>
+<rect x="40" y="146" width="250" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="165" y="174" text-anchor="middle" font-size="14" font-weight="bold">Admin</text>
+<rect x="90" y="218" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="190" y="246" text-anchor="middle" font-size="14">Log Masuk</text>
+<rect x="90" y="282" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="190" y="310" text-anchor="middle" font-size="14">Urus Pengguna</text>
+<rect x="90" y="346" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="190" y="374" text-anchor="middle" font-size="14">Import Akaun CSV</text>
+<rect x="90" y="410" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="190" y="438" text-anchor="middle" font-size="14">Tetapkan Kata Laluan</text>
+<rect x="90" y="474" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="190" y="494" text-anchor="middle" font-size="14">Semak Kelengkapan Rekod</text>
+<text x="190" y="510" text-anchor="middle" font-size="14">Pensyarah</text>
+<rect x="90" y="538" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="190" y="566" text-anchor="middle" font-size="14">Urus Akaun Sendiri</text>
+<rect x="380" y="146" width="250" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="505" y="174" text-anchor="middle" font-size="14" font-weight="bold">Pensyarah</text>
+<rect x="430" y="218" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="246" text-anchor="middle" font-size="14">Log Masuk</text>
+<rect x="430" y="282" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="310" text-anchor="middle" font-size="14">Kemas Kini Profil</text>
+<rect x="430" y="346" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="366" text-anchor="middle" font-size="14">Kemas Kini Maklumat</text>
+<text x="530" y="382" text-anchor="middle" font-size="14">Perkhidmatan</text>
+<rect x="430" y="410" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="438" text-anchor="middle" font-size="14">Urus Rekod Kriteria KP</text>
+<rect x="430" y="474" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="494" text-anchor="middle" font-size="14">Rekod Markah LPPT dan</text>
+<text x="530" y="510" text-anchor="middle" font-size="14">Tatatertib</text>
+<rect x="430" y="538" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="566" text-anchor="middle" font-size="14">Pilih Gred Sasaran</text>
+<rect x="430" y="602" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="630" text-anchor="middle" font-size="14">Lihat Bar Kemajuan</text>
+<rect x="430" y="666" width="200" height="46" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="530" y="694" text-anchor="middle" font-size="14">Cetak Ringkasan Rekod</text>
+</svg>

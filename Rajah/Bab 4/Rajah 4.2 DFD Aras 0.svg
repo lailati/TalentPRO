@@ -1,0 +1,243 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2010" height="1612" viewBox="0 0 2010 1612" font-family="Arial, Helvetica, sans-serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs><rect width="100%" height="100%" fill="#fff"/>
+<path d="M200,118.333 L494.3,118.333 L494.3,72 L730.3,72" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="110.333" width="114.2" height="15" fill="#fff"/>
+<text x="208" y="122.333" text-anchor="start" font-size="11" dx="0">Maklumat Log Masuk</text>
+<path d="M730.3,88 L522.3,88 L522.3,134.333 L200,134.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="126.333" width="120.1" height="15" fill="#fff"/>
+<text x="208" y="138.333" text-anchor="start" font-size="11" dx="0">Keputusan Log Masuk</text>
+<path d="M200,102.333 L452.3,102.333 L452.3,56 L730.3,56" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="94.3333" width="167.3" height="15" fill="#fff"/>
+<text x="208" y="106.333" text-anchor="start" font-size="11" dx="0">Maklumat Akaun dan Fail CSV</text>
+<path d="M730.3,104 L536.3,104 L536.3,150.333 L200,150.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="142.333" width="226.3" height="15" fill="#fff"/>
+<text x="208" y="154.333" text-anchor="start" font-size="11" dx="0">Senarai Pengguna dan Pengesahan Akaun</text>
+<path d="M200,669.364 L564.3,669.364 L564.3,136 L730.3,136" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="661.364" width="114.2" height="15" fill="#fff"/>
+<text x="208" y="673.364" text-anchor="start" font-size="11" dx="0">Maklumat Log Masuk</text>
+<path d="M730.3,120 L550.3,120 L550.3,653.364 L200,653.364" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="645.364" width="120.1" height="15" fill="#fff"/>
+<text x="208" y="657.364" text-anchor="start" font-size="11" dx="0">Keputusan Log Masuk</text>
+<path d="M980.3,68 L1470.6,68 L1470.6,85.3333 L1580.6,85.3333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="60" width="84.7" height="15" fill="#fff"/>
+<text x="988.3" y="72" text-anchor="start" font-size="11" dx="0">Data Pengguna</text>
+<path d="M1580.6,106.667 L1428.6,106.667 L1428.6,96 L980.3,96" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="88" width="84.7" height="15" fill="#fff"/>
+<text x="988.3" y="100" text-anchor="start" font-size="11" dx="0">Data Pengguna</text>
+<path d="M980.3,124 L1386.6,124 L1386.6,239.25 L1580.6,239.25" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="116" width="90.6" height="15" fill="#fff"/>
+<text x="988.3" y="128" text-anchor="start" font-size="11" dx="0">Data Pensyarah</text>
+<path d="M200,166.333 L648.3,166.333 L648.3,220.667 L730.3,220.667" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="158.333" width="131.9" height="15" fill="#fff"/>
+<text x="208" y="170.333" text-anchor="start" font-size="11" dx="0">Penapis Semakan Rekod</text>
+<path d="M730.3,249.333 L578.3,249.333 L578.3,182.333 L200,182.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="174.333" width="149.6" height="15" fill="#fff"/>
+<text x="208" y="186.333" text-anchor="start" font-size="11" dx="0">Status Kelengkapan Rekod</text>
+<path d="M1580.6,255.25 L1330.6,255.25 L1330.6,235 L980.3,235" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="227" width="90.6" height="15" fill="#fff"/>
+<text x="988.3" y="239" text-anchor="start" font-size="11" dx="0">Data Pensyarah</text>
+<path d="M200,685.364 L592.3,685.364 L592.3,346.667 L730.3,346.667" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="677.364" width="196.8" height="15" fill="#fff"/>
+<text x="208" y="689.364" text-anchor="start" font-size="11" dx="0">Maklumat Profil dan Perkhidmatan</text>
+<path d="M730.3,375.333 L620.3,375.333 L620.3,717.364 L200,717.364" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="709.364" width="102.4" height="15" fill="#fff"/>
+<text x="208" y="721.364" text-anchor="start" font-size="11" dx="0">Profil Pensyarah</text>
+<path d="M980.3,375.333 L1400.6,375.333 L1400.6,287.25 L1580.6,287.25" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="367.333" width="72.9" height="15" fill="#fff"/>
+<text x="988.3" y="379.333" text-anchor="start" font-size="11" dx="0">Data Profil</text>
+<path d="M1580.6,271.25 L1274.6,271.25 L1274.6,346.667 L980.3,346.667" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="338.667" width="72.9" height="15" fill="#fff"/>
+<text x="988.3" y="350.667" text-anchor="start" font-size="11" dx="0">Data Profil</text>
+<path d="M200,701.364 L606.3,701.364 L606.3,513.333 L730.3,513.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="693.364" width="190.9" height="15" fill="#fff"/>
+<text x="208" y="705.364" text-anchor="start" font-size="11" dx="0">Data Rekod Kriteria dan Dokumen</text>
+<path d="M730.3,582.667 L634.3,582.667 L634.3,733.364 L200,733.364" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="725.364" width="84.7" height="15" fill="#fff"/>
+<text x="208" y="737.364" text-anchor="start" font-size="11" dx="0">Senarai Rekod</text>
+<path d="M980.3,460 L1526.6,460 L1526.6,537.333 L1580.6,537.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="452" width="84.7" height="15" fill="#fff"/>
+<text x="988.3" y="464" text-anchor="start" font-size="11" dx="0">Data Aktiviti</text>
+<path d="M1580.6,558.667 L1512.6,558.667 L1512.6,476 L980.3,476" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="468" width="84.7" height="15" fill="#fff"/>
+<text x="988.3" y="480" text-anchor="start" font-size="11" dx="0">Data Aktiviti</text>
+<path d="M980.3,492 L1498.6,492 L1498.6,625.333 L1580.6,625.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="484" width="108.3" height="15" fill="#fff"/>
+<text x="988.3" y="496" text-anchor="start" font-size="11" dx="0">Data Penyelidikan</text>
+<path d="M1580.6,646.667 L1484.6,646.667 L1484.6,508 L980.3,508" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="500" width="108.3" height="15" fill="#fff"/>
+<text x="988.3" y="512" text-anchor="start" font-size="11" dx="0">Data Penyelidikan</text>
+<path d="M980.3,524 L1456.6,524 L1456.6,713.333 L1580.6,713.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="516" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="528" text-anchor="start" font-size="11" dx="0">Data Penerbitan</text>
+<path d="M1580.6,734.667 L1442.6,734.667 L1442.6,540 L980.3,540" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="532" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="544" text-anchor="start" font-size="11" dx="0">Data Penerbitan</text>
+<path d="M980.3,556 L1414.6,556 L1414.6,801.333 L1580.6,801.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="548" width="102.4" height="15" fill="#fff"/>
+<text x="988.3" y="560" text-anchor="start" font-size="11" dx="0">Data Konsultansi</text>
+<path d="M1580.6,822.667 L1372.6,822.667 L1372.6,572 L980.3,572" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="564" width="102.4" height="15" fill="#fff"/>
+<text x="988.3" y="576" text-anchor="start" font-size="11" dx="0">Data Konsultansi</text>
+<path d="M980.3,588 L1358.6,588 L1358.6,889.333 L1580.6,889.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="580" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="592" text-anchor="start" font-size="11" dx="0">Data Pencapaian</text>
+<path d="M1580.6,910.667 L1344.6,910.667 L1344.6,604 L980.3,604" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="596" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="608" text-anchor="start" font-size="11" dx="0">Data Pencapaian</text>
+<path d="M980.3,636 L1302.6,636 L1302.6,998.667 L1580.6,998.667" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="628" width="78.8" height="15" fill="#fff"/>
+<text x="988.3" y="640" text-anchor="start" font-size="11" dx="0">Data Dokumen</text>
+<path d="M1580.6,977.333 L1316.6,977.333 L1316.6,620 L980.3,620" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="612" width="78.8" height="15" fill="#fff"/>
+<text x="988.3" y="624" text-anchor="start" font-size="11" dx="0">Data Dokumen</text>
+<path d="M200,765.364 L508.3,765.364 L508.3,749.333 L730.3,749.333" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="757.364" width="161.4" height="15" fill="#fff"/>
+<text x="208" y="769.364" text-anchor="start" font-size="11" dx="0">Markah LPPT dan Tatatertib</text>
+<path d="M730.3,720.667 L676.3,720.667 L676.3,749.364 L200,749.364" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="741.364" width="167.3" height="15" fill="#fff"/>
+<text x="208" y="753.364" text-anchor="start" font-size="11" dx="0">Senarai LPPT dan Tatatertib</text>
+<path d="M980.3,709.2 L1288.6,709.2 L1288.6,1065.33 L1580.6,1065.33" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="701.2" width="61.1" height="15" fill="#fff"/>
+<text x="988.3" y="713.2" text-anchor="start" font-size="11" dx="0">Data LPPT</text>
+<path d="M1580.6,1086.67 L1260.6,1086.67 L1260.6,726.4 L980.3,726.4" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="718.4" width="61.1" height="15" fill="#fff"/>
+<text x="988.3" y="730.4" text-anchor="start" font-size="11" dx="0">Data LPPT</text>
+<path d="M980.3,743.6 L1246.6,743.6 L1246.6,1153.33 L1580.6,1153.33" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="735.6" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="747.6" text-anchor="start" font-size="11" dx="0">Data Tatatertib</text>
+<path d="M1580.6,1174.67 L1232.6,1174.67 L1232.6,760.8 L980.3,760.8" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="752.8" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="764.8" text-anchor="start" font-size="11" dx="0">Data Tatatertib</text>
+<path d="M1820.6,276.583 L1956.6,276.583 L1956.6,1400 L980.3,1400" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1392" width="90.6" height="15" fill="#fff"/>
+<text x="988.3" y="1404" text-anchor="start" font-size="11" dx="0">Data Pensyarah</text>
+<path d="M1820.6,548 L1942.6,548 L1942.6,1384 L980.3,1384" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1376" width="84.7" height="15" fill="#fff"/>
+<text x="988.3" y="1388" text-anchor="start" font-size="11" dx="0">Data Aktiviti</text>
+<path d="M1820.6,636 L1928.6,636 L1928.6,1368 L980.3,1368" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1360" width="108.3" height="15" fill="#fff"/>
+<text x="988.3" y="1372" text-anchor="start" font-size="11" dx="0">Data Penyelidikan</text>
+<path d="M1820.6,724 L1914.6,724 L1914.6,1352 L980.3,1352" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1344" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="1356" text-anchor="start" font-size="11" dx="0">Data Penerbitan</text>
+<path d="M1820.6,812 L1900.6,812 L1900.6,1336 L980.3,1336" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1328" width="102.4" height="15" fill="#fff"/>
+<text x="988.3" y="1340" text-anchor="start" font-size="11" dx="0">Data Konsultansi</text>
+<path d="M1820.6,900 L1886.6,900 L1886.6,1320 L980.3,1320" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1312" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="1324" text-anchor="start" font-size="11" dx="0">Data Pencapaian</text>
+<path d="M1820.6,988 L1872.6,988 L1872.6,1304 L980.3,1304" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1296" width="78.8" height="15" fill="#fff"/>
+<text x="988.3" y="1308" text-anchor="start" font-size="11" dx="0">Data Dokumen</text>
+<path d="M1820.6,1076 L1858.6,1076 L1858.6,1288 L980.3,1288" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1280" width="61.1" height="15" fill="#fff"/>
+<text x="988.3" y="1292" text-anchor="start" font-size="11" dx="0">Data LPPT</text>
+<path d="M1820.6,1164 L1844.6,1164 L1844.6,1272 L980.3,1272" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1264" width="96.5" height="15" fill="#fff"/>
+<text x="988.3" y="1276" text-anchor="start" font-size="11" dx="0">Data Tatatertib</text>
+<path d="M896.967,1416 L896.967,1486" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="904.967" y="1443" width="161.4" height="15" fill="#fff"/>
+<text x="904.967" y="1455" text-anchor="start" font-size="11" dx="0">Keputusan Semakan Kriteria</text>
+<path d="M813.633,1486 L813.633,1416" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="726.833" y="1443" width="78.8" height="15" fill="#fff"/>
+<text x="805.633" y="1455" text-anchor="end" font-size="11" dx="0">Gred Sasaran</text>
+<path d="M200,813.364 L466.3,813.364 L466.3,1550.5 L730.3,1550.5" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="805.364" width="78.8" height="15" fill="#fff"/>
+<text x="208" y="817.364" text-anchor="start" font-size="11" dx="0">Gred Sasaran</text>
+<path d="M730.3,1529 L480.3,1529 L480.3,797.364 L200,797.364" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="789.364" width="185" height="15" fill="#fff"/>
+<text x="208" y="801.364" text-anchor="start" font-size="11" dx="0">Bar Kemajuan dan Senarai Semak</text>
+<path d="M730.3,1507.5 L662.3,1507.5 L662.3,781.364 L200,781.364" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="773.364" width="96.5" height="15" fill="#fff"/>
+<text x="208" y="785.364" text-anchor="start" font-size="11" dx="0">Ringkasan Rekod</text>
+<path d="M1820.6,249.917 L1970.6,249.917 L1970.6,1529 L980.3,1529" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="988.3" y="1521" width="90.6" height="15" fill="#fff"/>
+<text x="988.3" y="1533" text-anchor="start" font-size="11" dx="0">Data Pensyarah</text>
+<rect x="40" y="86.3333" width="160" height="112" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="120" y="147.333" text-anchor="middle" font-size="14">Admin</text>
+<rect x="40" y="637.364" width="160" height="192" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="120" y="738.364" text-anchor="middle" font-size="14">Pensyarah</text>
+<rect x="730.3" y="40" width="250" height="112" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="60" text-anchor="middle" font-size="13">1.0</text>
+<line x1="738.3" y1="68" x2="972.3" y2="68" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="106" text-anchor="middle" font-size="13">Urus Akaun dan</text>
+<text x="855.3" y="122" text-anchor="middle" font-size="13">Pengesahan</text>
+<rect x="730.3" y="192" width="250" height="86" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="212" text-anchor="middle" font-size="13">2.0</text>
+<line x1="738.3" y1="220" x2="972.3" y2="220" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="245" text-anchor="middle" font-size="13">Semak Kelengkapan Rekod</text>
+<text x="855.3" y="261" text-anchor="middle" font-size="13">Pensyarah</text>
+<rect x="730.3" y="318" width="250" height="86" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="338" text-anchor="middle" font-size="13">3.0</text>
+<line x1="738.3" y1="346" x2="972.3" y2="346" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="371" text-anchor="middle" font-size="13">Urus Profil dan Maklumat</text>
+<text x="855.3" y="387" text-anchor="middle" font-size="13">Perkhidmatan</text>
+<rect x="730.3" y="444" width="250" height="208" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="464" text-anchor="middle" font-size="13">4.0</text>
+<line x1="738.3" y1="472" x2="972.3" y2="472" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="566" text-anchor="middle" font-size="13">Urus Rekod Kriteria KP</text>
+<rect x="730.3" y="692" width="250" height="86" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="712" text-anchor="middle" font-size="13">5.0</text>
+<line x1="738.3" y1="720" x2="972.3" y2="720" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="745" text-anchor="middle" font-size="13">Urus Markah LPPT dan</text>
+<text x="855.3" y="761" text-anchor="middle" font-size="13">Tatatertib</text>
+<rect x="730.3" y="1256" width="250" height="160" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="1276" text-anchor="middle" font-size="13">6.0</text>
+<line x1="738.3" y1="1284" x2="972.3" y2="1284" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="1346" text-anchor="middle" font-size="13">Semak Kriteria Kenaikan</text>
+<text x="855.3" y="1362" text-anchor="middle" font-size="13">Pangkat</text>
+<rect x="730.3" y="1486" width="250" height="86" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="855.3" y="1506" text-anchor="middle" font-size="13">7.0</text>
+<line x1="738.3" y1="1514" x2="972.3" y2="1514" stroke="#111" stroke-width="1"/>
+<text x="855.3" y="1539" text-anchor="middle" font-size="13">Papar Kemajuan dan</text>
+<text x="855.3" y="1555" text-anchor="middle" font-size="13">Ringkasan Rekod</text>
+<line x1="1580.6" y1="64" x2="1820.6" y2="64" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="128" x2="1820.6" y2="128" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="64" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="101" text-anchor="middle" font-size="13">D1</text>
+<text x="1723.6" y="101" text-anchor="middle" font-size="13">users</text>
+<line x1="1580.6" y1="223.25" x2="1820.6" y2="223.25" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="303.25" x2="1820.6" y2="303.25" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="223.25" width="46" height="80" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="268.25" text-anchor="middle" font-size="13">D2</text>
+<text x="1723.6" y="268.25" text-anchor="middle" font-size="13">lecturers</text>
+<line x1="1580.6" y1="516" x2="1820.6" y2="516" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="580" x2="1820.6" y2="580" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="516" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="553" text-anchor="middle" font-size="13">D3</text>
+<text x="1723.6" y="553" text-anchor="middle" font-size="13">activities</text>
+<line x1="1580.6" y1="604" x2="1820.6" y2="604" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="668" x2="1820.6" y2="668" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="604" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="641" text-anchor="middle" font-size="13">D4</text>
+<text x="1723.6" y="641" text-anchor="middle" font-size="13">research</text>
+<line x1="1580.6" y1="692" x2="1820.6" y2="692" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="756" x2="1820.6" y2="756" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="692" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="729" text-anchor="middle" font-size="13">D5</text>
+<text x="1723.6" y="729" text-anchor="middle" font-size="13">publications</text>
+<line x1="1580.6" y1="780" x2="1820.6" y2="780" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="844" x2="1820.6" y2="844" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="780" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="817" text-anchor="middle" font-size="13">D6</text>
+<text x="1723.6" y="817" text-anchor="middle" font-size="13">consultancy</text>
+<line x1="1580.6" y1="868" x2="1820.6" y2="868" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="932" x2="1820.6" y2="932" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="868" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="905" text-anchor="middle" font-size="13">D7</text>
+<text x="1723.6" y="905" text-anchor="middle" font-size="13">achievements</text>
+<line x1="1580.6" y1="956" x2="1820.6" y2="956" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="1020" x2="1820.6" y2="1020" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="956" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="993" text-anchor="middle" font-size="13">D8</text>
+<text x="1723.6" y="993" text-anchor="middle" font-size="13">documents</text>
+<line x1="1580.6" y1="1044" x2="1820.6" y2="1044" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="1108" x2="1820.6" y2="1108" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="1044" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="1081" text-anchor="middle" font-size="13">D9</text>
+<text x="1723.6" y="1081" text-anchor="middle" font-size="13">lppt_scores</text>
+<line x1="1580.6" y1="1132" x2="1820.6" y2="1132" stroke="#111" stroke-width="1.6"/>
+<line x1="1580.6" y1="1196" x2="1820.6" y2="1196" stroke="#111" stroke-width="1.6"/>
+<rect x="1580.6" y="1132" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1603.6" y="1169" text-anchor="middle" font-size="13">D10</text>
+<text x="1723.6" y="1169" text-anchor="middle" font-size="13">disciplinary</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="322" viewBox="0 0 1215 322" font-family="Arial, Helvetica, sans-serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs><rect width="100%" height="100%" fill="#fff"/>
+<path d="M935,83 L699.5,83" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="707.5" y="75" width="90.6" height="15" fill="#fff"/>
+<text x="707.5" y="87" text-anchor="start" font-size="11" dx="0">Data Pensyarah</text>
+<path d="M574.5,126 L574.5,196" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="582.5" y="153" width="155.5" height="15" fill="#fff"/>
+<text x="582.5" y="165" text-anchor="start" font-size="11" dx="0">Hasil Semakan Kelengkapan</text>
+<path d="M200,228.333 L381.5,228.333 L381.5,224.667 L449.5,224.667" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="220.333" width="131.9" height="15" fill="#fff"/>
+<text x="208" y="232.333" text-anchor="start" font-size="11" dx="0">Penapis Semakan Rekod</text>
+<path d="M449.5,253.333 L395.5,253.333 L395.5,249.667 L200,249.667" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="208" y="241.667" width="149.6" height="15" fill="#fff"/>
+<text x="208" y="253.667" text-anchor="start" font-size="11" dx="0">Status Kelengkapan Rekod</text>
+<rect x="40" y="207" width="160" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="120" y="244" text-anchor="middle" font-size="14">Admin</text>
+<rect x="449.5" y="40" width="250" height="86" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="574.5" y="60" text-anchor="middle" font-size="13">2.1</text>
+<line x1="457.5" y1="68" x2="691.5" y2="68" stroke="#111" stroke-width="1"/>
+<text x="574.5" y="101" text-anchor="middle" font-size="13">Semak Kelengkapan Rekod</text>
+<rect x="449.5" y="196" width="250" height="86" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="574.5" y="216" text-anchor="middle" font-size="13">2.2</text>
+<line x1="457.5" y1="224" x2="691.5" y2="224" stroke="#111" stroke-width="1"/>
+<text x="574.5" y="249" text-anchor="middle" font-size="13">Papar Senarai dan</text>
+<text x="574.5" y="265" text-anchor="middle" font-size="13">Bilangan Rekod</text>
+<line x1="935" y1="51" x2="1175" y2="51" stroke="#111" stroke-width="1.6"/>
+<line x1="935" y1="115" x2="1175" y2="115" stroke="#111" stroke-width="1.6"/>
+<rect x="935" y="51" width="46" height="64" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="958" y="88" text-anchor="middle" font-size="13">D2</text>
+<text x="1078" y="88" text-anchor="middle" font-size="13">lecturers</text>
+</svg>

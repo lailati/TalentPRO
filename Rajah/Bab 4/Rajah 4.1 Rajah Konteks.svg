@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1336" height="436" viewBox="0 0 1336 436" font-family="Arial, Helvetica, sans-serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs><rect width="100%" height="100%" fill="#fff"/>
+<path d="M210,75.6 L518.3,75.6" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="307.05" y="67.6" width="114.2" height="15" fill="#fff"/>
+<text x="364.15" y="79.6" text-anchor="middle" font-size="11" dx="0">Maklumat Log Masuk</text>
+<path d="M210,111.2 L518.3,111.2" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="265.75" y="103.2" width="196.8" height="15" fill="#fff"/>
+<text x="364.15" y="115.2" text-anchor="middle" font-size="11" dx="0">Maklumat Profil dan Perkhidmatan</text>
+<path d="M210,146.8 L518.3,146.8" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="268.7" y="138.8" width="190.9" height="15" fill="#fff"/>
+<text x="364.15" y="150.8" text-anchor="middle" font-size="11" dx="0">Data Rekod Kriteria dan Dokumen</text>
+<path d="M210,182.4 L518.3,182.4" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="283.45" y="174.4" width="161.4" height="15" fill="#fff"/>
+<text x="364.15" y="186.4" text-anchor="middle" font-size="11" dx="0">Markah LPPT dan Tatatertib</text>
+<path d="M210,218 L518.3,218" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="324.75" y="210" width="78.8" height="15" fill="#fff"/>
+<text x="364.15" y="222" text-anchor="middle" font-size="11" dx="0">Gred Sasaran</text>
+<path d="M518.3,253.6 L210,253.6" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="304.1" y="245.6" width="120.1" height="15" fill="#fff"/>
+<text x="364.15" y="257.6" text-anchor="middle" font-size="11" dx="0">Keputusan Log Masuk</text>
+<path d="M518.3,289.2 L210,289.2" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="289.35" y="281.2" width="149.6" height="15" fill="#fff"/>
+<text x="364.15" y="293.2" text-anchor="middle" font-size="11" dx="0">Profil dan Senarai Rekod</text>
+<path d="M518.3,324.8 L210,324.8" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="271.65" y="316.8" width="185" height="15" fill="#fff"/>
+<text x="364.15" y="328.8" text-anchor="middle" font-size="11" dx="0">Bar Kemajuan dan Senarai Semak</text>
+<path d="M518.3,360.4 L210,360.4" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="315.9" y="352.4" width="96.5" height="15" fill="#fff"/>
+<text x="364.15" y="364.4" text-anchor="middle" font-size="11" dx="0">Ringkasan Rekod</text>
+<path d="M1126.6,127.286 L818.3,127.286" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="915.35" y="119.286" width="114.2" height="15" fill="#fff"/>
+<text x="972.45" y="131.286" text-anchor="middle" font-size="11" dx="0">Maklumat Log Masuk</text>
+<path d="M1126.6,163.571 L818.3,163.571" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="888.8" y="155.571" width="167.3" height="15" fill="#fff"/>
+<text x="972.45" y="167.571" text-anchor="middle" font-size="11" dx="0">Maklumat Akaun dan Fail CSV</text>
+<path d="M1126.6,199.857 L818.3,199.857" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="906.5" y="191.857" width="131.9" height="15" fill="#fff"/>
+<text x="972.45" y="203.857" text-anchor="middle" font-size="11" dx="0">Penapis Semakan Rekod</text>
+<path d="M818.3,236.143 L1126.6,236.143" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="912.4" y="228.143" width="120.1" height="15" fill="#fff"/>
+<text x="972.45" y="240.143" text-anchor="middle" font-size="11" dx="0">Keputusan Log Masuk</text>
+<path d="M818.3,272.429 L1126.6,272.429" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="859.3" y="264.429" width="226.3" height="15" fill="#fff"/>
+<text x="972.45" y="276.429" text-anchor="middle" font-size="11" dx="0">Senarai Pengguna dan Pengesahan Akaun</text>
+<path d="M818.3,308.714 L1126.6,308.714" fill="none" stroke="#111" stroke-width="1.3" marker-end="url(#a)"/>
+<rect x="897.65" y="300.714" width="149.6" height="15" fill="#fff"/>
+<text x="972.45" y="312.714" text-anchor="middle" font-size="11" dx="0">Status Kelengkapan Rekod</text>
+<rect x="518.3" y="40" width="300" height="356" rx="16" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="668.3" y="60" text-anchor="middle" font-size="13">0</text>
+<line x1="526.3" y1="68" x2="810.3" y2="68" stroke="#111" stroke-width="1"/>
+<text x="668.3" y="236" text-anchor="middle" font-size="13">Sistem TalentPro</text>
+<rect x="40" y="40" width="170" height="356" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="125" y="223" text-anchor="middle" font-size="14">Pensyarah</text>
+<rect x="1126.6" y="91" width="170" height="254" fill="#fff" stroke="#111" stroke-width="1.6"/>
+<text x="1211.6" y="223" text-anchor="middle" font-size="14">Admin</text>
+</svg>

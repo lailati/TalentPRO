@@ -28,3 +28,6 @@ desktop.ini
 dist/
 node_modules/
 screenshots/
+
+# Draf tesis (mengandungi ringkasan dokumen SULIT): jangan push ke repo awam
+Tesis/

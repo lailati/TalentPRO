@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="840" viewBox="0 0 1180 840" font-family="Arial, Helvetica, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<ellipse cx="590" cy="410" rx="180" ry="130" fill="#e3efff" stroke="#2b4d8f" stroke-width="2"/><text x="590" y="393.8" text-anchor="middle" font-size="18" font-weight="bold">TalentPro</text><text x="590" y="416.3" text-anchor="middle" font-size="18" font-weight="bold">Pembangunan Agile</text><text x="590" y="438.8" text-anchor="middle" font-size="18" font-weight="bold">(Kitaran Berulang)</text>
+<rect x="410" y="20" width="320" height="170" rx="12" fill="#dbeafe" stroke="#2b4d8f" stroke-width="1.8"/>
+<text x="570" y="60" text-anchor="middle" font-size="17" fill="#111111" font-weight="bold">1. Perancangan</text>
+<text x="570" y="98" text-anchor="middle" font-size="13" fill="#111111">Kenal pasti masalah dan objektif</text>
+<text x="570" y="114.25" text-anchor="middle" font-size="13" fill="#111111">Tetapkan skop (Admin dan Pensyarah)</text>
+<text x="570" y="130.5" text-anchor="middle" font-size="13" fill="#111111">Sediakan senarai keperluan (backlog)</text>
+<rect x="840" y="130" width="320" height="170" rx="12" fill="#dcfce7" stroke="#2b4d8f" stroke-width="1.8"/>
+<text x="1000" y="170" text-anchor="middle" font-size="17" fill="#111111" font-weight="bold">2. Analisis Keperluan</text>
+<text x="1000" y="208" text-anchor="middle" font-size="13" fill="#111111">Kaji Garis Panduan KP UPNM 2025</text>
+<text x="1000" y="224.25" text-anchor="middle" font-size="13" fill="#111111">Kenal pasti keperluan fungsian</text>
+<text x="1000" y="240.5" text-anchor="middle" font-size="13" fill="#111111">dan bukan fungsian</text>
+<rect x="840" y="430" width="320" height="170" rx="12" fill="#fef3c7" stroke="#2b4d8f" stroke-width="1.8"/>
+<text x="1000" y="470" text-anchor="middle" font-size="17" fill="#111111" font-weight="bold">3. Reka Bentuk</text>
+<text x="1000" y="508" text-anchor="middle" font-size="13" fill="#111111">Rajah konteks dan DFD</text>
+<text x="1000" y="524.25" text-anchor="middle" font-size="13" fill="#111111">ERD, carta hierarki, carta alir</text>
+<text x="1000" y="540.5" text-anchor="middle" font-size="13" fill="#111111">Reka bentuk antara muka</text>
+<rect x="410" y="600" width="320" height="170" rx="12" fill="#ede9fe" stroke="#2b4d8f" stroke-width="1.8"/>
+<text x="570" y="640" text-anchor="middle" font-size="17" fill="#111111" font-weight="bold">4. Pembangunan</text>
+<text x="570" y="678" text-anchor="middle" font-size="13" fill="#111111">Bangunkan modul mengikut</text>
+<text x="570" y="694.25" text-anchor="middle" font-size="13" fill="#111111">sprint (HTML, CSS, JavaScript,</text>
+<text x="570" y="710.5" text-anchor="middle" font-size="13" fill="#111111">PHP dan MySQL)</text>
+<rect x="20" y="430" width="320" height="170" rx="12" fill="#fee2e2" stroke="#2b4d8f" stroke-width="1.8"/>
+<text x="180" y="470" text-anchor="middle" font-size="17" fill="#111111" font-weight="bold">5. Pengujian</text>
+<text x="180" y="508" text-anchor="middle" font-size="13" fill="#111111">Ujian fungsi (black-box)</text>
+<text x="180" y="524.25" text-anchor="middle" font-size="13" fill="#111111">Ujian integrasi modul</text>
+<text x="180" y="540.5" text-anchor="middle" font-size="13" fill="#111111">Penilaian kebolehgunaan</text>
+<rect x="20" y="130" width="320" height="170" rx="12" fill="#ccfbf1" stroke="#2b4d8f" stroke-width="1.8"/>
+<text x="180" y="170" text-anchor="middle" font-size="17" fill="#111111" font-weight="bold">6. Penambahbaikan</text>
+<text x="180" y="208" text-anchor="middle" font-size="13" fill="#111111">Semak maklum balas penyelia</text>
+<text x="180" y="224.25" text-anchor="middle" font-size="13" fill="#111111">dan pengguna</text>
+<text x="180" y="240.5" text-anchor="middle" font-size="13" fill="#111111">Baiki dan ulang kitaran</text>
+<path d="M730,105 L1000,105 L1000,130" fill="none" stroke="#2b4d8f" stroke-width="3" marker-end="url(#a)"/>
+<path d="M1000,300 L1000,430" fill="none" stroke="#2b4d8f" stroke-width="3" marker-end="url(#a)"/>
+<path d="M1000,600 L1000,685 L730,685" fill="none" stroke="#2b4d8f" stroke-width="3" marker-end="url(#a)"/>
+<path d="M410,685 L180,685 L180,600" fill="none" stroke="#2b4d8f" stroke-width="3" marker-end="url(#a)"/>
+<path d="M180,430 L180,300" fill="none" stroke="#2b4d8f" stroke-width="3" marker-end="url(#a)"/>
+<path d="M180,130 L180,105 L410,105" fill="none" stroke="#2b4d8f" stroke-width="3" marker-end="url(#a)"/>
+<text x="590" y="815" text-anchor="middle" font-size="13" fill="#111111" font-style="italic">Setiap kitaran menghasilkan penambahan fungsi yang boleh diuji sebelum kitaran seterusnya bermula</text>
+</svg>
